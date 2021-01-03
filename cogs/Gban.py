@@ -115,8 +115,8 @@ class Gban(commands.Cog):
                     logs_webhook.send(f'Failed to gban **{user}** from **{guild.name}**!\nDetails:\n`{e}`')
 
             try:
-                embed = discord.Embed(title='Federation BAN NOTICE', description=f'You were banned from the federation by **{ctx.author} ({ctx.author.id})**', colour=discord.Colour.red())
-                embed.add_field(name='REASON:', value=reason, inline=False)
+                embed = discord.Embed(title='Federation Ban Notice', description=f'You were banned from the federation by **{ctx.author} ({ctx.author.id})**', colour=discord.Colour.red())
+                embed.add_field(name='Reason:', value=reason, inline=False)
                 embed.add_field(name='Federation BAN?', value=f'If you think this ban was unjustified please contact the bot owner {DOZ_DISCORD} ({BOT_OWNER_ID}) to get unbanned!')
                 embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                 embed.set_image(url=BAN_GIF)
@@ -127,8 +127,8 @@ class Gban(commands.Cog):
 
 
             try:
-                embed = discord.Embed(title='Federation BAN NOTICE', description=f'{user} has been banned from the federation by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-                embed.add_field(name='REASON:', value=f'{reason}', inline=False)
+                embed = discord.Embed(title='Federation Ban Notice', description=f'{user} has been banned from the federation by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+                embed.add_field(name='Reason:', value=f'{reason}', inline=False)
                 embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                 await ctx.send(embed=embed)
                 gbans_webhook.send(embed=embed)
