@@ -1,0 +1,15 @@
+{
+    "bot_token" : "NzIwMzg3OTkyOTkyMDg4MTE1.XuFSnw.L_aEHFcibAcA3zbD3hIAIQd2nmw",
+    "mongosrv" : "mongodb://Doz:ab1dcd77b3@doz-shard-00-00-jumbd.gcp.mongodb.net:27017,doz-shard-00-01-jumbd.gcp.mongodb.net:27017,doz-shard-00-02-jumbd.gcp.mongodb.net:27017/<dbname>?ssl=true&replicaSet=Doz-shard-0&authSource=admin&retryWrites=true&w=majority",
+    
+    "term" : "true",
+    "prefix" : "-",
+    "bot_owner_id" : 540627360513392651,
+
+    "server_invite" : "https://discord.gg/CBruyh3",
+    "bot_invite" : "https://discord.com/api/oauth2/authorize?client_id=720387992992088115&permissions=8&scope=bot",
+
+    "ban_gif" : "https://media1.tenor.com/images/88bf753468fad45c30be74c6f4747453/tenor.gif?itemid=8540518",
+    "nuke_gif" : "https://thumbs.gfycat.com/SoulfulShamelessIrishterrier-size_restricted.gif",
+    "nuke_launch_gif" : "https://i.kinja-img.com/gawker-media/image/upload/t_original/k0xazmabaxcpul2fj8x8.gif"
+}

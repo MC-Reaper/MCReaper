@@ -1,0 +1,10 @@
+discord.py[voice]
+https://github.com/Nekos-life/nekos.py/archive/master.zip
+https://github.com/rachmadaniHaryono/we-get/archive/master.zip
+requests
+pyfiglet
+pymongo
+dnspython
+googletrans
+google
+anime-downloader
