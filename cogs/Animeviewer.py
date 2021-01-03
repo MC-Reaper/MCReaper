@@ -21,7 +21,7 @@ class Animeviewer(commands.Cog):
             if keyword == None:
                 return await ctx.send(
                     "Hey there, you did not use this command corrently, here is the usage!\n\n",
-                    "```animesearch <keyword>\nkeyword is the name of the anime. Be as specific as possible to get the closest results. Once you get a result, use animeview [episode#] <keyword> (default is episode 1) to get the video link.```")
+                    "```animesearch <keyword>\nkeyword is the name of the anime. Be as specific as possible to get the closest results. Once you get a result, use animeview [episode#] <animetitle> (default is episode 1) to get the video link.```")
         
             smsg = await ctx.send("```Please wait...```")
 

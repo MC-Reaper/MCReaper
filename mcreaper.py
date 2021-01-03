@@ -1,12 +1,19 @@
 # ---------------------------------------------------------------------------
 # Modules
-import discord, json, asyncio, random, json, nekos, pyfiglet, pymongo, datetime, reapertools
-from pymongo import MongoClient
-from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
-from discord.ext import commands
-from discord.ext.commands import Bot
-from platform import python_version
-from os import remove
+try:
+    import discord, json, asyncio, random, json, nekos, pyfiglet, pymongo, datetime, reapertools
+    from pymongo import MongoClient
+    from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
+    from discord.ext import commands
+    from discord.ext.commands import Bot
+    from platform import python_version
+    from os import remove
+except ImportError:
+    print(
+    'You baka! You forgot to install the required modules in requirements.txt!',
+    '\nInstall them with pip install -r requirements.txt'
+    )
+    exit()
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
@@ -29,8 +36,8 @@ HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Testing AnimeViewer and TorrentSearcher"
-CHANGELOG_DATE = '25/12/2020'
+CHANGELOG_MESSAGE = "Testing AnimeViewer and TorrentSearcher\nMCREAPER.PY: Handling of import errors."
+CHANGELOG_DATE = '3/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -61,7 +68,14 @@ def get_prefix(bot, msg):
     return commands.when_mentioned_or(default_prefix)(bot, msg)
 # ---------------------------------------------------------------------------
 # Boot
-reaper_start_text = pyfiglet.figlet_format("MC REAPER")
+reaper_start_text = """
+                        ███╗   ███╗ ██████╗    ██████╗ ███████╗ █████╗ ██████╗ ███████╗██████╗ 
+                        ████╗ ████║██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
+                        ██╔████╔██║██║         ██████╔╝█████╗  ███████║██████╔╝█████╗  ██████╔╝
+                        ██║╚██╔╝██║██║         ██╔══██╗██╔══╝  ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗
+                        ██║ ╚═╝ ██║╚██████╗    ██║  ██║███████╗██║  ██║██║     ███████╗██║  ██║
+                        ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
+                    """
 print(f'{reaper_start_text}\nStarting up...')
 bot = commands.Bot(command_prefix=get_prefix, intents=intents) # Bot def.
 bot.remove_command("help") # Removes default help command.
