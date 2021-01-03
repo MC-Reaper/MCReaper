@@ -11,7 +11,7 @@ with open('config.json') as a:
     config = json.load(a) 
 # ---------------------------------------------------------------------------
 BAN_GIF = config.get("ban_gif")
-DOZ_DISCORD = 'Doz#2512'
+DOZ_DISCORD = 'Doz#1040'
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
 DARK_ID = int(440253153775190037) # Dark (Fonce)
 # ---------------------------------------------------------------------------
@@ -105,7 +105,7 @@ class Gban(commands.Cog):
                 errorlogs_webhook.send(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
                 return
 
-            await ctx.send(f">>> Initiating GBAN for **{user}**...")
+            initbanmsg = await ctx.send(f">>> Initiating GBAN for **{user}**...")
         
             for guild in self.bot.guilds:
                 try:
@@ -131,6 +131,7 @@ class Gban(commands.Cog):
                 embed.add_field(name='Reason:', value=f'{reason}', inline=False)
                 embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                 await ctx.send(embed=embed)
+                await initbanmsg.delete()
                 gbans_webhook.send(embed=embed)
             except Exception as e:
                 await ctx.send('An unknown error has occured, sent error log to HQ.')
