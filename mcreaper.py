@@ -8,7 +8,7 @@ try:
     from discord.ext import commands
     from discord.ext.commands import Bot
     from platform import python_version, platform
-    from os import remove
+    from os import remove, listdir
 except ImportError:
     print(
     'You baka! You forgot to install the required modules in requirements.txt!',
@@ -84,21 +84,6 @@ bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
 # ---------------------------------------------------------------------------
-# Cog management
-initial_extensions = ['cogs.Botsudo',
-                      'cogs.Moderation',
-                      'cogs.Gban',
-                      'cogs.Sysinfo',
-                      'cogs.Google',
-                      'cogs.Greetings',
-                      'cogs.SearchTorrent',
-                      'cogs.Animeviewer',
-                      'cogs.Info']
-
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        bot.load_extension(extension)
-# ---------------------------------------------------------------------------
 # Webhooks
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
  adapter=RequestsWebhookAdapter()) #logs in HQ
@@ -114,6 +99,19 @@ joinleave_webhook = Webhook.partial(746157465606946847, "SOz8ky2uDPiNfdjntY4H40j
 
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
  adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+# ---------------------------------------------------------------------------
+# Cog loader
+if __name__ == '__main__':
+    for cog in listdir("./cogs"):
+        if cog.endswith(".py"):
+            try:
+                cog = f"cogs.{cog.replace('.py', '')}"
+                bot.load_extension(cog)
+            except Exception as e:
+                print(f"[CRITICAL] BOT|COGS: {cog} could not load!\n{e}")
+                errorlogs_webhook.send(f"[CRITICAL] BOT|COGS: {cog} could not load!\n{e}")
+            else:
+                print(f"[INFO] BOT|COGS: {cog} has been loaded!")
 # ---------------------------------------------------------------------------
 # Program Defs
 def RandomColour():
