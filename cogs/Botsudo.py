@@ -127,7 +127,6 @@ class Botsudo(commands.Cog):
             except Exception as e:
                 await ctx.send('Failed to add user to sudo database!')
                 errorlogs_webhook.send(f'>>> Failed to add user to SUDO DATABSE!\nEXCEPTION: {e}')
-                pass
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
@@ -163,7 +162,6 @@ class Botsudo(commands.Cog):
             except Exception as e:
                 await ctx.send('Failed to remove user to sudo database!')
                 errorlogs_webhook.send(f'>>> Failed to remove {user} ({user.id}) from SUDO DATABSE!\nEXCEPTION: {e}')
-                pass
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()

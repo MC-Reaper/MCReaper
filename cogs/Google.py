@@ -27,7 +27,7 @@ class Google(commands.Cog):
     async def gghelp(self, ctx):
         """Help page for Google"""
 
-        embed =discord.Embed(title="GOOGLE HELP", description="Commands for google search & translate.", colour=discord.Colour.red())
+        embed =discord.Embed(title="Google Help", description="Commands for google search & translate.", colour=discord.Colour.red())
         embed.add_field(name="COMMANDS", value="`gsearch <query>` searches for the first 5 results.\n- `tl <text>` translates a language to English.\n- `tlc <language> <text>` Auto Detect to specified language.", inline=False)
         await ctx.send(embed=embed)
 

@@ -36,7 +36,7 @@ class Greetings(commands.Cog):
     async def greetingshelp(self, ctx):
         """Help page for ..."""
 
-        embed =discord.Embed(title="GREETINGS HELP", description="These are the commands that can be used for custom join/leave messages.", colour=discord.Colour.red())
+        embed =discord.Embed(title="Greetings Help", description="These are the commands that can be used for custom join/leave messages.", colour=discord.Colour.red())
         embed.add_field(name="COMMANDS", value="- `greetings help` Shows help for greetings.", inline=False)
         await ctx.send(embed=embed)
 

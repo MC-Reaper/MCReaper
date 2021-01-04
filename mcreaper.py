@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, json, nekos, pyfiglet, pymongo, datetime, reapertools
+    import discord, json, asyncio, random, json, nekos, pyfiglet, pymongo, reapertools
+    from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
     from discord.ext import commands
     from discord.ext.commands import Bot
-    from platform import python_version
+    from platform import python_version, platform
     from os import remove
 except ImportError:
     print(
@@ -77,8 +78,9 @@ reaper_start_text = """
                         ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
                     """
 print(f'{reaper_start_text}\nStarting up...')
-bot = commands.Bot(command_prefix=get_prefix, intents=intents) # Bot def.
-bot.remove_command("help") # Removes default help command.
+bot = commands.Bot(command_prefix=get_prefix, intents=intents)
+bot.remove_command("help")
+botstartTime = datetime.utcnow()
 # ---------------------------------------------------------------------------
 # Cog management
 initial_extensions = ['cogs.Botsudo',
@@ -206,7 +208,7 @@ async def on_member_join(member):
 
     if (welcmsg.count_documents({"_id": guild.id}) == 1):
 
-        replace_dict = {'{mention}': member.mention, '{user}': str(member), '{username}': str(member.name), '{userid}': str(member.id), '{servername}': str(guild.name), '{serverid}': str(guild.id), '{serverowner}': str(guild.owner), '{membercount}': str(len(guild.members)), '{truemembercount}': str(len([m for m in guild.members if not m.bot])), '{userbirth}': member.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), '{userage}': reapertools.datediff_humanize(member.created_at, datetime.datetime.utcnow()), '{serverbirth}': guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)')}
+        replace_dict = {'{mention}': member.mention, '{user}': str(member), '{username}': str(member.name), '{userid}': str(member.id), '{servername}': str(guild.name), '{serverid}': str(guild.id), '{serverowner}': str(guild.owner), '{membercount}': str(len(guild.members)), '{truemembercount}': str(len([m for m in guild.members if not m.bot])), '{userbirth}': member.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), '{userage}': reapertools.datediff_humanize(member.created_at, datetime.utcnow()), '{serverbirth}': guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)')}
         raw_welcome_msg = welcmsg.find_one({"_id": guild.id})['msg']
         translated_text = reapertools.rtwdv(raw_welcome_msg, replace_dict)
 
@@ -269,7 +271,7 @@ async def on_member_remove(member):
 
     if (welcmsg.count_documents(gquery) == 1):
 
-        replace_dict = {'{mention}': member.mention, '{user}': str(member), '{username}': str(member.name), '{userid}': str(member.id), '{servername}': str(guild.name), '{serverid}': str(guild.id), '{serverowner}': str(guild.owner), '{membercount}': str(len(guild.members)), '{truemembercount}': str(len([m for m in guild.members if not m.bot])), '{userbirth}': member.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), '{userage}': reapertools.datediff_humanize(member.created_at, datetime.datetime.utcnow()), '{serverbirth}': guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)')}
+        replace_dict = {'{mention}': member.mention, '{user}': str(member), '{username}': str(member.name), '{userid}': str(member.id), '{servername}': str(guild.name), '{serverid}': str(guild.id), '{serverowner}': str(guild.owner), '{membercount}': str(len(guild.members)), '{truemembercount}': str(len([m for m in guild.members if not m.bot])), '{userbirth}': member.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), '{userage}': reapertools.datediff_humanize(member.created_at, datetime.utcnow()), '{serverbirth}': guild.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)')}
         raw_welcome_msg = welcmsg.find_one(gquery)['msgleave']
 
         if raw_welcome_msg == 'none':
@@ -288,7 +290,7 @@ async def on_member_remove(member):
     if (chatlog.count_documents(gquery) == 1):
 
         avi = member.avatar_url_as(static_format='png')
-        em = discord.Embed(colour=discord.Colour.red(), timestamp=datetime.datetime.utcnow())
+        em = discord.Embed(colour=discord.Colour.red(), timestamp=datetime.utcnow())
         em.set_author(name=f'{member} ({member.id}) left.', icon_url=avi)
 
         await send_to_log_channel(gld=guild, emt=em)
@@ -317,7 +319,7 @@ async def on_member_update(userb, usera):
         
         avib=userb.avatar_url_as(static_format='png')
         avia=usera.avatar_url_as(static_format='png')
-        em = discord.Embed(description=f'User {userb} ({userb.id}) has been updated.', colour=discord.Colour.orange(), timestamp=datetime.datetime.utcnow())
+        em = discord.Embed(description=f'User {userb} ({userb.id}) has been updated.', colour=discord.Colour.orange(), timestamp=datetime.utcnow())
         if userb.nick != usera.nick:
             em.add_field(name='Nickname changed', value=f'**Old nickname:** {userb.nick}\n**New nickname:** {usera.nick}')
         em.set_author(name='User updated', icon_url=avia)
@@ -344,7 +346,7 @@ async def on_user_update(userb, usera):
             try:
                 membera = await guilds.fetch_member(usera.id)
 
-                date = datetime.datetime.utcnow()
+                date = datetime.utcnow()
 
                 if (chatlog.count_documents({"_id": membera.guild.id}) == 1):
                     avib=userb.avatar_url_as(static_format='png')
@@ -397,7 +399,7 @@ async def on_invite_create(invite):
 
         url = invite.url
 
-        em = discord.Embed(colour = discord.Colour.blue(), timestamp=datetime.datetime.utcnow())
+        em = discord.Embed(colour = discord.Colour.blue(), timestamp=datetime.utcnow())
         em.set_author(name='Invite Created', icon_url=inviter_pfp)
         em.add_field(name='Invite url', value=url)
         em.add_field(name='Expiry date (seconds)', value=age)
@@ -431,7 +433,7 @@ async def on_message(message):
             for x in afk_c_list:
                 if str(mention.id) in x['UserID'] and str(user.id) not in x['UserID']:
 
-                    afksince = reapertools.datediff_humanize(x['Timestamp'], datetime.datetime.utcnow())
+                    afksince = reapertools.datediff_humanize(x['Timestamp'], datetime.utcnow())
 
                     reason = afk_c.find_one({"UserID": str(mention.id), "GuildID": str(guild.id)})['Reason']
                     await message.channel.send(f'{mention} is currently AFK - {reason}\nAFK {afksince} ago.')
@@ -466,14 +468,14 @@ async def on_message_delete(message):
                 msgcont = "The message couldn't be obtained because it was either an embed or it was empty."
             if len(msgcont) > 1024:
                 output = open("log.txt", "w+")
-                output.write(f"From {message.author}:\n\n{msgcont}\n\nMessage created at: {message.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}\nMessage deleted at: {datetime.datetime.utcnow().__format__('%A, %d. %B %Y @ %H:%M:%S')}")
+                output.write(f"From {message.author}:\n\n{msgcont}\n\nMessage created at: {message.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}\nMessage deleted at: {datetime.utcnow().__format__('%A, %d. %B %Y @ %H:%M:%S')}")
                 output.close()
                 fle = File("./log.txt")
                 msgcont = "The message couldn't be displayed because it exceeded 1024 characters, uploaded as file instead."
             if message.embeds:
                 msgcont = "The message couldn't be obtained because it was either an embed or it was empty."
 
-            em = discord.Embed(colour=discord.Colour.red(), timestamp=datetime.datetime.utcnow())
+            em = discord.Embed(colour=discord.Colour.red(), timestamp=datetime.utcnow())
             em.set_author(name='Message Deleted', icon_url=avi)
             em.add_field(name='User', value=f'{user} ({user.id})')
             em.add_field(name='Channel', value=f'<#{message.channel.id}>')
@@ -498,7 +500,7 @@ async def on_bulk_message_delete(messages):
 
         deleted_messages_count = str(len(messages))
 
-        em = discord.Embed(colour=discord.Colour.gold(), timestamp=datetime.datetime.utcnow())
+        em = discord.Embed(colour=discord.Colour.gold(), timestamp=datetime.utcnow())
         em.set_author(name='Bulk Messages Deleted')
         em.add_field(name='Count', value=deleted_messages_count)
         em.add_field(name='Channel', value=f'<#{channel.id}>')
@@ -566,6 +568,30 @@ async def help(ctx):
             await ctx.send('An unknown error has occured, sent error log to HQ.')
             errorlogs_webhook.send(f"```[ERROR] CMD|HELP: {e}```")
 
+@bot.command(aliases=['status'])
+async def ping(ctx):
+    """Sends bot latency"""
+
+    async with ctx.typing():
+
+        db_status = 'Database is up and running!'
+        ping_ = bot.latency
+        ping = round(ping_ * 1000)
+
+        try:
+            cluster.server_info()
+        except:
+            db_status = 'Something is wrong with the database!'
+
+        botUptime = reapertools.datediff_humanize(botstartTime, datetime.utcnow())
+
+        em = discord.Embed(description=f'Watching {len(bot.guilds)} servers\n```Bot uptime: {botUptime}\nOS: {platform()}```', colour=RandomColour())
+        em.add_field(name='Latency (Ping)', value=f'Bot-to-API: `{ping}ms`')
+        em.add_field(name='Database Status', value=db_status)
+        em.set_author(name="Bot's Status", icon_url=bot.user.avatar_url_as(static_format='png'))
+
+        await ctx.send(embed=em)
+
 # Changelog
 @bot.command()
 async def changelog(ctx):
@@ -595,7 +621,7 @@ async def afk(ctx, *, reason=None):
         afk_c.delete_one(query)
         return await ctx.send('Idiot you already had AFK status, removing it anyway.')
 
-    timestamp = datetime.datetime.utcnow()
+    timestamp = datetime.utcnow()
     post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': reason, 'Timestamp': timestamp}
     afk_c.insert_one(post)
     await ctx.send(f'{ctx.author} is now AFK - {reason}')

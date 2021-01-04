@@ -44,31 +44,9 @@ class Info(commands.Cog):
     async def ihelp(self, ctx):
         """Help for information"""
 
-        embed =discord.Embed(title="INFORMATION HELP", description="These are the commands that can be used to get information.", colour=discord.Colour.red())
+        embed =discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour=discord.Colour.red())
         embed.add_field(name="COMMANDS", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
         await ctx.send(embed=embed)
-
-    @commands.command(aliases=['status'])
-    async def ping(self, ctx):
-        """Sends bot latency"""
-
-        async with ctx.typing():
-
-            db_status = 'Database is up and running!'
-            ping_ = self.bot.latency
-            ping = round(ping_ * 1000)
-
-            try:
-                cluster.server_info()
-            except:
-                db_status = 'Something is wrong with the database!'
-
-            em = discord.Embed(description=f'Watching {len(self.bot.guilds)} servers', colour=RandomColour())
-            em.add_field(name='Latency (Ping)', value=f'Bot-to-API: `{ping}ms`')
-            em.add_field(name='Database Status', value=db_status)
-            em.set_author(name="Bot's Status", icon_url=self.bot.user.avatar_url_as(static_format='png'))
-
-            await ctx.send(embed=em)
 
     # Info
     # Userinfo
