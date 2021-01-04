@@ -21,14 +21,15 @@ with open('config.json') as a:
     config = json.load(a)
 # ---------------------------------------------------------------------------
 # Configuration
-default_prefix = config.get("prefix") # The command prefix to be used.
-token = config.get("bot_token") # bot_token in config.json.
-mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
-# --------------------------------------------------------------------------
 intents = discord.Intents.default()
 intents.members = True
 # --------------------------------------------------------------------------
+# Please see config.json
 # ! DO NOT EDIT !
+default_prefix = config.get("prefix")
+token = config.get("bot_token") # bot_token in config.json.
+mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
+# --------------------------------------------------------------------------
 BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.5-ALPHA'
 DOZ_DISCORD = 'Doz#1040'
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
@@ -77,6 +78,7 @@ reaper_start_text = """
                         ██║ ╚═╝ ██║╚██████╗    ██║  ██║███████╗██║  ██║██║     ███████╗██║  ██║
                         ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
                     """
+
 print(f'{reaper_start_text}\nStarting up...')
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
@@ -97,12 +99,6 @@ if __name__ == '__main__':
     for extension in initial_extensions:
         bot.load_extension(extension)
 # ---------------------------------------------------------------------------
-def RandomColour():
-    """Generates random colours"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
-# ---------------------------------------------------------------------------
 # Webhooks
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
  adapter=RequestsWebhookAdapter()) #logs in HQ
@@ -120,6 +116,12 @@ errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW
  adapter=RequestsWebhookAdapter()) #errorlogs in HQ
 # ---------------------------------------------------------------------------
 # Program Defs
+def RandomColour():
+    """Generates random colours for embed"""
+
+    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
+    return randcolour
+
 async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: File = None):
     """Send info to log channel which can be fetched using MongoDB"""
 
@@ -541,7 +543,7 @@ async def on_command_error(ctx, error):
         return
 
     err_embed = discord.Embed(description=errorstr, colour=discord.Colour.red())
-    err_embed.set_author(name='Error!', icon_url='https://www.freeiconspng.com/uploads/a-red-error-exclamation-sign-meaningful-official-round-26.png')
+    err_embed.set_author(name='Error', icon_url='https://www.freeiconspng.com/uploads/a-red-error-exclamation-sign-meaningful-official-round-26.png')
     return await ctx.send(embed=err_embed)
 
 # ---------------------------------------------------------------------------
@@ -553,20 +555,16 @@ async def help(ctx):
 
     async with ctx.typing():
 
-        try:
-            avi = ctx.message.author.avatar_url_as(static_format='png')
-            embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Help')
-            embed.set_footer(text='MC Reaper')
-            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n \n- `changelog` What is new?\n- `afk <reason>` afk\n- `gghelp` Help for google commands.\n- `ihelp` Help for info commands.\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
-            embed.add_field(name='Fun', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!')
-            embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
-            embed.add_field(name='Moderator', value='- `modhelp` help for moderators.\n- `greetingshelp` help for custom join/leave messages.', inline=False)
-            embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
-            embed.set_thumbnail(url=avi)
-            await ctx.send(embed=embed)
-        except Exception as e:
-            await ctx.send('An unknown error has occured, sent error log to HQ.')
-            errorlogs_webhook.send(f"```[ERROR] CMD|HELP: {e}```")
+        avi = ctx.message.author.avatar_url_as(static_format='png')
+        embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Help')
+        embed.set_footer(text='MC Reaper')
+        embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n \n- `changelog` What is new?\n- `afk <reason>` afk\n- `gghelp` Help for google commands.\n- `ihelp` Help for info commands.\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
+        embed.add_field(name='Fun', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!')
+        embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
+        embed.add_field(name='Moderator', value='- `modhelp` help for moderators.\n- `greetingshelp` help for custom join/leave messages.', inline=False)
+        embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
+        embed.set_thumbnail(url=avi)
+        await ctx.send(embed=embed)
 
 @bot.command(aliases=['status'])
 async def ping(ctx):
@@ -592,7 +590,6 @@ async def ping(ctx):
 
         await ctx.send(embed=em)
 
-# Changelog
 @bot.command()
 async def changelog(ctx):
     """What's new?"""
@@ -603,7 +600,6 @@ async def changelog(ctx):
         embed.add_field(name='Changes:',value=f'{CHANGELOG_MESSAGE}',inline=False)
         await ctx.send(embed=embed)
 
-# AFK
 @bot.command()
 async def afk(ctx, *, reason=None):
     """AFK"""
@@ -627,8 +623,6 @@ async def afk(ctx, *, reason=None):
     await ctx.send(f'{ctx.author} is now AFK - {reason}')
     await ctx.message.delete()
 
-
-# NSFW
 @bot.command()
 async def nsfw(ctx, text = None):
     """Its obvious what this does"""
@@ -658,7 +652,6 @@ async def nsfw(ctx, text = None):
             await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
             errorlogs_webhook.send(f"```[ERROR] CMD|NSFW: {e}```")
 
-# Hentai Bomb
 @bot.command()
 async def hentaibomb(ctx, user : discord.Member = None):
     """Drops alot of hentai"""
@@ -712,7 +705,6 @@ async def hentaibomb(ctx, user : discord.Member = None):
         except Exception as e:
             errorlogs_webhook.send(f"```[ERROR] CMD|HENTAIBOMB: {e}```")
 
-# Say
 @bot.command()
 async def say(ctx, *, text : str = None):
     """Outputs text as the bot"""
@@ -748,65 +740,51 @@ async def say(ctx, *, text : str = None):
             logs_webhook.send(elog)
             await send_to_log_channel(gld=ctx.guild, text=elog)
 
-# Say file
-@bot.command()
-async def sayfile(ctx, *, fl: File = None):
-    """Send a file as bot"""
-
-    if fl == None:
-        return await ctx.send("UPLOAD A FILE!")
-
-    await ctx.message.delete()
-
-    await ctx.send(file=fl)
-    elog = f'```[INFO] CMD|SAYFILE: {ctx.author} ({ctx.author.id}) uploaded a file by using the bot.'
-    logs_webhook.send(content=elog, file=fl)
-    await send_to_log_channel(gld=ctx.guild, text=elog, fle=fl)
-
-
 @bot.command()
 async def shout(ctx, *, msg: str = None):
-    if msg == None:
-        await ctx.send("`shout <msg>`")
-    else:
-        async with ctx.typing():
-            try:
-                text = msg
-                result = []
-                result.append(' '.join([s for s in text]))
-                for pos, symbol in enumerate(text[1:]):
-                    result.append(symbol + ' ' + '  ' * pos + symbol)
-                result = list("\n".join(result))
-                result[0] = text[0]
-                result = "".join(result)
-                msg = "\n" + result
-                await ctx.send("```"+msg+"```")
-                await ctx.message.delete()
-            except Exception as e:
-                await ctx.send('Failed to run shout because my output has to be less than 2000!')
-                errorlogs_webhook.send(f"```[ERROR] CMD|SHOUT: {e}```")
+    """🗣️"""
 
-# ASCII
+    if msg == None:
+        return await ctx.send("`shout <msg>`")
+
+    async with ctx.typing():
+
+        await ctx.message.delete()
+
+        text = msg
+        result = []
+        result.append(' '.join([s for s in text]))
+        for pos, symbol in enumerate(text[1:]):
+            result.append(symbol + ' ' + '  ' * pos + symbol)
+        result = list("\n".join(result))
+        result[0] = text[0]
+        result = "".join(result)
+        msg = "\n" + result
+        await ctx.send("```"+msg+"```")
+
+        elog = f'```[INFO] CMD|SHOUT: {ctx.author} ({ctx.author.id}) shouted:``` {msg}'
+        logs_webhook.send(elog)
+        await send_to_log_channel(gld=ctx.guild, text=elog)
+
 @bot.command()
 async def ascii(ctx, *, text = None):
     """Prints text in ASCII format."""
 
     if text == None:
-        await ctx.send('`ascii <text>`\nPrints text in ASCII format.')
-    else:
-        async with ctx.typing():
-            try:
-                await ctx.message.delete()
-                ascii_text = pyfiglet.figlet_format(text)
-                await ctx.send(f'```{ascii_text}```')
-                logs_webhook.send(f'>>> **{ctx.message.author} ({ctx.message.author.id})** executed `ascii`\n\nLog: ```{ctx.message.content}```')
-            except Exception as e:
-                await ctx.send('Failed to run `ascii` (went over the limit?)')
-                errorlogs_webhook.send(f"```[ERROR] CMD|ASCII: {e}```")
+        return await ctx.send('`ascii <text>`\nPrints text in ASCII format.')
+
+    async with ctx.typing():
+
+        await ctx.message.delete()
+
+        ascii_text = pyfiglet.figlet_format(text)
+        await ctx.send(f'```{ascii_text}```')
+
+        elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
+        logs_webhook.send(elog)
+        await send_to_log_channel(gld=ctx.guild, text=elog)
 
 # Fun
-
-# DM
 @bot.command()
 async def dm(ctx, member: discord.Member, *, text: str = None):
     await ctx.message.delete()
@@ -817,7 +795,6 @@ async def dm(ctx, member: discord.Member, *, text: str = None):
         await ctx.send('Failed to DM user! (Blocked?)')
         errorlogs_webhook.send(f"```[ERROR] CMD|DM: {e}```")
 
-# 8Ball
 @bot.command(name='8ball',
                 description="Answers a yes/no question.",
                 brief="Answers from the beyond baby.",
@@ -863,7 +840,6 @@ async def eight_ball(ctx, *, question: str):
     embed.add_field(name='Answer :8ball::', value=random.choice(possible_responses), inline=False)
     await ctx.send(embed=embed)
 
-# GayR8
 @bot.command()
 async def gayr8(ctx, *, name: str = None):
     rng = random.randint(0, 101)
@@ -884,6 +860,7 @@ async def gayr8(ctx, *, name: str = None):
         )
 
         await ctx.send(embed=em1)
+
     else:
         em2 = discord.Embed(
             title = "Gay r8 machine: 100% accurate!",
@@ -893,7 +870,6 @@ async def gayr8(ctx, *, name: str = None):
 
         await ctx.send(embed=em2)
 
-# ThotR8
 @bot.command()
 async def thotr8(ctx, *, name: str = None):
     rng = random.randint(0, 101)
@@ -914,6 +890,7 @@ async def thotr8(ctx, *, name: str = None):
         )
 
         await ctx.send(embed=em1)
+
     else:
         em2 = discord.Embed(
             title = "Thot r8 machine: 100% accurate!",
@@ -943,6 +920,7 @@ async def penis(ctx, *, name: str = None):
         )
 
         await ctx.send(embed=em2)
+
     else:
         em4 = discord.Embed(
             title = "PP Length Machine: 69% accurate!",
@@ -952,7 +930,6 @@ async def penis(ctx, *, name: str = None):
 
         await ctx.send(embed=em4)
 
-# Waifu R8
 @bot.command()
 async def waifur8(ctx, *, name: str = None):
     rng = random.randint(0, 101)
@@ -973,6 +950,7 @@ async def waifur8(ctx, *, name: str = None):
         )
 
         await ctx.send(embed=em1)
+
     else:
         em2 = discord.Embed(
             title = "Waifu r8 machine: 100% accurate!",

@@ -43,7 +43,7 @@ errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW
 # ---------------------------------------------------------------------------
 # Other Defs
 BAN_GIF = config.get("ban_gif")
-default_prefix = '-' # The command prefix to be used.
+default_prefix = '-'
 # ---------------------------------------------------------------------------
 # Program Defs
 def RandomColour():
