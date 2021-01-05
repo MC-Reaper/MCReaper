@@ -26,6 +26,7 @@ class Sysinfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # TODO: Handle Windows Machines
     @commands.command()
     async def sysinfo(self, ctx):
         """ For sysinfo command, get system info using neofetch. """
@@ -77,21 +78,6 @@ class Sysinfo(commands.Cog):
             result = 'No result'
 
         await ctx.send(f'```bash\n{result}```')
-
-    @commands.check(BOT_OWNER_CHECK)
-    @commands.command()
-    async def upload(self, ctx, *, command = None):
-        """ upload file to discord """
-
-        if command == None:
-            return await ctx.send("`Give a command!`")
-
-        async with ctx.typing():
-
-            await ctx.send('`Please wait...`')
-
-
-            await ctx.send(file=File(f"./{str(command)}"))
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Sysinfo(bot))

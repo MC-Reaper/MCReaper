@@ -21,25 +21,22 @@ with open('config.json') as a:
     config = json.load(a)
 # ---------------------------------------------------------------------------
 # Configuration
-intents = discord.Intents.default()
-intents.members = True
-# --------------------------------------------------------------------------
 # Please see config.json
 # ! DO NOT EDIT !
 default_prefix = config.get("prefix")
 token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
+BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.5-ALPHA'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.6-ALPHA'
 DOZ_DISCORD = 'Doz#1040'
-BOT_OWNER_ID = int(config.get("bot_owner_id"))
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Testing AnimeViewer and TorrentSearcher\nMCREAPER.PY: Handling of import errors."
-CHANGELOG_DATE = '3/1/2021'
+CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nSexy cog loader and minor code clean up and reorganizing."
+CHANGELOG_DATE = '4/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -70,16 +67,20 @@ def get_prefix(bot, msg):
     return commands.when_mentioned_or(default_prefix)(bot, msg)
 # ---------------------------------------------------------------------------
 # Boot
-reaper_start_text = """
+reaper_start_text = f"""
                         ███╗   ███╗ ██████╗    ██████╗ ███████╗ █████╗ ██████╗ ███████╗██████╗ 
                         ████╗ ████║██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
                         ██╔████╔██║██║         ██████╔╝█████╗  ███████║██████╔╝█████╗  ██████╔╝
                         ██║╚██╔╝██║██║         ██╔══██╗██╔══╝  ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗
                         ██║ ╚═╝ ██║╚██████╗    ██║  ██║███████╗██║  ██║██║     ███████╗██║  ██║
                         ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
+                    
+                        By {DOZ_DISCORD} | Ver: {BOT_VERSION}
                     """
 
-print(f'{reaper_start_text}\nStarting up...')
+print(f'{reaper_start_text}')
+intents = discord.Intents.default()
+intents.members = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
@@ -108,8 +109,8 @@ if __name__ == '__main__':
                 cog = f"cogs.{cog.replace('.py', '')}"
                 bot.load_extension(cog)
             except Exception as e:
-                print(f"[CRITICAL] BOT|COGS: {cog} could not load!\n{e}")
-                errorlogs_webhook.send(f"[CRITICAL] BOT|COGS: {cog} could not load!\n{e}")
+                print(f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}")
+                errorlogs_webhook.send(f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}")
             else:
                 print(f"[INFO] BOT|COGS: {cog} has been loaded!")
 # ---------------------------------------------------------------------------
@@ -155,14 +156,16 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
 async def on_ready():
     """When the bot has started up"""
 
+    # TODO: Add change presence commands and use MongoDB for it to survive restarts. 
+
     await bot.change_presence(activity=discord.Streaming(name=f"-help or @mention help | Watching {len(bot.guilds)} servers.", url='https://www.twitch.tv/artia_hololive'))
 
-    print('MC Reaper has started!')
     reaper_start_text = pyfiglet.figlet_format("MC REAPER")
     logs_webhook.send(f'```{reaper_start_text}\nstarting up...```')
     em = discord.Embed(title='MC Reaper Status', description=f'MC Reaper is up and running!', colour=RandomColour())
     em.add_field(name='Bot version:', value=BOT_VERSION, inline=False)
     logs_webhook.send(embed=em)
+    print('[INFO] BOT|BOOT: MC Reaper is running!')
 
 @bot.event
 async def on_guild_join(guild):
