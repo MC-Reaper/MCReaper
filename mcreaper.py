@@ -109,8 +109,9 @@ if __name__ == '__main__':
                 cog = f"cogs.{cog.replace('.py', '')}"
                 bot.load_extension(cog)
             except Exception as e:
-                print(f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}")
-                errorlogs_webhook.send(f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}")
+                cogerrlg = f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}"
+                print(cogerrlg)
+                errorlogs_webhook.send(f"```{cogerrlg}```")
             else:
                 print(f"[INFO] BOT|COGS: {cog} has been loaded!")
 # ---------------------------------------------------------------------------
@@ -162,7 +163,7 @@ async def on_ready():
 
     reaper_start_text = pyfiglet.figlet_format("MC REAPER")
     logs_webhook.send(f'```{reaper_start_text}\nstarting up...```')
-    em = discord.Embed(title='MC Reaper Status', description=f'MC Reaper is up and running!', colour=RandomColour())
+    em = discord.Embed(title='MC Reaper Status', description=f'MC Reaper is running!', colour=RandomColour())
     em.add_field(name='Bot version:', value=BOT_VERSION, inline=False)
     logs_webhook.send(embed=em)
     print('[INFO] BOT|BOOT: MC Reaper is running!')
@@ -171,15 +172,17 @@ async def on_ready():
 async def on_guild_join(guild):
     """When the bot joins a guild"""
 
-    print(f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})')
-    joinleave_webhook.send(f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})')
+    ogr = f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})'
+    print(ogr)
+    joinleave_webhook.send(f'```{ogr}```')
 
 @bot.event
 async def on_guild_remove(guild):
     """When the bot leaves a guild"""
 
-    print(f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})')
-    joinleave_webhook.send(f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})')
+    ogr1 = f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})'
+    print(ogr1)
+    joinleave_webhook.send(f'```{ogr1}```')
 
     wquery = {"guild_id" : guild.id}
     gquery = {"GuildID": str(guild.id)}
@@ -190,29 +193,31 @@ async def on_guild_remove(guild):
             resultw = warn_c.delete_many(wquery)
             mjrp1 = f'[INFO] WARN|DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp1)
-            logs_webhook.send(mjrp1)
+            logs_webhook.send(f"```{mjrp1}```")
         if (nsfw_flag.count_documents(query) >= 1):
             resultn = nsfw_flag.delete_many(query)
             mjrp2 = f'[INFO] NSFW|DB: Deleted {resultn.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp2)
-            logs_webhook.send(mjrp2)
+            logs_webhook.send(f"```{mjrp2}```")
         if (chatlog.count_documents(query) >= 1):
             resultc = chatlog.delete_many(query)
             mjrp3 = f'[INFO] CHATLOG|DB: Deleted {resultc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp3)
-            logs_webhook.send(mjrp3)
+            logs_webhook.send(f"```{mjrp3}```")
         if (welcmsg.count_documents(query) >= 1):
             resultwc = welcmsg.delete_many(query)
             mjrp4 = f'[INFO] WELCOME_MSG|DB: Deleted {resultwc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp4)
-            logs_webhook.send(mjrp4)
+            logs_webhook.send(f"```{mjrp4}```")
         if (afk_c.count_documents(gquery) >= 1):
             resultafk = welcmsg.delete_many(gquery)
             mjrp5 = f'[INFO] AFK|DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp5)
-            logs_webhook.send(mjrp5)
+            logs_webhook.send(f"```{mjrp5}```")
     except Exception as e:
-        errorlogs_webhook.send(f'[ERROR] ONMEMBERJOIN|DATABASE: {e}')
+        mjrp6 = f'[ERROR] ONMEMBERJOIN|DATABASE: {e}'
+        print(mjrp6)
+        errorlogs_webhook.send(f'```{mjrp6}```')
 
 @bot.event
 async def on_member_join(member):
@@ -660,7 +665,7 @@ async def nsfw(ctx, text = None):
         try:
             inviteurl = await ctx.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
             await ctx.send(nekos.img(text))
-            logs_webhook.send(f'>>> {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+            logs_webhook.send(f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
         except Exception as e:
             await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
             errorlogs_webhook.send(f"```[ERROR] CMD|NSFW: {e}```")
@@ -692,29 +697,9 @@ async def hentaibomb(ctx, user : discord.Member = None):
                 await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
                 await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
                 await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-                logs_webhook.send(f'>>> {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+                logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
             else:
-                if (sudo_users_c.count_documents(query) == 1):
-                    try:
-                        await ctx.send(f'>>> Attempting to hentaibomb {user.name}...')
-                        await user.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
-                        await user.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
-                        await user.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
-                        await user.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
-                        await user.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
-                        await user.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-                        await ctx.send(f'>>> Hentaibombed {user.name}.')
-                        await user.send(f'>>> **DO NOT REPORT THIS BOT ! ! !**\nIf you report this bot then you will have the bot owner banned for something he did not do.\nInstead of reporting me, report the person who sent you the hentaibomb by using the `-report` command!\n**I AM NOT RESPONSIBLE FOR ANY PERVERT WHO HENTAIBOMBS YOU ! ! !**')
-                    except:
-                        await ctx.send(f'Failed to hentaibomb **{user.name}**. Blocked DMs?')
-                else:
-                    await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
-                    await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
-                    await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
-                    await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
-                    await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
-                    await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-                    logs_webhook.send(f'>>> {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+                await ctx.send('This function has been removed due to ToS violations.')
         except Exception as e:
             errorlogs_webhook.send(f"```[ERROR] CMD|HENTAIBOMB: {e}```")
 

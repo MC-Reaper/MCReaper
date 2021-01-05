@@ -7,4 +7,3 @@ pymongo
 dnspython
 anime-downloader
 google
-googletrans
