@@ -67,7 +67,7 @@ def get_prefix(bot, msg):
     return commands.when_mentioned_or(default_prefix)(bot, msg)
 # ---------------------------------------------------------------------------
 # Boot
-reaper_start_text = f"""
+print(f"""
                         ███╗   ███╗ ██████╗    ██████╗ ███████╗ █████╗ ██████╗ ███████╗██████╗ 
                         ████╗ ████║██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
                         ██╔████╔██║██║         ██████╔╝█████╗  ███████║██████╔╝█████╗  ██████╔╝
@@ -76,9 +76,8 @@ reaper_start_text = f"""
                         ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
                     
                         By {DOZ_DISCORD} | Ver: {BOT_VERSION}
-                    """
+        """)
 
-print(f'{reaper_start_text}')
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
@@ -86,6 +85,7 @@ bot.remove_command("help")
 botstartTime = datetime.utcnow()
 # ---------------------------------------------------------------------------
 # Webhooks
+# TODO: Make webhook logging optional
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
  adapter=RequestsWebhookAdapter()) #logs in HQ
 
@@ -132,7 +132,7 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
         logs_channel = bot.get_channel(chatlog_id)
 
         if not logs_channel:
-            errorlogs_webhook.send(f'```[WARNING] BOT|LOGGING: Could not find channel for logging! in {gld.name} ({gld.id})```')
+            errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for logging! in {gld.name} ({gld.id})```')
         
         else:
             if text:
@@ -158,7 +158,7 @@ async def on_ready():
 
     # TODO: Add change presence commands and use MongoDB for it to survive restarts. 
 
-    await bot.change_presence(activity=discord.Streaming(name=f"-help or @mention help | Watching {len(bot.guilds)} servers.", url='https://www.twitch.tv/artia_hololive'))
+    await bot.change_presence(activity=discord.Streaming(name=f"-help | Overseeing {len(bot.guilds)} guilds", url='https://www.twitch.tv/artia_hololive'))
 
     reaper_start_text = pyfiglet.figlet_format("MC REAPER")
     logs_webhook.send(f'```{reaper_start_text}\nstarting up...```')
@@ -171,13 +171,15 @@ async def on_ready():
 async def on_guild_join(guild):
     """When the bot joins a guild"""
 
-    joinleave_webhook.send(f'>>> Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})')
+    print(f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})')
+    joinleave_webhook.send(f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})')
 
 @bot.event
 async def on_guild_remove(guild):
     """When the bot leaves a guild"""
 
-    joinleave_webhook.send(f'>>> Left guild, {guild.name} ({guild.id})\nDeleting server settings collection...')
+    print(f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})')
+    joinleave_webhook.send(f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})')
 
     wquery = {"guild_id" : guild.id}
     gquery = {"GuildID": str(guild.id)}
@@ -186,21 +188,31 @@ async def on_guild_remove(guild):
     try:
         if (warn_c.count_documents(wquery) >= 1):
             resultw = warn_c.delete_many(wquery)
-            logs_webhook.send(f'WARN DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            mjrp1 = f'[INFO] WARN|DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
+            print(mjrp1)
+            logs_webhook.send(mjrp1)
         if (nsfw_flag.count_documents(query) >= 1):
             resultn = nsfw_flag.delete_many(query)
-            logs_webhook.send(f'NSFW DB: Deleted {resultn.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            mjrp2 = f'[INFO] NSFW|DB: Deleted {resultn.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
+            print(mjrp2)
+            logs_webhook.send(mjrp2)
         if (chatlog.count_documents(query) >= 1):
             resultc = chatlog.delete_many(query)
-            logs_webhook.send(f'CHATLOG DB: Deleted {resultc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            mjrp3 = f'[INFO] CHATLOG|DB: Deleted {resultc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
+            print(mjrp3)
+            logs_webhook.send(mjrp3)
         if (welcmsg.count_documents(query) >= 1):
             resultwc = welcmsg.delete_many(query)
-            logs_webhook.send(f'WELCOME_MSG DB: Deleted {resultwc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            mjrp4 = f'[INFO] WELCOME_MSG|DB: Deleted {resultwc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
+            print(mjrp4)
+            logs_webhook.send(mjrp4)
         if (afk_c.count_documents(gquery) >= 1):
             resultafk = welcmsg.delete_many(gquery)
-            logs_webhook.send(f'AFK DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            mjrp5 = f'[INFO] AFK|DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
+            print(mjrp5)
+            logs_webhook.send(mjrp5)
     except Exception as e:
-        errorlogs_webhook.send(f'**CRITICAL ERROR | DATABASE: {e}**')
+        errorlogs_webhook.send(f'[ERROR] ONMEMBERJOIN|DATABASE: {e}')
 
 @bot.event
 async def on_member_join(member):
@@ -219,7 +231,7 @@ async def on_member_join(member):
         welcome_channel = bot.get_channel(welchan_id)
 
         if not welcome_channel:
-            errorlogs_webhook.send(f'```[WARNING] BOT|LOGGING: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
+            errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
         else:
             await welcome_channel.send(content=translated_text)
 
@@ -286,7 +298,7 @@ async def on_member_remove(member):
             welcome_channel = bot.get_channel(welchan_id)
 
             if not welcome_channel:
-                errorlogs_webhook.send(f'```[WARNING] BOT|LOGGING: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
+                errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
             else:
                 await welcome_channel.send(content=translated_text)
 

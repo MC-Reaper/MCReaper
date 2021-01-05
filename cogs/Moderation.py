@@ -64,8 +64,8 @@ async def send_to_log_channel(ctx, *, text=None, emt=None):
         logs_channel = discord.utils.get(ctx.guild.text_channels, id=chatlog_id)
 
         if not logs_channel:
-            ctx.channel.send('```[WARNING] BOT|LOGGING: Could not find channel for logging!```')
-            return errorlogs_webhook.send(f'```[WARNING] BOT|LOGGING: Could not find channel for logging! in {ctx.guild.name} ({ctx.guild.id})```')
+            ctx.channel.send('```[WARNING] BOT|LOGS: Could not find channel for logging!```')
+            return errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for logging! in {ctx.guild.name} ({ctx.guild.id})```')
 
         if text:
             if len(text) > 2000:

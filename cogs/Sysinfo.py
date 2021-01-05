@@ -1,6 +1,6 @@
 # Sysinfo cog by Doz, kanged sysd module from Paperplane-Telegram
 # ---------------------------------------------------------------------------
-import discord, asyncio, requests, json
+import discord, asyncio, requests, json, platform
 from discord import Member, File
 from discord.ext.commands import Bot
 from discord.ext import commands
@@ -30,6 +30,10 @@ class Sysinfo(commands.Cog):
     @commands.command()
     async def sysinfo(self, ctx):
         """ For sysinfo command, get system info using neofetch. """
+
+        if str(platform.system()) == 'Windows':
+            return await ctx.send('This command only works on Linux machines!')
+
         try:
             chmod("./neofetch", mode=0o777)
             fetch = await asyncrunapp(

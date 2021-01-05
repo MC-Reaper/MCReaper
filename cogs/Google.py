@@ -54,7 +54,6 @@ class Google(commands.Cog):
 
         await ctx.send("Currently Broken because Google keeps messing with us.")
 
-        """
         if txt == None:
             return await ctx.send("`USAGE: tl <text>`")
 
@@ -74,7 +73,6 @@ class Google(commands.Cog):
         em.set_footer(text=f'Detected Language: {lang.lang}')
 
         return await ctx.send(embed=em)
-        """
 
     @commands.command(aliases=['tlc'])
     async def translatec(self, ctx, lg=None, *, txt=None):
@@ -82,7 +80,6 @@ class Google(commands.Cog):
 
         await ctx.send("Currently Broken because Google keeps messing with us.")
 
-        """
         if lg == None:
             return await ctx.send("`USAGE: tlc <language> <text>`")
 
@@ -105,7 +102,6 @@ class Google(commands.Cog):
         em.set_footer(text=f'Language used: {lg}')
 
         return await ctx.send(embed=em)
-        """
 
 # ---------------------------------------------------------------------------
 def setup(bot):

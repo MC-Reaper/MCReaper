@@ -5,6 +5,6 @@ requests
 pyfiglet
 pymongo
 dnspython
-googletrans
-google
 anime-downloader
+google
+googletrans
