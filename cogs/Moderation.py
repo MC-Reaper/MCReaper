@@ -131,14 +131,6 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def modhelp(self, ctx):
-        """Shows Moderation help page"""
-
-        embed = discord.Embed(title="MODERATOR HELP", description="These are the commands that can be used by admins to keep their server in check!", colour=discord.Colour.red())
-        embed.add_field(name="COMMANDS", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
-        await ctx.send(embed=embed)
-
     # log
     @commands.group(invoke_without_command=True)
     @has_permissions(manage_guild=True)
@@ -242,13 +234,13 @@ class Moderation(commands.Cog):
             post = {"_id": warn_id, "GuildID": ctx.guild.id, "username": member.name+'#'+member.discriminator, "UserID": member.id, "reason": reason, "moderator": moderator.name+'#'+moderator.discriminator, "timestamp": ctx.message.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}
             warn_c.insert_one(post)
         
-        embed = discord.Embed(title='WARN NOTICE', description=f'You were warned in **{ctx.guild.name}** by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
-        embed.add_field(name='REASON:', value=f'{reason}', inline=False)
+        embed = discord.Embed(title='Warn Notice', description=f'You were warned in **{ctx.guild.name}** by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
+        embed.add_field(name='Reason:', value=f'{reason}', inline=False)
         embed.add_field(name='WARN ID:', value=warn_id, inline=True)
         embed.set_footer(text=f'Warned by {moderator.name}', icon_url=moderator.avatar_url_as(static_format='png'))
         
-        embed2 = discord.Embed(title='WARN NOTICE', description=f'**{member} ({member.id})** has been warned by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
-        embed2.add_field(name='REASON:', value=f'{reason}', inline=False)
+        embed2 = discord.Embed(title='Warn Notice', description=f'**{member} ({member.id})** has been warned by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
+        embed2.add_field(name='Reason:', value=f'{reason}', inline=False)
         embed2.add_field(name='WARN ID:', value=warn_id, inline=True)
         embed2.set_footer(text=f'Warned by {moderator.name}', icon_url=moderator.avatar_url_as(static_format='png'))
 
@@ -374,13 +366,13 @@ class Moderation(commands.Cog):
         if user.id == ctx.author.id:
             return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
 
-        embed = discord.Embed(title='BAN NOTICE', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed.add_field(name='REASON:', value=reason, inline=False)
+        embed = discord.Embed(title='Ban Notice', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed.add_field(name='Reason:', value=reason, inline=False)
         embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
         embed.set_image(url=BAN_GIF)
         
-        embed2 = discord.Embed(title='BAN NOTICE', description=f'**{user} ({user.id})** has been banned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed2.add_field(name='REASON:', value=reason, inline=False)
+        embed2 = discord.Embed(title='Ban Notice', description=f'**{user} ({user.id})** has been banned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed2.add_field(name='Reason:', value=reason, inline=False)
         embed2.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
         try: # DM the banned user the reason of ban
@@ -425,13 +417,13 @@ class Moderation(commands.Cog):
         if user.id == ctx.author.id:
             return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
 
-        embed = discord.Embed(title='BAN NOTICE', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed.add_field(name='REASON:', value=reason, inline=False)
+        embed = discord.Embed(title='Ban Notice', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed.add_field(name='Reason:', value=reason, inline=False)
         embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
         embed.set_image(url=BAN_GIF)
         
-        embed2 = discord.Embed(title='SOFT-BAN NOTICE', description=f'**{user} ({user.id})** has been soft-banned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed2.add_field(name='REASON:', value=reason, inline=False)
+        embed2 = discord.Embed(title='Soft-Ban Notice', description=f'**{user} ({user.id})** has been soft-banned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed2.add_field(name='Reason:', value=reason, inline=False)
         embed2.set_footer(text=f'Soft-banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
         try: # DM the banned user the reason of ban
@@ -513,12 +505,12 @@ class Moderation(commands.Cog):
         if user.id == ctx.author.id:
             return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
 
-        embed = discord.Embed(title='KICK NOTICE', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed.add_field(name='REASON:', value=reason, inline=False)
+        embed = discord.Embed(title='Kick Notice', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed.add_field(name='Reason:', value=reason, inline=False)
         embed.set_footer(text=f'Kicked by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
-        embed2 = discord.Embed(title='KICK NOTICE', description=f'**{user} ({user.id})** has been kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
-        embed2.add_field(name='REASON:', value=reason, inline=False)
+        embed2 = discord.Embed(title='Kick Notice', description=f'**{user} ({user.id})** has been kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
+        embed2.add_field(name='Reason:', value=reason, inline=False)
         embed2.set_footer(text=f'Kicked by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
         
         try:
@@ -634,9 +626,9 @@ class Moderation(commands.Cog):
             reason = "No reason provided."
 
         user = ctx.author
-        embed = discord.Embed(title='MESSAGES DELETED', description=f'**{txt}** messages has been deleted by **{user} ({user.id})**', colour=discord.Colour.red())
-        embed.add_field(name='REASON:', value=f'{reason}', inline=False)
-        embed.add_field(name='CHANNEL:', value=f'{ctx.message.channel}', inline=False)
+        embed = discord.Embed(title='Messages Purged', description=f'**{txt}** messages has been deleted by **{user} ({user.id})**', colour=discord.Colour.red())
+        embed.add_field(name='Reason:', value=f'{reason}', inline=False)
+        embed.add_field(name='Channel:', value=f'{ctx.message.channel}', inline=False)
         embed.set_footer(text=f'Cleared by {user.name}', icon_url=user.avatar_url_as(static_format='png'))
 
         try:

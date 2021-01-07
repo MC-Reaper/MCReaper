@@ -6,7 +6,7 @@ try:
     from pymongo import MongoClient
     from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
     from discord.ext import commands
-    from discord.ext.commands import Bot
+    from discord.ext.commands import Bot, has_permissions
     from platform import python_version, platform
     from os import remove, listdir
 except ImportError:
@@ -243,19 +243,11 @@ async def on_member_join(member):
     if (chatlog.count_documents({"_id": guild.id}) == 1):
 
         gban_flag = "Not Banned"
-        gban_reason = None
+        gban_reason = ""
 
         avi = member.avatar_url_as(static_format='png')
-        if isinstance(member, discord.Member):
-            role = member.top_role.name
-            if role == "@everyone":
-                role = "N/A"
         em = discord.Embed(colour=RandomColour())
         em.add_field(name='User ID', value=member.id, inline=False)
-        if isinstance(member, discord.Member):
-            em.add_field(name='Nick', value=member.nick, inline=False)
-            em.add_field(name='Status', value=member.status, inline=False)
-            em.add_field(name='Highest Role', value=role, inline=False)
         em.add_field(name='Account Created', value=member.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), inline=False)
         if isinstance(member, discord.Member):
             em.add_field(name='Join Date', value=member.joined_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), inline=False)
@@ -275,11 +267,11 @@ async def on_member_join(member):
     if (gbanned_users_c.count_documents(query) == 1):
         try:
             gban_user_reason : str = gbanned_users_c.find_one(query)["reason"]
-            logs_webhook.send(f'>>> AUTO GBAN: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}')
+            logs_webhook.send(f'```[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}```')
             await member.ban(reason=gban_user_reason)
             await send_to_log_channel(gld=guild, text=f'{member} ({member.id}) was denied access to your server due to being in the global ban database.\nReason for GBAN: {gban_user_reason}')
         except Exception as e:
-            errorlogs_webhook.send(f'>>> AUTO GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}')
+            errorlogs_webhook.send(f'```[WARNING] AUTOMOD: GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}```')
 
 @bot.event
 async def on_member_remove(member):
@@ -567,22 +559,57 @@ async def on_command_error(ctx, error):
 # ---------------------------------------------------------------------------
 # Commands
 # Regular users
-@bot.command()
+@bot.group(invoke_without_command=True)
 async def help(ctx):
     """Shows help"""
 
-    async with ctx.typing():
+    if ctx.invoked_subcommand is None:
 
-        avi = ctx.message.author.avatar_url_as(static_format='png')
-        embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Help')
-        embed.set_footer(text='MC Reaper')
-        embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n \n- `changelog` What is new?\n- `afk <reason>` afk\n- `gghelp` Help for google commands.\n- `ihelp` Help for info commands.\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
-        embed.add_field(name='Fun', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!')
-        embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
-        embed.add_field(name='Moderator', value='- `modhelp` help for moderators.\n- `greetingshelp` help for custom join/leave messages.', inline=False)
-        embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
-        embed.set_thumbnail(url=avi)
-        await ctx.send(embed=embed)
+        async with ctx.typing():
+
+            avi = ctx.message.author.avatar_url_as(static_format='png')
+            embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Help')
+            embed.set_footer(text='MC Reaper')
+            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n \n- `changelog` What is new?\n- `afk <reason>` afk\n- `help google` Help for google commands.\n- `help info` Help for info commands.\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
+            embed.add_field(name='Fun', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!')
+            embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
+            embed.add_field(name='Moderator', value='- `help mod` help for moderators.\n- `help greetings` help for custom join/leave messages.', inline=False)
+            embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
+            embed.set_thumbnail(url=avi)
+            await ctx.send(embed=embed)
+
+@help.command(aliases=['info'])
+async def info_help(ctx):
+    """Help for information"""
+
+    embed = discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour = RandomColour())
+    embed.add_field(name="COMMANDS", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(aliases=['google'])
+async def google_help(ctx):
+    """Help page for Google"""
+
+    embed = discord.Embed(title="Google Help", description="Commands for google search", colour = RandomColour())
+    embed.add_field(name="Commands", value="`gsearch <query>` searches for the first 5 results.", inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(aliases=['greetings'])
+@has_permissions(manage_guild=True)
+async def greetings_help(self, ctx):
+    """Shows greetings help"""
+
+    embed = discord.Embed(title="Greetings Help", description="Set the current channel as a greetings/goodbye channel where anytime a user joins/leaves the server, the bot will send the specified message on this channel.", colour = RandomColour())
+    embed.add_field(name="Commands", value='```greetings <message> - set message on join.\ngreetings leave <message> set message on leave.\nUsable terms:\n\n{mention} - mentions the user joined.\n{user} - displays username#discriminator.\n{username} - displays username.\n{userid} - displays userid.\n{servername} - displays server name.\n{serverid} - displays serverid.\n{serverowner} - displays server owner username#discriminator.\n{membercount} - displays the number of users in the server.\n{truemembercount} - displays the number of humans in the server.\n{userbirth} - displays the creation date of the user.\n{userage} - displays the age of the user account.\n{serverbirth} - displays the creation date of the server.```\n\n`greetings raw` - shows greetings message without format.\n`greetings off` - disables greetings message.', inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(aliases=['mod'])
+async def mod_help(ctx):
+    """Shows Moderation help page"""
+
+    embed = discord.Embed(title="Moderator Help", description="These are the commands that can be used by admins to keep their server in check!", colour = RandomColour())
+    embed.add_field(name="Commands", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
+    await ctx.send(embed=embed)
 
 @bot.command(aliases=['status'])
 async def ping(ctx):

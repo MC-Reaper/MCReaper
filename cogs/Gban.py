@@ -170,8 +170,8 @@ class Gban(commands.Cog):
             query = {"_id": user.id}
             if (gbanned_users_c.count_documents(query) == 1):
                 try:
-                    embed = discord.Embed(title='Federation UNBAN NOTICE', description=f'{user} has been unbanned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.green())
-                    embed.add_field(name='REASON:', value=f'{reason}', inline=False)
+                    embed = discord.Embed(title='Federation Unban Notice', description=f'{user} has been unbanned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.green())
+                    embed.add_field(name='Reason:', value=f'{reason}', inline=False)
                     embed.set_footer(text=f'Unbanned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                     gbanned_users_c.delete_one(query)
                     await ctx.send(embed=embed)

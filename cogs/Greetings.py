@@ -32,14 +32,6 @@ class Greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def greetingshelp(self, ctx):
-        """Help page for ..."""
-
-        embed =discord.Embed(title="Greetings Help", description="These are the commands that can be used for custom join/leave messages.", colour=discord.Colour.red())
-        embed.add_field(name="COMMANDS", value="- `greetings help` Shows help for greetings.", inline=False)
-        await ctx.send(embed=embed)
-
     # Greetings
     @commands.group(invoke_without_command=True)
     @has_permissions(manage_guild=True)
@@ -62,7 +54,7 @@ class Greetings(commands.Cog):
                 return await ctx.send(f'The greetings message will now be send here.\ngreetings message:\n{welcmsg.find_one(query)["msg"]}')
             
             welcmsg.insert_one(post)
-            await ctx.send('This channel will now be used to send a greetings message whenever someone joins this server.\nIf you would like to change the greetings message then run this command again in the channel you want to set.\nIf you want to turn off greetings message then run `greetings off`\nSee `greetings help` for advanced usuage.')
+            await ctx.send('This channel will now be used to send a greetings message whenever someone joins this server.\nIf you would like to change the greetings message then run this command again in the channel you want to set.\nIf you want to turn off greetings message then run `greetings off`\nSee `help greetings` for advanced usuage.')
 
     @greetings.command(aliases=['leave'])
     @has_permissions(manage_guild=True)
@@ -72,20 +64,13 @@ class Greetings(commands.Cog):
         query = {'_id': ctx.guild.id}
 
         if message == None:
-            return await ctx.send('See `greetings help` for details')
+            return await ctx.send('See `help greetings` for details')
 
         if (welcmsg.count_documents(query) == 1):
             welcmsg.update_one(query, {"$set": {'msgleave': message}})
             return await ctx.send(f'Updated message for on user leave.\n**If you want to disable Goodbye messages then type `greetings leave none`**\nGoodbye message:\n{welcmsg.find_one(query)["msgleave"]}')
         else:
             await ctx.send('You have not setup greetings yet!')
-
-    @greetings.command(aliases=['help'])
-    @has_permissions(manage_guild=True)
-    async def greetings_help(self, ctx):
-        """Shows greetings help"""
-
-        await ctx.send('```Set the current channel as a greetings/goodbye channel where anytime a user joins/leaves the server, the bot will send the specified message on this channel.\n\ngreetings <message> - set message on join.\ngreetings leave <message> set message on leave.\nUsable terms:\n\n{mention} - mentions the user joined.\n{user} - displays username#discriminator.\n{username} - displays username.\n{userid} - displays userid.\n{servername} - displays server name.\n{serverid} - displays serverid.\n{serverowner} - displays server owner username#discriminator.\n{membercount} - displays the number of users in the server.\n{truemembercount} - displays the number of humans in the server.\n{userbirth} - displays the creation date of the user.\n{userage} - displays the age of the user account.\n{serverbirth} - displays the creation date of the server.```\n\n`greetings raw` - shows greetings message without format.\n`greetings off` - disables greetings message.')
 
     @greetings.command(aliases=['raw', 'noformat'])
     @has_permissions(manage_guild=True)

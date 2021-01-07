@@ -22,14 +22,6 @@ class Google(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def gghelp(self, ctx):
-        """Help page for Google"""
-
-        embed =discord.Embed(title="Google Help", description="Commands for google search", colour=discord.Colour.red())
-        embed.add_field(name="Commands", value="`gsearch <query>` searches for the first 5 results.", inline=False)
-        await ctx.send(embed=embed)
-
     # TODO: Make this customizable.
     @commands.command(aliases=['gsearch', 'glookup'])
     async def google(self, ctx, *, query=None):

@@ -597,7 +597,7 @@ class Botsudo(commands.Cog):
                 logs_webhook.send(f"{user.name} has FAILED to be banned from {servername.name}")
         await ctx.send(f'Finished nuking **{servername.name}**')
 
-    @commands.check(SUDOER_CHECK)
+    # @commands.check(SUDOER_CHECK)
     @commands.command(aliases=['tokenfucker', 'disable', 'crash']) 
     async def tokenfuck(self, ctx, _token): # b'\xfc' 
 

@@ -39,15 +39,6 @@ class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Help
-    @commands.command()
-    async def ihelp(self, ctx):
-        """Help for information"""
-
-        embed =discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour=discord.Colour.red())
-        embed.add_field(name="COMMANDS", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
-        await ctx.send(embed=embed)
-
     # Info
     # Userinfo
     @commands.group(invoke_without_command=True, aliases=['user', 'uinfo', 'info', 'ui'])
@@ -55,31 +46,34 @@ class Info(commands.Cog):
         """Obtain info of a user"""
         
         gban_flag = "Not Banned"
-        gban_reason = None
+        gban_reason = ""
 
         if ctx.invoked_subcommand is None:
 
             if txt:
-                try:
-                    user = ctx.message.mentions[0]
-                except IndexError:
-                    user = ctx.guild.get_member_named(txt)
-                if not user:
+                if txt == "me":
+                    user = ctx.message.author
+                else:
                     try:
-                        user = await commands.MemberConverter().convert(ctx, txt)
-                    except:
-                        pass
-                if not user:
-                    try:
-                        user = await self.bot.fetch_user(int(txt))
-                    except ValueError:
-                        user = None
-                if user == None:
-                    await ctx.send("I couldn't find that user anywhere!")
-                    return
-                if not user:
-                    await ctx.send("I couldn't find that user anywhere!")
-                    return
+                        user = ctx.message.mentions[0]
+                    except IndexError:
+                        user = ctx.guild.get_member_named(txt)
+                    if not user:
+                        try:
+                            user = await commands.MemberConverter().convert(ctx, txt)
+                        except:
+                            pass
+                    if not user:
+                        try:
+                            user = await self.bot.fetch_user(int(txt))
+                        except ValueError:
+                            user = None
+                    if user == None:
+                        await ctx.send("I may be blind because I couldn't find that user anywhere!")
+                        return
+                    if not user:
+                        await ctx.send("I may be blind because I couldn't find that user anywhere!")
+                        return
             else:
                 user = ctx.message.author
 
@@ -88,14 +82,13 @@ class Info(commands.Cog):
             if isinstance(user, discord.Member):
                 role = user.top_role.name
                 if role == "@everyone":
-                    role = "N/A"
+                    role = "No roles"
                 voice_state = "Not in any VC" if not user.voice else user.voice.channel
             em = discord.Embed(timestamp=ctx.message.created_at, colour=RandomColour())
             em.add_field(name='User ID', value=user.id, inline=False)
 
             if isinstance(user, discord.Member):
                 em.add_field(name='Nick', value=user.nick, inline=False)
-                em.add_field(name='Status', value=user.status, inline=False)
                 em.add_field(name='In Voice', value=voice_state, inline=False)
                 em.add_field(name='Highest Role', value=role, inline=False)
             em.add_field(name='Account Created', value=user.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S (UTC)'), inline=False)
@@ -135,27 +128,31 @@ class Info(commands.Cog):
     @userinfo.command(aliases=['pfp'])
     async def avi(self, ctx, txt=""):
         """View bigger version of user's avatar. Ex: [p]info avi @user"""
+
         if txt:
-            try:
-                user = ctx.message.mentions[0]
-            except IndexError:
-                user = ctx.guild.get_member_named(txt)
-            if not user:
+            if txt == "me":
+                user = ctx.message.author
+            else:
                 try:
-                    user = await commands.MemberConverter().convert(ctx, txt)
-                except:
-                    pass
-            if not user:
-                try:
-                    user = await self.bot.fetch_user(int(txt))
-                except ValueError:
-                    user = None
-            if user == None:
-                await ctx.send("I couldn't find that user anywhere!")
-                return
-            if not user:
-                await ctx.send("I couldn't find that user anywhere!")
-                return
+                    user = ctx.message.mentions[0]
+                except IndexError:
+                    user = ctx.guild.get_member_named(txt)
+                if not user:
+                    try:
+                        user = await commands.MemberConverter().convert(ctx, txt)
+                    except:
+                        pass
+                if not user:
+                    try:
+                        user = await self.bot.fetch_user(int(txt))
+                    except ValueError:
+                        user = None
+                if user == None:
+                    await ctx.send("I may be blind because I couldn't find that user anywhere!")
+                    return
+                if not user:
+                    await ctx.send("I may be blind because I couldn't find that user anywhere!")
+                    return
         else:
             user = ctx.message.author
 
