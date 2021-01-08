@@ -280,7 +280,7 @@ class Info(commands.Cog):
             embed.add_field(name="Reporter's ID:", value=userID)
             embed.add_field(name="Reported from:", value=server_invite.url)
             embed.add_field(name="Channel:", value=ctx.channel.id, inline=False)
-            embed.add_field(name="Guild_ID:", value= ctx.guild.id, inline=False)
+            embed.add_field(name="Guild ID:", value= ctx.guild.id, inline=False)
                 
             await hqchannel.send(embed=embed)
             await ctx.message.delete()
@@ -315,7 +315,7 @@ class Info(commands.Cog):
             embed.add_field(name="Suggester's ID:", value=userID)
             embed.add_field(name="Suggested from:", value=server_invite.url)
             embed.add_field(name="Channel:", value=ctx.channel.id, inline=False)
-            embed.add_field(name="Guild_ID:", value= ctx.guild.id, inline=False)
+            embed.add_field(name="Guild ID:", value= ctx.guild.id, inline=False)
                 
             await hqchannel.send(embed=embed)
             await ctx.message.delete()

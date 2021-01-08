@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.6-ALPHA'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.7-ALPHA'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nSexy cog loader and minor code clean up and reorganizing."
-CHANGELOG_DATE = '4/1/2021'
+CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nCommands reorganized p1."
+CHANGELOG_DATE = '8/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -133,7 +133,9 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
         logs_channel = bot.get_channel(chatlog_id)
 
         if not logs_channel:
-            errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for logging! in {gld.name} ({gld.id})```')
+            lgerr = f'[WARNING] BOT|LOGS: Could not find channel for logging in {gld.name} ({gld.id})!'
+            print(lgerr)
+            errorlogs_webhook.send(f'```{lgerr}```')
         
         else:
             if text:
@@ -236,7 +238,9 @@ async def on_member_join(member):
         welcome_channel = bot.get_channel(welchan_id)
 
         if not welcome_channel:
-            errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
+            lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
+            print(lgerr)
+            errorlogs_webhook.send(f'```{lgerr}```')
         else:
             await welcome_channel.send(content=translated_text)
 
@@ -295,7 +299,9 @@ async def on_member_remove(member):
             welcome_channel = bot.get_channel(welchan_id)
 
             if not welcome_channel:
-                errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for welcome message! in {guild.name} ({guild.id})```')
+                lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
+                print(lgerr)
+                errorlogs_webhook.send(f'```{lgerr}```')
             else:
                 await welcome_channel.send(content=translated_text)
 
@@ -315,7 +321,9 @@ async def on_member_remove(member):
             resultafk = welcmsg.delete_many(query)
             logs_webhook.send(f'AFK DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
     except Exception as e:
-        errorlogs_webhook.send(f'**CRITICAL ERROR | DATABASE: {e}**')
+        errlog = f'[ERROR] DATABASE|ONMEMBERREMOVE: {e}'
+        print(errlog)
+        errorlogs_webhook.send(f'```{errlog}```')
 
 @bot.event
 async def on_member_update(userb, usera):
@@ -542,7 +550,7 @@ async def on_command_error(ctx, error):
         pass
     else:
         errorstr = f"An error has occured! HQ will receive this error message!\n```{error}```"
-        pwebstr = f"```An error has occured!```\nMSGCONT: {msgcont}\n\nERR: {error}"
+        pwebstr = f"[ERROR] BOT|CMD: MsgCont: {msgcont}\nError: {error}"
         try:
             errorlogs_webhook.send(pwebstr)
         except:
@@ -583,7 +591,7 @@ async def info_help(ctx):
     """Help for information"""
 
     embed = discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour = RandomColour())
-    embed.add_field(name="COMMANDS", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
+    embed.add_field(name="Commands", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
     await ctx.send(embed=embed)
 
 @help.command(aliases=['google'])

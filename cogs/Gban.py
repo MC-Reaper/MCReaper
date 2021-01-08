@@ -57,7 +57,7 @@ class Gban(commands.Cog):
         """Help page for Federation Ban"""
 
         embed=discord.Embed(title="Federation Ban Help", description="These are the commands that can be used by bot owners to keep your servers in check!", colour=discord.Colour.red())
-        embed.add_field(name="COMMANDS", value="- `gban <user> [reason]` Bans a user from every server I share with.\n- `ungban <user> [reason]` removes the user from the GBAN database.", inline=False)
+        embed.add_field(name="Commands", value="- `gban <user> [reason]` Bans a user from every server I share with.\n- `ungban <user> [reason]` removes the user from the GBAN database.", inline=False)
         await ctx.send(embed=embed)
 
     @commands.check(SUDOER_CHECK)
@@ -102,8 +102,7 @@ class Gban(commands.Cog):
                     await ctx.send(f'{user} ({user.id}) was already gbanned! New reason set!: {gbanned_users_c.find_one(query)["reason"]}')
             except Exception as e:
                 await ctx.send('Aborted operation due to an error on the database.')
-                errorlogs_webhook.send(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
-                return
+                return errorlogs_webhook.send(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
 
             initbanmsg = await ctx.send(f">>> Initiating GBAN for **{user}**...")
         
