@@ -604,7 +604,7 @@ async def google_help(ctx):
 
 @help.command(aliases=['greetings'])
 @has_permissions(manage_guild=True)
-async def greetings_help(self, ctx):
+async def greetings_help(ctx):
     """Shows greetings help"""
 
     embed = discord.Embed(title="Greetings Help", description="Set the current channel as a greetings/goodbye channel where anytime a user joins/leaves the server, the bot will send the specified message on this channel.", colour=RandomColour())
