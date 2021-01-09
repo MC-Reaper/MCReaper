@@ -47,7 +47,7 @@ default_prefix = '-'
 # ---------------------------------------------------------------------------
 # Program Defs
 def RandomColour():
-    """Generates random colours"""
+    """Generates random colours for embed"""
 
     randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
     return randcolour

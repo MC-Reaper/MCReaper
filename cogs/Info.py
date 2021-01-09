@@ -28,10 +28,10 @@ errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW
  adapter=RequestsWebhookAdapter()) #errorlogs in HQ
 # ---------------------------------------------------------------------------
 def RandomColour():
-    """Generates random Colours"""
+    """Generates random colours for embed"""
 
-    randColour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randColour
+    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
+    return randcolour
 # ---------------------------------------------------------------------------
 class Info(commands.Cog):
     """Commands for information"""

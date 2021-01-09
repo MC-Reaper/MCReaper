@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, json, nekos, pyfiglet, pymongo, reapertools
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
@@ -28,14 +28,14 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v1.7-ALPHA'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.12'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nCommands reorganized p1."
+CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nCommands reorganized - Fun commands gets its own cog."
 CHANGELOG_DATE = '8/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
@@ -576,29 +576,28 @@ async def help(ctx):
         async with ctx.typing():
 
             avi = ctx.message.author.avatar_url_as(static_format='png')
-            embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Help')
+            embed = discord.Embed(colour=RandomColour(), title = 'MC Reaper Help')
             embed.set_footer(text='MC Reaper')
-            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n \n- `changelog` What is new?\n- `afk <reason>` afk\n- `help google` Help for google commands.\n- `help info` Help for info commands.\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
-            embed.add_field(name='Fun', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!')
+            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n\n- `changelog` What is new?\n- `afk <reason>` afk\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
+            embed.add_field(name='Pages', value="Use `help <page>` to navigate to different help sections.\n\n- `help fun` Help for fun commands.\n- `help info` Help for info commands.\n- `help google` Help for google commands.\n- `help greetings` Help for greetings commands (mod only)\n- `help mod` Help for moderator commands.", inline=False)
             embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
-            embed.add_field(name='Moderator', value='- `help mod` help for moderators.\n- `help greetings` help for custom join/leave messages.', inline=False)
             embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
             embed.set_thumbnail(url=avi)
             await ctx.send(embed=embed)
 
-@help.command(aliases=['info'])
-async def info_help(ctx):
-    """Help for information"""
+@help.command(aliases=['fun'])
+async def fun_help(ctx):
+    """Help page for Fun"""
 
-    embed = discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour = RandomColour())
-    embed.add_field(name="Commands", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
-    await ctx.send(embed=embed)
+    embed = discord.Embed(title="Fun Help", description="Commands for Fun", colour=RandomColour())
+    embed.add_field(name='Commands', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!', inline=False)
+
 
 @help.command(aliases=['google'])
 async def google_help(ctx):
     """Help page for Google"""
 
-    embed = discord.Embed(title="Google Help", description="Commands for google search", colour = RandomColour())
+    embed = discord.Embed(title="Google Help", description="Commands for google search", colour=RandomColour())
     embed.add_field(name="Commands", value="`gsearch <query>` searches for the first 5 results.", inline=False)
     await ctx.send(embed=embed)
 
@@ -607,15 +606,23 @@ async def google_help(ctx):
 async def greetings_help(self, ctx):
     """Shows greetings help"""
 
-    embed = discord.Embed(title="Greetings Help", description="Set the current channel as a greetings/goodbye channel where anytime a user joins/leaves the server, the bot will send the specified message on this channel.", colour = RandomColour())
+    embed = discord.Embed(title="Greetings Help", description="Set the current channel as a greetings/goodbye channel where anytime a user joins/leaves the server, the bot will send the specified message on this channel.", colour=RandomColour())
     embed.add_field(name="Commands", value='```greetings <message> - set message on join.\ngreetings leave <message> set message on leave.\nUsable terms:\n\n{mention} - mentions the user joined.\n{user} - displays username#discriminator.\n{username} - displays username.\n{userid} - displays userid.\n{servername} - displays server name.\n{serverid} - displays serverid.\n{serverowner} - displays server owner username#discriminator.\n{membercount} - displays the number of users in the server.\n{truemembercount} - displays the number of humans in the server.\n{userbirth} - displays the creation date of the user.\n{userage} - displays the age of the user account.\n{serverbirth} - displays the creation date of the server.```\n\n`greetings raw` - shows greetings message without format.\n`greetings off` - disables greetings message.', inline=False)
+    await ctx.send(embed=embed)
+
+@help.command(aliases=['info'])
+async def info_help(ctx):
+    """Help for information"""
+
+    embed = discord.Embed(title="Informaton Help", description="These are the commands that can be used to get information.", colour=RandomColour())
+    embed.add_field(name="Commands", value="- `ping` Checks the bot's latency.\n- `report <message>` report bot issues to HQ.\n- `suggest <message>` Suggest changes to the bot to HQ\n- `invite` Get bot invite link and TGB server invite.\n- `userinfo <@user>` Gets info about someone\n- `serverinfo` gets server info\n- `owner` Whos the owner of the server?", inline=False)
     await ctx.send(embed=embed)
 
 @help.command(aliases=['mod'])
 async def mod_help(ctx):
     """Shows Moderation help page"""
 
-    embed = discord.Embed(title="Moderator Help", description="These are the commands that can be used by admins to keep their server in check!", colour = RandomColour())
+    embed = discord.Embed(title="Moderator Help", description="These are the commands that can be used by admins to keep their server in check!", colour=RandomColour())
     embed.add_field(name="Commands", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
     await ctx.send(embed=embed)
 
@@ -649,7 +656,7 @@ async def changelog(ctx):
     
     async with ctx.typing():
 
-        embed = discord.Embed(colour = RandomColour(), title = 'MC Reaper Changelog', description = f'{CHANGELOG_DATE}\n{BOT_VERSION}')
+        embed = discord.Embed(colour=RandomColour(), title = 'MC Reaper Changelog', description = f'{CHANGELOG_DATE}\n{BOT_VERSION}')
         embed.add_field(name='Changes:',value=f'{CHANGELOG_MESSAGE}',inline=False)
         await ctx.send(embed=embed)
 
@@ -817,7 +824,6 @@ async def ascii(ctx, *, text = None):
         logs_webhook.send(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 
-# Fun
 @bot.command()
 async def dm(ctx, member: discord.Member, *, text: str = None):
     await ctx.message.delete()
@@ -827,170 +833,5 @@ async def dm(ctx, member: discord.Member, *, text: str = None):
     except Exception as e:
         await ctx.send('Failed to DM user! (Blocked?)')
         errorlogs_webhook.send(f"```[ERROR] CMD|DM: {e}```")
-
-@bot.command(name='8ball',
-                description="Answers a yes/no question.",
-                brief="Answers from the beyond baby.",
-                aliases=['eight_ball', 'eightball', '8-ball'],
-                )
-async def eight_ball(ctx, *, question: str):
-
-    possible_responses = [
-        'That is a resounding no',
-        'Nah.',
-        '*Shakes head left-right 3 times*',
-        'Impossible!',
-        'Fuck no!',
-        'No just no.',
-        'No you idiot!',
-        'No ❤️'
-        'It is not looking likely',
-        'I really cannot say.',
-        'Too hard to tell.',
-        'нет (no)',
-        'Of course not!',
-        'It is quite possible',
-        'Definitely!',
-        'Absolutely!',
-        'Fuck yes!',
-        'Positive its true!',
-        'I can tell its true!',
-        'Its certain that its possible!',
-        'YES!',
-        'Of course!',
-        'Si!',
-        '*Nods*',
-        'да (yes)',
-        'You are asking a question that I have no answer to. Fuck off with your half of braincell, you filthy piglet.',
-        'What kind of stupid question is that? I cannot answer such idiotic subintellectual question. Come back to me when you have fully developed that fetus brain of yours.',
-        "*Ignore's you*"
-    ]
-    embed = discord.Embed(
-    title = '8ball',
-    colour = RandomColour()
-    )
-    embed.add_field(name='Question :question::', value=f'{ctx.message.author.mention} asked: \n**{question}**', inline=False)
-    embed.add_field(name='Answer :8ball::', value=random.choice(possible_responses), inline=False)
-    await ctx.send(embed=embed)
-
-@bot.command()
-async def gayr8(ctx, *, name: str = None):
-    rng = random.randint(0, 101)
-    if name == None:
-        em = discord.Embed(
-            title = "Gay r8 machine: 100% accurate!",
-            description = f"You are `{rng}%` gay! :gay_pride_flag:",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em)
-    
-    elif name == "me":
-        em1 = discord.Embed(
-            title = "Gay r8 machine: 100% accurate!",
-            description = f"You are `{rng}%` gay! :gay_pride_flag:",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em1)
-
-    else:
-        em2 = discord.Embed(
-            title = "Gay r8 machine: 100% accurate!",
-            description = f"**{name}** is `{rng}%` gay! :gay_pride_flag:",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em2)
-
-@bot.command()
-async def thotr8(ctx, *, name: str = None):
-    rng = random.randint(0, 101)
-    if name == None:
-        em = discord.Embed(
-            title = "Thot r8 machine",
-            description = f"You are `{rng}%` THOT!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em)
-    
-    elif name == "me":
-        em1 = discord.Embed(
-            title = "Thot r8 machine: 100% accurate!",
-            description = f"You are `{rng}%` THOT!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em1)
-
-    else:
-        em2 = discord.Embed(
-            title = "Thot r8 machine: 100% accurate!",
-            description = f"**{name}** is `{rng}%` THOT!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em2)
-
-@bot.command()
-async def penis(ctx, *, name: str = None):
-    """Displays PP size!"""
-
-    ministick = '='
-    stick = ''
-    rng = random.randint(-1, 20)
-    count = 0
-    while (count < rng):
-        stick += ministick
-        count = count + 1
-
-    if name == None:
-        em2 = discord.Embed(
-            title = "PP Length Machine: 69% accurate!",
-            description = f"Your pp size:\n`8{stick}D`",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em2)
-
-    else:
-        em4 = discord.Embed(
-            title = "PP Length Machine: 69% accurate!",
-            description = f"**{name}'s** pp size:\n`8{stick}D`",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em4)
-
-@bot.command()
-async def waifur8(ctx, *, name: str = None):
-    rng = random.randint(0, 101)
-    if name == None:
-        em = discord.Embed(
-            title = "Waifu r8 machine",
-            description = f"You are `{rng}%` Waifu!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em)
-    
-    elif name == "me":
-        em1 = discord.Embed(
-            title = "Waifu r8 machine: 100% accurate!",
-            description = f"You are `{rng}%` Waifu!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em1)
-
-    else:
-        em2 = discord.Embed(
-            title = "Waifu r8 machine: 100% accurate!",
-            description = f"**{name}** is `{rng}%` Waifu!",
-            colour = RandomColour()
-        )
-
-        await ctx.send(embed=em2)
 # ---------------------------------------------------------------------------
 bot.run(token, bot=True)

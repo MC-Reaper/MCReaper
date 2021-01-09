@@ -5,7 +5,6 @@ from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
 # ---------------------------------------------------------------------------
-
 class Animeviewer(commands.Cog):
     """Fetch anime stream links"""
     
@@ -36,14 +35,14 @@ class Animeviewer(commands.Cog):
                 from anime_downloader.sites.animekisa import AnimeKisa
                 anime = AnimeKisa(search[0].url)
 
-                aembed = discord.Embed(title='Anime Search')
+                em = discord.Embed(title='Anime Search')
 
-                aembed.add_field(name='Keyword', value=keyword, inline=False)
-                aembed.add_field(name='Anime Title', value=anime, inline=False)
-                aembed.add_field(name='No. of Episodes', value=len(anime), inline=False)
-                aembed.add_field(name='Stream link to Episode 1', value=f'[First Episode]({anime[0].source().stream_url})')
+                em.add_field(name='Keyword', value=keyword, inline=False)
+                em.add_field(name='Anime Title', value=anime, inline=False)
+                em.add_field(name='No. of Episodes', value=len(anime), inline=False)
+                em.add_field(name='Stream link to Episode 1', value=f'[First Episode]({anime[0].source().stream_url})')
 
-                await smsg.edit(content=None, embed=aembed)
+                await smsg.edit(content=None, embed=em)
 
             except Exception as e:
                 if 'list index out of range' in str(e):
@@ -69,14 +68,14 @@ class Animeviewer(commands.Cog):
                 from anime_downloader.sites.animekisa import AnimeKisa
                 anime = AnimeKisa(search[0].url)
 
-                aembed = discord.Embed(title='Anime Search')
+                em = discord.Embed(title='Anime Search')
 
-                aembed.add_field(name='Keyword', value=keyword, inline=False)
-                aembed.add_field(name='Anime Title', value=anime, inline=False)
-                aembed.add_field(name='No. of Episodes', value=len(anime), inline=False)
-                aembed.add_field(name=f'Stream link to Episode {episodenum}', value=f'[Link]({anime[episodenum - 1].source().stream_url})')
+                em.add_field(name='Keyword', value=keyword, inline=False)
+                em.add_field(name='Anime Title', value=anime, inline=False)
+                em.add_field(name='No. of Episodes', value=len(anime), inline=False)
+                em.add_field(name=f'Stream link to Episode {episodenum}', value=f'[Link]({anime[episodenum - 1].source().stream_url})')
 
-                await smsg.edit(content=None, embed=aembed)
+                await smsg.edit(content=None, embed=em)
 
             except Exception as e:
                 if 'list index out of range' in str(e):

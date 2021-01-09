@@ -1,6 +1,6 @@
 # Greetings cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, pymongo, datetime, json
+import discord, asyncio, pymongo, datetime, json
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter, File
 from discord.ext.commands import Bot, has_permissions
@@ -22,10 +22,6 @@ db = cluster["mcreaper"]
 # Collections
 welcmsg = db["welcmsg"]
 # ---------------------------------------------------------------------------
-# Program Defs
-
-# ---------------------------------------------------------------------------
-
 class Greetings(commands.Cog):
     """Commands for greetings"""
     

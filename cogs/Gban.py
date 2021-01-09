@@ -1,6 +1,6 @@
 # GBan cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo, json
+import discord, asyncio, random, json, pymongo
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -44,7 +44,6 @@ async def SUDOER_CHECK(ctx):
     else:
         return False
 # ---------------------------------------------------------------------------
-
 class Gban(commands.Cog):
     """Commands for managing Federation bans"""
     
