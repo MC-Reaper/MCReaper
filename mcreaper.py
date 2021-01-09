@@ -575,14 +575,14 @@ async def help(ctx):
 
         async with ctx.typing():
 
-            avi = ctx.message.author.avatar_url_as(static_format='png')
-            embed = discord.Embed(colour=RandomColour(), title = 'MC Reaper Help')
+            embed = discord.Embed(colour=RandomColour())
+            embed.set_author(name=f'{bot.user.name} Help', icon_url=bot.user.avatar_url_as(static_format='png'))
             embed.set_footer(text='MC Reaper')
-            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n `|` seperator.\n\n- `changelog` What is new?\n- `afk <reason>` afk\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
+            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n\n- `changelog` What is new?\n- `afk <reason>` afk\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
             embed.add_field(name='Pages', value="Use `help <page>` to navigate to different help sections.\n\n- `help fun` Help for fun commands.\n- `help info` Help for info commands.\n- `help google` Help for google commands.\n- `help greetings` Help for greetings commands (mod only)\n- `help mod` Help for moderator commands.", inline=False)
             embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
             embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
-            embed.set_thumbnail(url=avi)
+            embed.set_thumbnail(url=ctx.message.author.avatar_url_as(static_format='png'))
             await ctx.send(embed=embed)
 
 @help.command(aliases=['fun'])
@@ -591,6 +591,7 @@ async def fun_help(ctx):
 
     embed = discord.Embed(title="Fun Help", description="Commands for Fun", colour=RandomColour())
     embed.add_field(name='Commands', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 <name>` Checks how gay anything is.\n- `waifur8 <name>` :heart:\n- `thotr8` BEGONE THOT!', inline=False)
+    await ctx.send(embed=embed)
 
 
 @help.command(aliases=['google'])
