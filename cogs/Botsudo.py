@@ -89,8 +89,8 @@ class Botsudo(commands.Cog):
             embed.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
             embed.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
-            await asyncio.sleep(5)
-            mhsend.edit(embed=embed)
+            await asyncio.sleep(2.5)
+            await mhsend.edit(embed=embed)
             i += 1
 
     # ---------------------------------------------------------------------------
