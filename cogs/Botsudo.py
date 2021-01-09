@@ -97,8 +97,11 @@ class Botsudo(commands.Cog):
 
         mhsend = await ctx.send('Ratelimit test')
         i = 0
+        ministick = '='
+        stick = ''
         while i <= 10:
-            embed = discord.Embed(title='RGB', description='Dark is sin', colour=RandomColour())
+            stick += ministick
+            embed = discord.Embed(title='PP Grow', description=f'Dark is sin\n8{stick}D', colour=RandomColour())
 
             await asyncio.sleep(2.5)
             await mhsend.edit(embed=embed)
