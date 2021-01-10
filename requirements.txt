@@ -1,5 +1,4 @@
 discord.py[voice]
-DiscordUtils
 https://github.com/Nekos-life/nekos.py/archive/master.zip
 https://github.com/rachmadaniHaryono/we-get/archive/master.zip
 requests
