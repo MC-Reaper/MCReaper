@@ -92,13 +92,13 @@ class Botsudo(commands.Cog):
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
-    async def rgbtest(self, ctx):
+    async def rgbtest(self, ctx, lol: int):
 
         mhsend = await ctx.send('Ratelimit test')
         i = 0
         ministick = '='
         stick = ''
-        while i <= 10:
+        while i <= lol:
             stick += ministick
             em = discord.Embed(title='PP Grow', description=f'Dark is sin\n8{stick}D', colour=RandomColour())
 

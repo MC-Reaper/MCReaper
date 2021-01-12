@@ -86,9 +86,9 @@ def rtwdv(txt, dic):
 
     return txt
 # ---------------------------------------------------------------------------
-# Simple MD5 hash generator by Doz
-def randmd5_hash():
-    """Returns a random MD5 hash"""
+# Simple hash generator by Doz
+def rand_hash():
+    """Returns a random hash"""
     
     ranbits_128 = random.getrandbits(128)
     return '%032x' % ranbits_128

@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.12'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.13'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "AnimeViewer and TorrentSearcher is still a WIP\nCommands reorganized - Fun commands gets its own cog."
-CHANGELOG_DATE = '8/1/2021'
+CHANGELOG_MESSAGE = "Removed DM commands"
+CHANGELOG_DATE = '12/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -733,16 +733,13 @@ async def hentaibomb(ctx, user : discord.Member = None):
     async with ctx.typing():
         try:
             inviteurl = await ctx.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
-            if user == None:
-                await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
-                await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
-                await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
-                await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
-                await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
-                await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-                logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
-            else:
-                await ctx.send('This function has been removed due to ToS violations.')
+            await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
+            await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
+            await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
+            await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
+            await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
+            await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
+            logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
         except Exception as e:
             errorlogs_webhook.send(f"```[ERROR] CMD|HENTAIBOMB: {e}```")
 
@@ -824,15 +821,5 @@ async def ascii(ctx, *, text = None):
         elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
         logs_webhook.send(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
-
-@bot.command()
-async def dm(ctx, member: discord.Member, *, text: str = None):
-    await ctx.message.delete()
-    try:
-        await member.send(text)
-        logs_webhook.send(f'>>> **{ctx.message.author} ({ctx.message.author.id})** executed `dm` to {member} ({member.id})\n\nLog: ```{ctx.message.content}```')
-    except Exception as e:
-        await ctx.send('Failed to DM user! (Blocked?)')
-        errorlogs_webhook.send(f"```[ERROR] CMD|DM: {e}```")
 # ---------------------------------------------------------------------------
 bot.run(token, bot=True)
