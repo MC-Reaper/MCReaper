@@ -328,12 +328,6 @@ class Moderation(commands.Cog):
                         errorlogs_webhook.send(f"```[ERROR] CMD|WARNS: {e}```")
 
                 await ctx.send(embed=warnem)
-
-
-        a = warn_c.count_documents(query_guild_user)
-
-        em = discord.Embed(title='Querying Complete!', description=f"{user} has {a} warnings.", colour=discord.Colour.red())
-        await ctx.send(embed=em)
             
     @commands.command(aliases=["banish"])
     @commands.has_permissions(ban_members=True)
