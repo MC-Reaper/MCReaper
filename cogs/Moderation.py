@@ -236,12 +236,12 @@ class Moderation(commands.Cog):
         
         embed = discord.Embed(title='Warn Notice', description=f'You were warned in **{ctx.guild.name}** by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=f'{reason}', inline=False)
-        embed.add_field(name='WARN ID:', value=warn_id, inline=True)
+        embed.add_field(name='Warn ID:', value=warn_id, inline=True)
         embed.set_footer(text=f'Warned by {moderator.name}', icon_url=moderator.avatar_url_as(static_format='png'))
         
         embed2 = discord.Embed(title='Warn Notice', description=f'**{member} ({member.id})** has been warned by **{moderator} ({moderator.id})**', colour=discord.Colour.red())
         embed2.add_field(name='Reason:', value=f'{reason}', inline=False)
-        embed2.add_field(name='WARN ID:', value=warn_id, inline=True)
+        embed2.add_field(name='Warn ID:', value=warn_id, inline=True)
         embed2.set_footer(text=f'Warned by {moderator.name}', icon_url=moderator.avatar_url_as(static_format='png'))
 
         try:
@@ -272,8 +272,8 @@ class Moderation(commands.Cog):
                 return await ctx.send("That warn id does not exist!")
             
             for x in warn_c.find(query):
-                embed = discord.Embed(title='WARN REMOVED', description='Details of warn:', colour=discord.Colour.green())
-                embed.add_field(name='WARN ID:', value=txt, inline=False)
+                embed = discord.Embed(title='Warn Removed', description='Details of warn:', colour=discord.Colour.green())
+                embed.add_field(name='Warn ID:', value=txt, inline=False)
                 embed.add_field(name='User of warn removed:', value=f"{x['username']} ({x['UserID']})", inline=False)
                 embed.add_field(name='Reason of warn:', value=x['reason'], inline=False)
                 embed.add_field(name='Was warned by:', value=x['moderator'], inline=False)
@@ -313,25 +313,22 @@ class Moderation(commands.Cog):
             return await ctx.send(f"{ctx.author.mention}, I can't find that user!")  
 
         query_guild_user = {"GuildID": guild_id, "UserID": user.id}
-        
-        if (warn_c.count_documents(query_guild_user) == 0):
-            return await ctx.send("This user has no warnings!")
+        a = warn_c.count_documents(query_guild_user)
 
-        emo = discord.Embed(title=f'Obtaining warns... for {user}', description="This may take a while depending on how many warnings this user has.", colour=discord.Colour.red())
-        await ctx.send(embed=emo)
+        if (a == 0):
+            await ctx.send(f"**❌ No warnings found for {user}**")
+        else:
+            async with ctx.typing():
+                warnem = discord.Embed(title=f"Found {a} warnings for {user}", colour=discord.Colour.red())
 
-        async with ctx.typing():
-            for x in warn_c.find(query_guild_user):
-                try:
-                    embed = discord.Embed(title=f"WARN ID: {x['_id']}", colour=discord.Colour.red())
-                    embed.add_field(name='Reason', value=x['reason'], inline=False)
-                    embed.add_field(name='Warn Issued by', value=x['moderator'], inline=False)
-                    embed.add_field(name="Warned at", value=x['timestamp'], inline=False)
-                    await ctx.send(embed=embed)
-                    await asyncio.sleep(0.5)
-                except Exception as e:
-                    await ctx.send('An unknown error has occured, sent error log to HQ.')
-                    errorlogs_webhook.send(f"```[ERROR] CMD|WARNS: {e}```")
+                for x in warn_c.find(query_guild_user):
+                    try:
+                        warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"Reason: {x['reason']}\nTime: {x['timestamp']}\nWarn issued by: {x['moderator']}", inline=False)
+                    except Exception as e:
+                        errorlogs_webhook.send(f"```[ERROR] CMD|WARNS: {e}```")
+
+                await ctx.send(embed=warnem)
+
 
         a = warn_c.count_documents(query_guild_user)
 
