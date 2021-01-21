@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.13'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.14'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Removed DM commands"
-CHANGELOG_DATE = '12/1/2021'
+CHANGELOG_MESSAGE = "Stop spamming results from `warn` command."
+CHANGELOG_DATE = '20/1/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -681,7 +681,7 @@ async def afk(ctx, *, reason=None):
     timestamp = datetime.utcnow()
     post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': reason, 'Timestamp': timestamp}
     afk_c.insert_one(post)
-    await ctx.send(f'{ctx.author} is now AFK - {reason}')
+    await ctx.send(f'{ctx.author} is now AFK: {reason}')
     await ctx.message.delete()
 
 @bot.command()
@@ -757,7 +757,6 @@ async def say(ctx, *, text : str = None):
                 f'Please refrain from doing that, {ctx.message.author.mention}.',
                 f"Baka {ctx.message.author.mention}, don't do that!",
                 f"I don't like what you did there {ctx.message.author.mention}.",
-                f"Please do not mention `@here` or  `@everyone` {ctx.message.author.mention}!",
                 f"Not good {ctx.message.author.mention}!",
                 f"I don't like what you are trying to do {ctx.message.author.mention}!",
                 f"Don't try to piss people off please {ctx.message.author.mention}"
