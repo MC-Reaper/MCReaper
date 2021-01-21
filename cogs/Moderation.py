@@ -286,8 +286,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    # Warns
-    @commands.command()
+    @commands.command(aliases=['warnings'])
     async def warns(self, ctx, txt = None):
         """Lists warnings of a user."""
 
@@ -316,14 +315,15 @@ class Moderation(commands.Cog):
         a = warn_c.count_documents(query_guild_user)
 
         if (a == 0):
-            await ctx.send(f"**❌ No warnings found for {user}**")
+            await ctx.send(f"**❌  No warnings found for {user}**")
         else:
             async with ctx.typing():
-                warnem = discord.Embed(title=f"Found {a} warnings for {user}", colour=discord.Colour.red())
+                warnem = discord.Embed(colour=discord.Colour.red())
+                warnem.set_author(name=f"Found {a} warnings for {user}", icon_url=user.avatar_url_as(static_format='png'))
 
                 for x in warn_c.find(query_guild_user):
                     try:
-                        warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"Reason: {x['reason']}\nTime: {x['timestamp']}\nWarn issued by: {x['moderator']}", inline=False)
+                        warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"**Reason:** {x['reason']}\n**Time:** {x['timestamp']}\n**Warn issued by:** {x['moderator']}", inline=False)
                     except Exception as e:
                         errorlogs_webhook.send(f"```[ERROR] CMD|WARNS: {e}```")
 

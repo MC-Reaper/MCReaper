@@ -456,7 +456,7 @@ async def on_message(message):
                     afksince = reapertools.datediff_humanize(x['Timestamp'], datetime.utcnow())
 
                     reason = afk_c.find_one({"UserID": str(mention.id), "GuildID": str(guild.id)})['Reason']
-                    await message.channel.send(f'{mention} is currently AFK - {reason}\nAFK {afksince} ago.')
+                    await message.channel.send(f'{mention} is currently AFK: {reason}\nAFK {afksince} ago.')
 
     await bot.process_commands(message)
 
