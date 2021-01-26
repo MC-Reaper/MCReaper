@@ -76,7 +76,7 @@ class Greetings(commands.Cog):
         query = {'_id': ctx.guild.id}
 
         if (welcmsg.count_documents(query) == 1):
-            await ctx.send(f"greetings message:\n{welcmsg.find_one(query)['msg']}")
+            await ctx.send(f"Greetings message:\n{welcmsg.find_one(query)['msg']}")
             return await ctx.send(f"Goodbye message:\n{welcmsg.find_one(query)['msgleave']}")
 
         await ctx.send('You have not setup greetings yet!')
