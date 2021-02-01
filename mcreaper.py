@@ -747,7 +747,7 @@ async def hentaibomb(ctx, user : discord.Member = None):
 async def say(ctx, *, text : str = None):
     """Outputs text as the bot"""
 
-    if ctx.message.id == 601685935490596884:
+    if ctx.author.id == 601685935490596884:
         return ctx.send('<@601685935490596884> Baka, you think you can use me? Piss off!')
         
     async with ctx.typing():
