@@ -100,7 +100,7 @@ class Botsudo(commands.Cog):
         stick = ''
         while i <= lol:
             stick += ministick
-            em = discord.Embed(title='PP Grow', description=f'Dark is sin\n8{stick}D', colour=RandomColour())
+            em = discord.Embed(title='PP Grow', description=f'Dark PP Grow!\n8{stick}D', colour=RandomColour())
 
             await asyncio.sleep(2.5)
             await mhsend.edit(embed=em)
