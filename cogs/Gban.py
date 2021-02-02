@@ -13,7 +13,6 @@ with open('config.json') as a:
 BAN_GIF = config.get("ban_gif")
 DOZ_DISCORD = 'Doz#1040'
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
-DARK_ID = int(440253153775190037) # Dark (Fonce)
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
 mongosrv = config.get("mongosrv")

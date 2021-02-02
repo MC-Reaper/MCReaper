@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.14'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.15'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Stop spamming results from `warn` command."
-CHANGELOG_DATE = '20/1/2021'
+CHANGELOG_MESSAGE = "Fixed everyone ping loophole"
+CHANGELOG_DATE = '02/02/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -666,11 +666,10 @@ async def afk(ctx, *, reason=None):
     """AFK"""
 
     if reason == None:
-        reason = 'AFK'
-    elif '<@everyone>' in reason:
-        return await ctx.send('DO NOT PING `EVERYONE`!')
-    elif '<@here>' in reason:
-        return await ctx.send('DO NOT PING `HERE`!')
+        translatedAFKReason = 'AFK'
+    else:
+        afkdict = {'@everyone': 'everyone', '@here': 'here'}
+        translatedAFKReason = reapertools.rtwdv(reason, afkdict)
 
     query = {'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id)}
 
@@ -679,9 +678,9 @@ async def afk(ctx, *, reason=None):
         return await ctx.send('Idiot you already had AFK status, removing it anyway.')
 
     timestamp = datetime.utcnow()
-    post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': reason, 'Timestamp': timestamp}
+    post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': {translatedAFKReason}, 'Timestamp': timestamp}
     afk_c.insert_one(post)
-    await ctx.send(f'{ctx.author} is now AFK: {reason}')
+    await ctx.send(f'{ctx.author} is now AFK: {translatedAFKReason}')
     await ctx.message.delete()
 
 @bot.command()
@@ -757,12 +756,12 @@ async def say(ctx, *, text : str = None):
             text = 'Usage: `-say <text>`\nMakes me speak with your words.'
 
             possible_responses_ping = [
-                f'Please refrain from doing that, {ctx.message.author.mention}.',
-                f"Baka {ctx.message.author.mention}, don't do that!",
-                f"I don't like what you did there {ctx.message.author.mention}.",
-                f"Not good {ctx.message.author.mention}!",
-                f"I don't like what you are trying to do {ctx.message.author.mention}!",
-                f"Don't try to piss people off please {ctx.message.author.mention}"
+                f'Your stupidity amazes me, {ctx.author.mention}.',
+                f"Baka {ctx.author.mention}, you think you can ping everyone?",
+                f"What an idiot :disappointed:. {ctx.author.mention}, why are you trying to ping everyone?",
+                f"Not good {ctx.author.mention}!",
+                f"Come on man! Don't go pinging everyone by using me {ctx.author.mention}!",
+                f"I'm telling you {ctx.author.mention}, you are going to piss people off, be a good dog okay?"
             ]
 
         if ctx.message.author.id == BOT_OWNER_ID:

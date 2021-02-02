@@ -46,7 +46,7 @@ class Animeviewer(commands.Cog):
 
             except Exception as e:
                 if 'list index out of range' in str(e):
-                    await smsg.edit(content="I couldn't find that! Please check your spelling, make sure the anime actually exists and be more specific.\nE.g: ```animesearch Boku No Hero Academia 4``` *4* is the season.")
+                    await smsg.edit(content="I couldn't find that! Please check your spelling, make sure the anime actually exists and be more specific.\nE.g: ```animesearch Boku No Hero Academia 4```")
                 else:
                     raise Exception
 
