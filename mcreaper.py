@@ -666,11 +666,12 @@ async def afk(ctx, *, reason=None):
     """AFK"""
 
     if reason == None:
-        translatedAFKReason = 'AFK'
-    else:
-        afkdict = {'@everyone': 'everyone', '@here': 'here'}
-        translatedAFKReason = reapertools.rtwdv(reason, afkdict)
-
+        reason = 'AFK'
+    elif '@everyone' in ctx.message.content:
+        return await ctx.send(f'Baka {ctx.author.mention}, you cannot use me to ping everyone!')
+    elif '@here' in ctx.message.content:
+        return await ctx.send(f'Baka {ctx.author.mention}, you cannot use me to ping everyone!')
+        
     query = {'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id)}
 
     if (afk_c.count_documents(query) == 1):
@@ -678,9 +679,9 @@ async def afk(ctx, *, reason=None):
         return await ctx.send('Idiot you already had AFK status, removing it anyway.')
 
     timestamp = datetime.utcnow()
-    post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': {translatedAFKReason}, 'Timestamp': timestamp}
+    post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': {reason}, 'Timestamp': timestamp}
     afk_c.insert_one(post)
-    await ctx.send(f'{ctx.author} is now AFK: {translatedAFKReason}')
+    await ctx.send(f'{ctx.author} is now AFK: {reason}')
     await ctx.message.delete()
 
 @bot.command()
