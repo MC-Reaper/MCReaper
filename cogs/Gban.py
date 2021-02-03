@@ -24,13 +24,13 @@ sudo_users_c = db["sudo_users"]
 # ---------------------------------------------------------------------------
 # Webhooks
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter()) #logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 gbans_webhook = Webhook.partial(746155689033990144, "V4QGR7UAO3HRGTYb2j8iUNFN4F1utX2CV5RQ3bWQSH_LGartc0lgAXPKEFiMUHxGL6kb",\
- adapter=RequestsWebhookAdapter()) #gban-logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+ adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Checks
 async def SUDOER_CHECK(ctx):

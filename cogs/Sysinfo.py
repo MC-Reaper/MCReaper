@@ -49,9 +49,10 @@ class Sysinfo(commands.Cog):
 
             await ctx.send("```" + result + "```")
         except FileNotFoundError:
-            await ctx.send("`The neofetch binary is missing!\nAttempting to download binary with wget...`")
+            nfdlmsg = await ctx.send("`The neofetch binary is missing!\nAttempting to download binary with wget...`")
             try:
-            	await asyncrunapp("wget", "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch")
+                await asyncrunapp("wget", "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch")
+                await nfdlmsg.edit(content="`Sucessfully downloaded the neofetch binary`")
             except:
             	await ctx.send("Failed to download neofetch binary!")
 

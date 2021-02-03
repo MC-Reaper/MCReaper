@@ -27,19 +27,10 @@ chatlog = db["chatlog"]
 # ---------------------------------------------------------------------------
 # Webhooks
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter()) #logs in HQ
-
-reaper_logs_webhook = Webhook.partial(746157945468747776, "lOrgfZFXSTt32nQq9qzZgeNewBxfaM--bTUT4EFg9jgAWhGGfBMcVUSijddymaEQvgWl",\
- adapter=RequestsWebhookAdapter()) #reaper-logs in HQ
-
-gbans_webhook = Webhook.partial(746155689033990144, "V4QGR7UAO3HRGTYb2j8iUNFN4F1utX2CV5RQ3bWQSH_LGartc0lgAXPKEFiMUHxGL6kb",\
- adapter=RequestsWebhookAdapter()) #gban-logs in HQ
-
-joinleave_webhook = Webhook.partial(746157465606946847, "SOz8ky2uDPiNfdjntY4H40jdpm9YHVM1kVRIv_LcgN_hKu7e269oAHkDGUgtxPdj8y6Q",\
- adapter=RequestsWebhookAdapter()) #bot-join-logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+ adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Other Defs
 BAN_GIF = config.get("ban_gif")
@@ -62,10 +53,12 @@ async def send_to_log_channel(ctx, *, text=None, emt=None):
 
         chatlog_id = chatlog.find_one(query)['chanid']
         logs_channel = discord.utils.get(ctx.guild.text_channels, id=chatlog_id)
-
+        
         if not logs_channel:
-            ctx.channel.send('```[WARNING] BOT|LOGS: Could not find channel for logging!```')
-            return errorlogs_webhook.send(f'```[WARNING] BOT|LOGS: Could not find channel for logging! in {ctx.guild.name} ({ctx.guild.id})```')
+            lgerr = f'[NOTICE] BOT|LOGS: Could not find channel for logging in {ctx.guild.name} ({ctx.guild.id}) so the DB has been deleted.'
+            chatlog.delete_many(query)
+            print(lgerr)
+            logs_webhook.send(f'```{lgerr}```')
 
         if text:
             if len(text) > 2000:
@@ -110,7 +103,7 @@ async def mute(ctx, user, reason):
                         role : discord.PermissionOverwrite(read_message_history=True)} # permissions for the channel
         # creates the channel and sends a message
             channel = await ctx.guild.create_text_channel('jail', overwrites=overwrites)
-            await channel.send("Sup, Reaper here. Welcome to jail, where you will spend your days in here for being a bad person. Enjoy your stay!")
+            await channel.send("Welcome to jail, where you will spend your days in here for being a bad person. Enjoy your stay, baka~!")
         except Exception as e:
             return await ctx.send(f"Error creating #jail!\n\n**DEBUG: {e}**")
 
@@ -188,7 +181,7 @@ class Moderation(commands.Cog):
         query = {"_id": ctx.guild.id}
         async with ctx.typing():
             if prefix == None:
-                await ctx.send('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE READ.\nYou can add multiple prefixes by seperating each prefix with ,`')
+                await ctx.send('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE USED.\nYou can add multiple prefixes by seperating each prefix with ,`')
                 return
             if (guild_prefixes_c.count_documents(query) == 0):
                 post = {"_id": ctx.guild.id, "prefix": prefix}
@@ -247,7 +240,7 @@ class Moderation(commands.Cog):
         try:
             await member.send(embed=embed)
         except:
-            await ctx.send(f"NOTICE: {member.mention} might have disabled DMs.")
+            await ctx.send(f"Warn has not been sent to {member.mention} as they might have disabled DMs for me.")
 
         await send_to_log_channel(ctx, emt=embed2)
 
@@ -378,7 +371,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to ban this user!")
+            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to ban {user.name}!")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -430,7 +423,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to soft-ban this user!")
+            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!")
     
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -516,7 +509,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to kick this user!")
+            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!")
 
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -643,10 +636,12 @@ class Moderation(commands.Cog):
 
         if (nsfw_flag.count_documents(query) == 0):
             nsfw_flag.insert_one(query)
-            return await ctx.send('Oh boy, someone wants to do something naughty!')
-
-        nsfw_flag.delete_one(query)
-        await ctx.send('Okay.. NSFW commands now only works on NSFW-marked channels.')
+            await send_to_log_channel(ctx, text=f'{ctx.author} has disabled the NSFW checker.')
+            await ctx.send('Is there really a need to disable this switch? well whatever you say, boss.')
+        else:
+            nsfw_flag.delete_one(query)
+            await send_to_log_channel(ctx, text=f'{ctx.author} has enabled the NSFW checker.')
+            await ctx.send('Okay.. NSFW commands now works only on NSFW-marked channels.')
 
     @commands.command(aliases=['cooldown'])
     @has_permissions(manage_messages=True)
@@ -664,9 +659,14 @@ class Moderation(commands.Cog):
         await ctx.channel.edit(slowmode_delay=txt, reason=reason)
 
         if txt == 0:
-            return await ctx.send(f'Disabled slowmode!')
+            smr = '✅ **Disabled slowmode!**'
+            smresult = f'{ctx.author} has disabled slowmode for {ctx.channel.name}.'
+        else:
+            smr = f'✅ **Set slowmode for {ctx.channel.name} to {txt}!**'
+            smresult = f'{ctx.author} set the slowmode of {ctx.channel.name} to {txt}.'
 
-        await ctx.send(f'Set slowmode to {txt}!')
+        await ctx.send(smr)
+        await send_to_log_channel(ctx, text=smresult)
 
     @commands.group(invoke_without_command=True, aliases=['embed', 'createembed'])
     @has_permissions(manage_messages=True)

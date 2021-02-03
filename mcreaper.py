@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.15'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.16'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Fixed everyone ping loophole"
-CHANGELOG_DATE = '02/02/2021'
+CHANGELOG_MESSAGE = "Fixed everyone ping loophole\nMinor changes."
+CHANGELOG_DATE = '03/02/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -67,16 +67,17 @@ def get_prefix(bot, msg):
     return commands.when_mentioned_or(default_prefix)(bot, msg)
 # ---------------------------------------------------------------------------
 # Boot
-print(f"""
-                        ███╗   ███╗ ██████╗    ██████╗ ███████╗ █████╗ ██████╗ ███████╗██████╗ 
-                        ████╗ ████║██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
-                        ██╔████╔██║██║         ██████╔╝█████╗  ███████║██████╔╝█████╗  ██████╔╝
-                        ██║╚██╔╝██║██║         ██╔══██╗██╔══╝  ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗
-                        ██║ ╚═╝ ██║╚██████╗    ██║  ██║███████╗██║  ██║██║     ███████╗██║  ██║
-                        ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
-                    
-                        By {DOZ_DISCORD} | Ver: {BOT_VERSION}
-        """)
+print(
+f"""
+███╗   ███╗ ██████╗    ██████╗ ███████╗ █████╗ ██████╗ ███████╗██████╗ 
+████╗ ████║██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔══██╗
+██╔████╔██║██║         ██████╔╝█████╗  ███████║██████╔╝█████╗  ██████╔╝
+██║╚██╔╝██║██║         ██╔══██╗██╔══╝  ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗
+██║ ╚═╝ ██║╚██████╗    ██║  ██║███████╗██║  ██║██║     ███████╗██║  ██║
+╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
+
+By {DOZ_DISCORD} | Ver: {BOT_VERSION}
+""")
 
 intents = discord.Intents.default()
 intents.members = True
@@ -87,19 +88,19 @@ botstartTime = datetime.utcnow()
 # Webhooks
 # TODO: Make webhook logging optional
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter()) #logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 reaper_logs_webhook = Webhook.partial(746157945468747776, "lOrgfZFXSTt32nQq9qzZgeNewBxfaM--bTUT4EFg9jgAWhGGfBMcVUSijddymaEQvgWl",\
- adapter=RequestsWebhookAdapter()) #reaper-logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 gbans_webhook = Webhook.partial(746155689033990144, "V4QGR7UAO3HRGTYb2j8iUNFN4F1utX2CV5RQ3bWQSH_LGartc0lgAXPKEFiMUHxGL6kb",\
- adapter=RequestsWebhookAdapter()) #gban-logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 joinleave_webhook = Webhook.partial(746157465606946847, "SOz8ky2uDPiNfdjntY4H40jdpm9YHVM1kVRIv_LcgN_hKu7e269oAHkDGUgtxPdj8y6Q",\
- adapter=RequestsWebhookAdapter()) #bot-join-logs in HQ
+ adapter=RequestsWebhookAdapter())
 
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+ adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Cog loader
 if __name__ == '__main__':
@@ -133,9 +134,10 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
         logs_channel = bot.get_channel(chatlog_id)
 
         if not logs_channel:
-            lgerr = f'[WARNING] BOT|LOGS: Could not find channel for logging in {gld.name} ({gld.id})!'
+            lgerr = f'[NOTICE] BOT|LOGS: Could not find channel for logging in {gld.name} ({gld.id}) so the DB has been deleted.'
+            chatlog.delete_many(query)
             print(lgerr)
-            errorlogs_webhook.send(f'```{lgerr}```')
+            logs_webhook.send(f'```{lgerr}```')
         
         else:
             if text:
@@ -163,12 +165,10 @@ async def on_ready():
 
     await bot.change_presence(activity=discord.Streaming(name=f"-help | Overseeing {len(bot.guilds)} guilds", url='https://www.twitch.tv/artia_hololive'))
 
-    reaper_start_text = pyfiglet.figlet_format("MC REAPER")
-    logs_webhook.send(f'```{reaper_start_text}\nstarting up...```')
     em = discord.Embed(title='MC Reaper Status', description=f'MC Reaper is running!', colour=RandomColour())
     em.add_field(name='Bot version:', value=BOT_VERSION, inline=False)
     logs_webhook.send(embed=em)
-    print('[INFO] BOT|BOOT: MC Reaper is running!')
+    print(f'[INFO] BOT|BOOT: MC Reaper is running!\n[INFO] BOT|BOOT: Logged in as {bot.user} | {bot.user.id}')
 
 @bot.event
 async def on_guild_join(guild):

@@ -25,7 +25,7 @@ userbio_c = db["userbio"]
 # ---------------------------------------------------------------------------
 # Webhooks
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+ adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 def RandomColour():
     """Generates random colours for embed"""
@@ -221,14 +221,8 @@ class Info(commands.Cog):
     async def owner(self, ctx):
         server = ctx.message.guild
         avi = server.owner.avatar_url_as(static_format='png')
-        if ctx.message.author.id == BOT_OWNER_ID:
-            bowner = f'You are the bot owner! Hi **{ctx.author.name}**!'
-        else:
-            bowner = 'You are not the bot owner! Buzz off!'
             
         embed = discord.Embed(title='Who is the Owner?', description=f"**{server.owner}** is the owner of this server.\nMore details of the owner:\nAccount birthday: {server.owner.created_at.__format__('%A, %d. %B %Y')}\nAccount joined server: {server.owner.joined_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}", colour=RandomColour())
-        
-        embed.add_field(name='Are you the bot owner?', value=bowner, inline=False)
         embed.set_author(name='Owner', icon_url=avi)
         
         await ctx.send(embed=embed)

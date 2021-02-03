@@ -9,7 +9,7 @@ from os import remove
 # ---------------------------------------------------------------------------
 # Webhook logging
 errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
+ adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
