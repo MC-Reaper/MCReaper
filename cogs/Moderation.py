@@ -629,7 +629,7 @@ class Moderation(commands.Cog):
             except:
                 pass
 
-    @clear.group()
+    @clear.command()
     @has_permissions(manage_messages=True)
     async def u(self, ctx, txt: str = None, count: int = None, *, reason = None):
         """Purges messages from a user"""
