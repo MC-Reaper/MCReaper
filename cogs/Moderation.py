@@ -596,36 +596,84 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             ctx.send('`nick <user> <new_nick>`\nOr `nick <new_nick>` If you want to change your own nickname.')
 
-    @commands.command(aliases=["delete","purge"])
+    @commands.group(aliases=["delete","purge"])
     @has_permissions(manage_messages=True)
     async def clear(self, ctx, txt: int = None, *, reason = None):
         """Clears messages"""
 
+        if ctx.invoked_subcommand is None:
+
+            if txt == None:
+                txtnon = await ctx.send("`You have to specify an amount baka!`")
+                await asyncio.sleep(2)
+                return await txtnon.delete()
+
+            if reason == None:
+                reason = "No reason provided."
+
+            user = ctx.author
+            embed = discord.Embed(title='Messages Purged', description=f'**{txt}** messages has been deleted by **{user} ({user.id})**', colour=discord.Colour.red())
+            embed.add_field(name='Reason:', value=f'{reason}', inline=False)
+            embed.add_field(name='Channel:', value=f'{ctx.message.channel}', inline=False)
+            embed.set_footer(text=f'Cleared by {user.name}', icon_url=user.avatar_url_as(static_format='png'))
+
+            try:
+                await ctx.message.delete()
+                await ctx.channel.purge(limit=txt)
+
+                infomsg = await ctx.send(embed=embed)
+
+                await send_to_log_channel(ctx, emt=embed)
+                await asyncio.sleep(10)
+                await infomsg.delete()
+            except:
+                pass
+
+    @clear.group()
+    @has_permissions(manage_messages=True)
+    async def u(self, ctx, txt: str = None, count: int = None, *, reason = None):
+        """Purges messages from a user"""
+
         if txt == None:
-            txtnon = await ctx.send("`You have to specify an amount baka!`")
-            await asyncio.sleep(2)
-            return await txtnon.delete()
+            return await ctx.send("`USAGE: clear u <user> <amount> [reason]`")
 
-        if reason == None:
-            reason = "No reason provided."
+        for a in txt:
+            if (a.isnumeric()) == True:
+                try:
+                    user = await self.bot.fetch_user(txt)
+                except:
+                    pass
+            else:
+                try:
+                    converter = MemberConverter()
+                    user = await converter.convert(ctx, txt)
+                except:
+                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
 
-        user = ctx.author
-        embed = discord.Embed(title='Messages Purged', description=f'**{txt}** messages has been deleted by **{user} ({user.id})**', colour=discord.Colour.red())
-        embed.add_field(name='Reason:', value=f'{reason}', inline=False)
-        embed.add_field(name='Channel:', value=f'{ctx.message.channel}', inline=False)
-        embed.set_footer(text=f'Cleared by {user.name}', icon_url=user.avatar_url_as(static_format='png'))
+            if count == None:
+                txtnon = await ctx.send("`You have to specify an amount baka!`")
+                await asyncio.sleep(2)
+                return await txtnon.delete()
 
-        try:
-            await ctx.message.delete()
-            await ctx.channel.purge(limit=txt)
+            if reason == None:
+                reason = "No reason provided."
 
-            infomsg = await ctx.send(embed=embed)
+            embed = discord.Embed(title='Messages Purged', description=f'**{count}** messages has been deleted for {user} by **{ctx.author} ({ctx.author.id})**', colour=discord.Colour.red())
+            embed.add_field(name='Reason:', value=f'{reason}', inline=False)
+            embed.add_field(name='Channel:', value=f'{ctx.message.channel}', inline=False)
+            embed.set_footer(text=f'Cleared by {ctx.author.name}', icon_url=user.avatar_url_as(static_format='png'))
 
-            await send_to_log_channel(ctx, emt=embed)
-            await asyncio.sleep(10)
-            await infomsg.delete()
-        except:
-            pass
+            try:
+                await ctx.message.delete()
+                await ctx.channel.purge(limit=count, check=lambda x: (x.user.id == user.id))
+
+                infomsg = await ctx.send(embed=embed)
+
+                await send_to_log_channel(ctx, emt=embed)
+                await asyncio.sleep(10)
+                await infomsg.delete()
+            except:
+                pass    
     
     @commands.command()
     @has_permissions(manage_messages=True)
