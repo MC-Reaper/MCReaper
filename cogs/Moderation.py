@@ -627,53 +627,7 @@ class Moderation(commands.Cog):
                 await asyncio.sleep(10)
                 await infomsg.delete()
             except:
-                pass
-
-    @commands.command(aliases=["deleteu","purgeu"])
-    @has_permissions(manage_messages=True)
-    async def clearu(self, ctx, txt: str = None, count: int = None, *, reason = None):
-        """Purges messages from a user"""
-
-        if txt == None:
-            return await ctx.send("`USAGE: clear u <user> <amount> [reason]`")
-
-        for a in txt:
-            if (a.isnumeric()) == True:
-                try:
-                    user = await self.bot.fetch_user(txt)
-                except:
-                    pass
-            else:
-                try:
-                    converter = MemberConverter()
-                    user = await converter.convert(ctx, txt)
-                except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
-
-            if count == None:
-                txtnon = await ctx.send("`You have to specify an amount baka!`")
-                await asyncio.sleep(2)
-                return await txtnon.delete()
-
-            if reason == None:
-                reason = "No reason provided."
-
-            embed = discord.Embed(title='Messages Purged', description=f'**{count}** messages has been deleted for {user} by **{ctx.author} ({ctx.author.id})**', colour=discord.Colour.red())
-            embed.add_field(name='Reason:', value=f'{reason}', inline=False)
-            embed.add_field(name='Channel:', value=f'{ctx.message.channel}', inline=False)
-            embed.set_footer(text=f'Cleared by {ctx.author.name}', icon_url=user.avatar_url_as(static_format='png'))
-
-            try:
-                await ctx.message.delete()
-                await ctx.channel.purge(limit=count, check=lambda x: (x.user.id == user.id))
-
-                infomsg = await ctx.send(embed=embed)
-
-                await send_to_log_channel(ctx, emt=embed)
-                await asyncio.sleep(10)
-                await infomsg.delete()
-            except:
-                pass    
+                pass   
     
     @commands.command()
     @has_permissions(manage_messages=True)
