@@ -596,7 +596,7 @@ class Moderation(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             ctx.send('`nick <user> <new_nick>`\nOr `nick <new_nick>` If you want to change your own nickname.')
 
-    @commands.group(aliases=["delete","purge"])
+    @commands.command(aliases=["delete","purge"])
     @has_permissions(manage_messages=True)
     async def clear(self, ctx, txt: int = None, *, reason = None):
         """Clears messages"""
@@ -629,9 +629,9 @@ class Moderation(commands.Cog):
             except:
                 pass
 
-    @clear.command()
+    @commands.command(aliases=["deleteu","purgeu"])
     @has_permissions(manage_messages=True)
-    async def u(self, ctx, txt: str = None, count: int = None, *, reason = None):
+    async def clearu(self, ctx, txt: str = None, count: int = None, *, reason = None):
         """Purges messages from a user"""
 
         if txt == None:
