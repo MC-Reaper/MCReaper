@@ -81,6 +81,7 @@ By {DOZ_DISCORD} | Ver: {BOT_VERSION}
 
 intents = discord.Intents.default()
 intents.members = True
+intents.bans = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
@@ -220,6 +221,34 @@ async def on_guild_remove(guild):
         mjrp6 = f'[ERROR] ONMEMBERJOIN|DATABASE: {e}'
         print(mjrp6)
         errorlogs_webhook.send(f'```{mjrp6}```')
+
+@bot.event
+async def on_member_ban(guild, user):
+    """Whan a member gets banned"""
+
+    logs = await guild.audit_logs(limit=1, action=discord.AuditLogAction.ban).flatten()
+    logs = logs[0]
+
+    if logs.target == user:
+
+        """if (welcmsg.count_documents({"_id": guild.id}) == 1):
+            
+            welchan_id = welcmsg.find_one({"_id": guild.id})['chanid']
+            welcome_channel = bot.get_channel(welchan_id)
+                
+            if not welcome_channel:
+                lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
+                print(lgerr)
+                errorlogs_webhook.send(f'```{lgerr}```')
+            else:
+                await welcome_channel.send(content=f"{user} has been banned.")"""
+
+        if (chatlog.count_documents({"_id": guild.id}) == 1):
+            
+            em = discord.Embed(title='Ban Notice', description=f'**{user} ({user.id})** has been banned.', colour=discord.Colour.red())
+            em.add_field(name='Reason:', value=logs.reason, inline=False)
+            em.set_footer(text=f'Banned by {logs.user}', icon_url=logs.user.avatar_url_as(static_format='png'))
+            await send_to_log_channel(gld=guild, emt=em)
 
 @bot.event
 async def on_member_join(member):
@@ -712,8 +741,10 @@ async def nsfw(ctx, text = None):
             await ctx.send(nekos.img(text))
             logs_webhook.send(f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
         except Exception as e:
-            await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
-            errorlogs_webhook.send(f"```[ERROR] CMD|NSFW: {e}```")
+            if "You haven't added any valid arguments" in str(e):
+                await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
+            else:
+                raise NameError(e)
 
 @bot.command()
 async def hentaibomb(ctx, user : discord.Member = None):
@@ -733,16 +764,13 @@ async def hentaibomb(ctx, user : discord.Member = None):
             return await ctx.send("You cannot use NSFW commands here!")
         
     async with ctx.typing():
-        try:
-            await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
-            await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
-            await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
-            await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
-            await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
-            await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-            logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id})')
-        except Exception as e:
-            errorlogs_webhook.send(f"```[ERROR] CMD|HENTAIBOMB: {e}```")
+        await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
+        await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
+        await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
+        await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
+        await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
+        await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
+        logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id})')
 
 @bot.command()
 async def say(ctx, *, text : str = None):

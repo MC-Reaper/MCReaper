@@ -354,8 +354,6 @@ class Moderation(commands.Cog):
         try: # Tries to ban user
             await ctx.guild.ban(user, reason=f"by {ctx.author}: {reason}")
 
-            await send_to_log_channel(ctx, emt=embed2)
-
             await ctx.send(embed=embed2)
         except:
             return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to ban {user.name}!")
