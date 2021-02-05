@@ -249,7 +249,7 @@ async def on_member_unban(guild, user):
 
         if (chatlog.count_documents({"_id": guild.id}) == 1):
             
-            em = discord.Embed(title='Unban Notice', description=f'**{user} ({user.id})** has been unbanned.', colour=discord.Colour.red())
+            em = discord.Embed(title='Unban Notice', description=f'**{user} ({user.id})** has been unbanned.', colour=discord.Colour.green())
             em.add_field(name='Reason:', value=logs.reason, inline=False)
             em.set_footer(text=f'Unbanned by {logs.user}', icon_url=logs.user.avatar_url_as(static_format='png'))
             await send_to_log_channel(gld=guild, emt=em)

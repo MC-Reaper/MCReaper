@@ -404,8 +404,6 @@ class Moderation(commands.Cog):
             await ctx.guild.ban(user, reason=f"By {ctx.author}: soft-ban: {reason}")
             await ctx.guild.unban(user, reason=f"By {ctx.author}: soft-ban: {reason}")
 
-            await send_to_log_channel(ctx, emt=embed2)
-
             await ctx.send(embed=embed2)
         except:
             return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!")
