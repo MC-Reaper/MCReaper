@@ -224,30 +224,34 @@ async def on_guild_remove(guild):
 
 @bot.event
 async def on_member_ban(guild, user):
-    """Whan a member gets banned"""
+    """When a member gets banned"""
 
     logs = await guild.audit_logs(limit=1, action=discord.AuditLogAction.ban).flatten()
     logs = logs[0]
 
     if logs.target == user:
 
-        """if (welcmsg.count_documents({"_id": guild.id}) == 1):
-            
-            welchan_id = welcmsg.find_one({"_id": guild.id})['chanid']
-            welcome_channel = bot.get_channel(welchan_id)
-                
-            if not welcome_channel:
-                lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
-                print(lgerr)
-                errorlogs_webhook.send(f'```{lgerr}```')
-            else:
-                await welcome_channel.send(content=f"{user} has been banned.")"""
-
         if (chatlog.count_documents({"_id": guild.id}) == 1):
             
             em = discord.Embed(title='Ban Notice', description=f'**{user} ({user.id})** has been banned.', colour=discord.Colour.red())
             em.add_field(name='Reason:', value=logs.reason, inline=False)
             em.set_footer(text=f'Banned by {logs.user}', icon_url=logs.user.avatar_url_as(static_format='png'))
+            await send_to_log_channel(gld=guild, emt=em)
+
+@bot.event
+async def on_member_unban(guild, user):
+    """When a member gets unbanned"""
+
+    logs = await guild.audit_logs(limit=1, action=discord.AuditLogAction.unban).flatten()
+    logs = logs[0]
+
+    if logs.target == user:
+
+        if (chatlog.count_documents({"_id": guild.id}) == 1):
+            
+            em = discord.Embed(title='Unban Notice', description=f'**{user} ({user.id})** has been unbanned.', colour=discord.Colour.red())
+            em.add_field(name='Reason:', value=logs.reason, inline=False)
+            em.set_footer(text=f'Unbanned by {logs.user}', icon_url=logs.user.avatar_url_as(static_format='png'))
             await send_to_log_channel(gld=guild, emt=em)
 
 @bot.event

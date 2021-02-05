@@ -352,7 +352,7 @@ class Moderation(commands.Cog):
             pass
 
         try: # Tries to ban user
-            await ctx.guild.ban(user, reason=f"by {ctx.author}: {reason}")
+            await ctx.guild.ban(user, reason=f"By {ctx.author}: {reason}")
 
             await ctx.send(embed=embed2)
         except:
@@ -401,8 +401,8 @@ class Moderation(commands.Cog):
             pass
 
         try: # Tries to soft-ban user
-            await ctx.guild.ban(user, reason=f"by {ctx.author}: {reason}")
-            await ctx.guild.unban(user)
+            await ctx.guild.ban(user, reason=f"By {ctx.author}: soft-ban: {reason}")
+            await ctx.guild.unban(user, reason=f"By {ctx.author}: soft-ban: {reason}")
 
             await send_to_log_channel(ctx, emt=embed2)
 
