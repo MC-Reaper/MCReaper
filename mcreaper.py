@@ -553,7 +553,7 @@ async def on_command_error(ctx, error):
         pass
     else:
         errorstr = f"An error has occured! HQ will receive this error message!\n```{error}```"
-        pwebstr = f"[ERROR] BOT|CMD: MsgCont: {msgcont}\nError: {error}"
+        pwebstr = f"[ERROR] BOT|CMD: MSGCONT: {msgcont}\nError: {error}"
         try:
             errorlogs_webhook.send(pwebstr)
         except:

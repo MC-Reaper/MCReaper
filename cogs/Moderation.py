@@ -78,44 +78,41 @@ async def send_to_log_channel(ctx, *, text=None, emt=None):
 # ---------------------------------------------------------------------------  
 # Checks if there is a muted role on the server and creates one if there isn't
 async def mute(ctx, user, reason):
-    role = discord.utils.get(ctx.guild.roles, name="Reaper Muted") # retrieves muted role returns none if there isn't 
-    jail = discord.utils.get(ctx.guild.text_channels, name="jail") # retrieves channel named jail returns none if there isn't
-    if not role: # checks if there is muted role
-        try: # creates muted role 
+    role = discord.utils.get(ctx.guild.roles, name="Reaper Muted")
+    jail = discord.utils.get(ctx.guild.text_channels, name="jail")
+    if not role:
+        try:
             muted = await ctx.guild.create_role(name="Reaper Muted", reason="To use for muting")
-            for channel in ctx.guild.channels: # removes permission to view and send in the channels 
+            for channel in ctx.guild.channels:
                 await channel.set_permissions(muted, send_messages=False,
                                             read_message_history=False,
                                             read_messages=False)
         except discord.Forbidden:
-            return await ctx.send("I have no permissions to make a muted role") # self-explainatory
-        await user.add_roles(muted) # adds newly created muted role
+            return await ctx.send("I have no permissions to make a muted role")
+        await user.add_roles(muted)
         await ctx.send(f"{user.mention} has been sent to the abyss for {reason}")
     else:
-        await user.add_roles(role) # adds already existing muted role
+        await user.add_roles(role)
         await ctx.send(f"{user.mention} has been sent to the abyss for {reason}")
     
-    if not jail: # checks if there is a channel named jail
-        try:
-            role = discord.utils.get(ctx.guild.roles, name="Reaper Muted")
-            overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_message_history=False),
-                        ctx.guild.me: discord.PermissionOverwrite(send_messages=True),
-                        role : discord.PermissionOverwrite(read_message_history=True)} # permissions for the channel
-        # creates the channel and sends a message
-            channel = await ctx.guild.create_text_channel('jail', overwrites=overwrites)
-            await channel.send("Welcome to jail, where you will spend your days in here for being a bad person. Enjoy your stay, baka~!")
-        except Exception as e:
-            return await ctx.send(f"Error creating #jail!\n\n**DEBUG: {e}**")
+    if not jail:
+        role = discord.utils.get(ctx.guild.roles, name="Reaper Muted")
+        overwrites = {ctx.guild.default_role: discord.PermissionOverwrite(read_message_history=False),
+                    ctx.guild.me: discord.PermissionOverwrite(send_messages=True),
+                    role : discord.PermissionOverwrite(read_message_history=True)}
+
+        channel = await ctx.guild.create_text_channel('jail', overwrites=overwrites)
+        await channel.send("Welcome to jail, where you will spend your days in here for being a bad person. Enjoy your stay, baka~!")
 
 # Checks if you have a muted role
 class Redeemed(commands.Converter):
     async def convert(self, ctx, argument):
-        argument = await commands.MemberConverter().convert(ctx, argument) # gets member object
-        muted = discord.utils.get(ctx.guild.roles, name="Reaper Muted") # gets role object
+        argument = await commands.MemberConverter().convert(ctx, argument)
+        muted = discord.utils.get(ctx.guild.roles, name="Reaper Muted")
         if muted in argument.roles: # checks if user has muted role
             return argument # returns member object if there is muted role
         else:
-            raise commands.BadArgument("The user was not muted.") # self-explainatory
+            raise commands.BadArgument("The user was not muted.")
             
             
 class Moderation(commands.Cog):
@@ -124,7 +121,6 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # log
     @commands.group(invoke_without_command=True)
     @has_permissions(manage_guild=True)
     async def log(self, ctx):
@@ -155,7 +151,6 @@ class Moderation(commands.Cog):
 
         await ctx.send('You have not setup logging yet!')
 
-    #Prefix
     @commands.group(invoke_without_command=True)
     async def prefix(self, ctx):
         """What's the current prefix?"""
@@ -188,11 +183,8 @@ class Moderation(commands.Cog):
                 guild_prefixes_c.insert_one(post)
                 await ctx.send(f'Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
             else:
-                try:
-                    guild_prefixes_c.update_one(query, {"$set":{"prefix":prefix}})
-                    await ctx.send(f'Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
-                except Exception as e:
-                    await ctx.send(e)
+                guild_prefixes_c.update_one(query, {"$set":{"prefix":prefix}})
+                await ctx.send(f'Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
 
     @prefix.error
     async def prefix_error(self, ctx, error):
@@ -202,7 +194,6 @@ class Moderation(commands.Cog):
             await ctx.send('An unknown error has occured, sent error log to HQ.')
             errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {str(error)}```")
 
-    # Warn
     @commands.command()
     @has_permissions(manage_messages=True)
     async def warn(self, ctx, member: discord.Member = None, *, reason = None):
@@ -246,7 +237,6 @@ class Moderation(commands.Cog):
 
         await ctx.send(embed=embed2)
 
-    # Unwarn
     @commands.command()
     @has_permissions(manage_messages=True)
     async def unwarn(self, ctx, txt = None):
@@ -315,10 +305,7 @@ class Moderation(commands.Cog):
                 warnem.set_author(name=f"Found {a} warnings for {user}", icon_url=user.avatar_url_as(static_format='png'))
 
                 for x in warn_c.find(query_guild_user):
-                    try:
-                        warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"**Reason:** {x['reason']}\n**Time:** {x['timestamp']}\n**Warn issued by:** {x['moderator']}", inline=False)
-                    except Exception as e:
-                        errorlogs_webhook.send(f"```[ERROR] CMD|WARNS: {e}```")
+                    warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"**Reason:** {x['reason']}\n**Time:** {x['timestamp']}\n**Warn issued by:** {x['moderator']}", inline=False)
 
                 await ctx.send(embed=warnem)
             
