@@ -677,10 +677,7 @@ class Moderation(commands.Cog):
 
         if ctx.invoked_subcommand is None:
 
-            try:
-                await ctx.message.delete()
-            except:
-                pass
+            await ctx.message.delete()
 
             em = discord.Embed(title='Reaper Embed Creator', description='Starting interactive creator..', colour=discord.Colour.gold())
             smsg = await ctx.send(content='No option specified, going with default option, please wait..', embed=em)
@@ -699,10 +696,7 @@ class Moderation(commands.Cog):
             em = discord.Embed(title='Reaper Embed Creator', description=f'This is now your title:\n{title_msg}\n\nNow tell me what your description should be?', colour=discord.Colour.green())
             await smsg.edit(content=None, embed=em)
 
-            try:
-                await msg.delete()
-            except:
-                pass
+            await msg.delete()
 
             try:
                 msg = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
@@ -714,10 +708,7 @@ class Moderation(commands.Cog):
             em = discord.Embed(title='Reaper Embed Creator', description=f'This is now your description:\n{description_msg}\n\nWould you like to set a thumbnail? If so, make sure your image is a url.\nSay no to create embed without thumbnail, otherwise say yes.', colour=discord.Colour.green())
             await smsg.edit(content=None, embed=em)
 
-            try:
-                await msg.delete()
-            except:
-                pass
+            await msg.delete()
 
             try:
                 msg = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
@@ -730,11 +721,8 @@ class Moderation(commands.Cog):
                 await smsg.edit(content=None, embed=em)
                 await asyncio.sleep(5)
 
-                try:
-                    await msg.delete()
-                    await smsg.delete()
-                except:
-                    pass
+                await msg.delete()
+                await smsg.delete()
 
                 em = discord.Embed(title=title_msg, description=description_msg, colour=RandomColour())
                 em.set_footer(text=f'Embed created by {ctx.message.author}')
@@ -744,10 +732,7 @@ class Moderation(commands.Cog):
                 em = discord.Embed(title='Reaper Embed Creator', description='You have chosen to add a thumbnail. Please type the link/url of the image.\nYou have 120 seconds.', colour=discord.Colour.green())
                 await smsg.edit(content=None, embed=em)
 
-                try:
-                    await msg.delete()
-                except:
-                    pass
+                await msg.delete()
 
                 try:
                     msg = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author, timeout=120)
@@ -763,11 +748,8 @@ class Moderation(commands.Cog):
                     await smsg.edit(content=None, embed=em)
                     await asyncio.sleep(5)
 
-                    try:
-                        await smsg.delete()
-                        await msg.delete()
-                    except:
-                        pass
+                    await smsg.delete()
+                    await msg.delete()
 
                     em = discord.Embed(title=title_msg, description=description_msg, colour=RandomColour())
                     em.set_thumbnail(url=url_thumbnail)
@@ -784,11 +766,8 @@ class Moderation(commands.Cog):
                 await smsg.edit(content=None, embed=em)
                 await asyncio.sleep(5)
 
-                try:
-                    await msg.delete()
-                    await smsg.delete()
-                except:
-                    pass
+                await msg.delete()
+                await smsg.delete()
 
                 em = discord.Embed(title=title_msg, description=description_msg, colour=RandomColour())
                 em.set_footer(text=f'Embed created by {ctx.message.author}')

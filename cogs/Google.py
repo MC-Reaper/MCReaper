@@ -23,11 +23,7 @@ class Google(commands.Cog):
         if query == None:
             return await ctx.send("`USAGE: gsearch <query>`\nLooks up for the first 5 results.\nTry `gsearch ducks`.")
 
-        try:
-            results = '\n '.join(str(x) for x in search(query, tld="com", num=5, stop=5, pause=2))
-        except Exception as e:
-            await ctx.send('An unknown error has occured, sent error log to HQ.')
-            return errorlogs_webhook.send(f"```[ERROR] CMD|GSEARCH: {e}```")
+        results = '\n '.join(str(x) for x in search(query, tld="com", num=5, stop=5, pause=2))
 
         if results == '':
             results = "Couldn't search for that!"

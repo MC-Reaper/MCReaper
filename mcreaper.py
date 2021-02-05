@@ -237,6 +237,9 @@ async def on_member_join(member):
         welchan_id = welcmsg.find_one({"_id": guild.id})['chanid']
         welcome_channel = bot.get_channel(welchan_id)
 
+        if member.id == BOT_OWNER_ID:
+            translated_text = translated_text + '\nMy creator has joined the server.'
+
         if not welcome_channel:
             lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
             print(lgerr)
@@ -675,7 +678,7 @@ async def afk(ctx, *, reason=None):
 
     if (afk_c.count_documents(query) == 1):
         afk_c.delete_one(query)
-        return await ctx.send('Idiot you already had AFK status, removing it anyway.')
+        return await ctx.send('Baka you already had AFK status, removing it anyway.')
 
     timestamp = datetime.utcnow()
     post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': translatedAFKReason, 'Timestamp': timestamp}
@@ -731,23 +734,19 @@ async def hentaibomb(ctx, user : discord.Member = None):
         
     async with ctx.typing():
         try:
-            inviteurl = await ctx.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
             await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
             await ctx.send(f"{nekos.img('random_hentai_gif')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('boobs')}\n{nekos.img('tits')}")
             await ctx.send(f"{nekos.img('tits')}\n{nekos.img('tits')}\n{nekos.img('feet')}\n{nekos.img('feet')}\n{nekos.img('feet')}")
             await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
             await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
             await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-            logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+            logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id})')
         except Exception as e:
             errorlogs_webhook.send(f"```[ERROR] CMD|HENTAIBOMB: {e}```")
 
 @bot.command()
 async def say(ctx, *, text : str = None):
     """Outputs text as the bot"""
-
-    if ctx.author.id == 601685935490596884:
-        return ctx.send('<@601685935490596884> Baka, you think you can use me? Piss off!')
         
     async with ctx.typing():
 

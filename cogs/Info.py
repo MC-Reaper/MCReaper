@@ -207,12 +207,9 @@ class Info(commands.Cog):
                 await ctx.send(e)
         elif lol == 'avi':
             server = ctx.message.guild
-            try:
-                em = discord.Embed(colour=RandomColour())
-                em.set_image(url=server.icon_url)
-                await ctx.send(embed=em)
-            except Exception as e:
-                await ctx.send(e)
+            em = discord.Embed(colour=RandomColour())
+            em.set_image(url=server.icon_url)
+            await ctx.send(embed=em)
         else:
             return await ctx.send('`si or si avi`')
 
