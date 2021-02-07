@@ -314,8 +314,6 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, txt = None, *, reason=None):
         """Bans a user"""
 
-        await ctx.message.delete()
-
         if txt == None:
             return await ctx.send("`USAGE: ban <user> [reason]`")
         if reason == None:
@@ -332,10 +330,9 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
-
+                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.message.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
 
         embed = discord.Embed(title='Ban Notice', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=reason, inline=False)
@@ -356,14 +353,14 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to ban {user.name}!")
+            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to ban {user.name}!", mention_author=True)
+
+        await ctx.message.delete()
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def softban(self, ctx, txt = None, *, reason=None):
         """Bans then unbans a user."""
-
-        await ctx.message.delete()
 
         if txt == None:
             return await ctx.send("`USAGE: ban <user> [reason]`")
@@ -381,7 +378,7 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
             return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
@@ -406,7 +403,9 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!")
+            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!", mention_author=True)
+
+        await ctx.message.delete()
     
     @has_permissions(manage_messages=True)
     @commands.command()
@@ -429,7 +428,7 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
             return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
@@ -465,7 +464,7 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
             return await ctx.message.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
@@ -490,7 +489,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!")
+            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!", mention_author=True)
 
         await ctx.message.delete()
 
