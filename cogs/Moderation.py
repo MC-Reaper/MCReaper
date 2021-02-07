@@ -448,8 +448,6 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, txt = None, *, reason=None):
         """Kicks someone"""
 
-        await ctx.message.delete()
-
         if txt == None:
             return await ctx.send("`USAGE: kick <user> [reason]`")
             
@@ -470,7 +468,7 @@ class Moderation(commands.Cog):
                     return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
 
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.message.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
 
         embed = discord.Embed(title='Kick Notice', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=reason, inline=False)
@@ -493,6 +491,8 @@ class Moderation(commands.Cog):
             await ctx.send(embed=embed2)
         except:
             return await ctx.send(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!")
+
+        await ctx.message.delete()
 
     @has_permissions(manage_messages=True)
     @commands.command()
