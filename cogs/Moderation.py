@@ -315,7 +315,7 @@ class Moderation(commands.Cog):
         """Bans a user"""
 
         if txt == None:
-            return await ctx.send("`USAGE: ban <user> [reason]`")
+            return await ctx.message.reply("`USAGE: ban <user> [reason]`", mention_author=True)
         if reason == None:
             reason = "No reason provided"
 
@@ -363,7 +363,7 @@ class Moderation(commands.Cog):
         """Bans then unbans a user."""
 
         if txt == None:
-            return await ctx.send("`USAGE: ban <user> [reason]`")
+            return await ctx.message.reply("`USAGE: softban <user> [reason]`", mention_author=True)
         if reason == None:
             reason = "No reason provided"
 
@@ -448,7 +448,7 @@ class Moderation(commands.Cog):
         """Kicks someone"""
 
         if txt == None:
-            return await ctx.send("`USAGE: kick <user> [reason]`")
+            return await ctx.message.reply("`USAGE: kick <user> [reason]`", mention_author=True)
             
         if reason == None:
             reason = "No reason provided"
