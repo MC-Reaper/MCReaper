@@ -188,7 +188,7 @@ class Botsudo(commands.Cog):
             em.set_author(name=f'There are {sudo_users_c.estimated_document_count()} sudo users.', icon_url='https://img.icons8.com/material/4ac144/256/info.png')
             
             for x in results:
-                em.add_field(name=x['user'], value=f"ID: {x['_id']}\nPromote reason: {x['reason']}")
+                em.add_field(name=x['user'], value=f"ID: {x['_id']}\nReason: {x['reason']}", inline=False)
 
             await ctx.send(embed=em)
 
