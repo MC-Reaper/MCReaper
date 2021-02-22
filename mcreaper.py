@@ -308,6 +308,7 @@ async def on_member_join(member):
         try:
             gban_user_reason : str = gbanned_users_c.find_one(query)["reason"]
             logs_webhook.send(f'```[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}```')
+            await member.send(f'You were banned from entering {guild.name} because you are in the Federation Ban Database.\nReason: {gban_user_reason}.\n\nIf you think this ban was wrong then speak to **{DOZ_DISCORD}**')
             await member.ban(reason=gban_user_reason)
             await send_to_log_channel(gld=guild, text=f'{member} ({member.id}) was denied access to your server due to being in the global ban database.\nReason for GBAN: {gban_user_reason}')
         except Exception as e:
