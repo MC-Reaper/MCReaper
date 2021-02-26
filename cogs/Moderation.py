@@ -169,7 +169,7 @@ class Moderation(commands.Cog):
                     errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {e}```")
 
     @prefix.command(aliases=['set'])
-    @has_permissions(manage_messages=True)
+    @has_permissions(manage_guild=True)
     async def prefix_set(self, ctx, prefix : str = None):
         """Sets a prefix for the guild"""
 
@@ -755,6 +755,28 @@ class Moderation(commands.Cog):
                 em.set_footer(text=f'Embed created by {ctx.message.author}')
                 await ctx.send(content=None, embed=em)
 
+    @commands.command()
+    @has_permissions(manage_roles=True)
+    async def addrole(self, ctx, user: discord.Member, roleName):
+        """Gives user a role"""
+
+        for a in roleName:
+            if (a.isnumeric()) == True:
+                try:
+                    role = discord.utils.get(ctx.guild.roles, id=roleName)
+                except:
+                    pass
+            else:
+                try:
+                    role = discord.utils.get(ctx.guild.roles, name=roleName)
+                except:
+                    return await ctx.message.reply(f"{ctx.author.mention}, {roleName} does not exist!", mention_author=True)
+
+        if not role:
+            await ctx.send(f'`{roleName}` does not exist!')
+        else:
+            await user.add_roles(role)
+            await ctx.send(f"Assigned role: {roleName} to {user}!")
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Moderation(bot))
