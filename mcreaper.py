@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.17'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.17B'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Added listsudo command for bot owners."
-CHANGELOG_DATE = '17/02/2021'
+CHANGELOG_MESSAGE = "Updated Requirements"
+CHANGELOG_DATE = '20/03/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
