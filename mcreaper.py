@@ -35,8 +35,8 @@ HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Updated Requirements"
-CHANGELOG_DATE = '20/03/2021'
+CHANGELOG_MESSAGE = "Fixed `local variable 'possible_responses_ping' referenced before assignment`"
+CHANGELOG_DATE = '11/05/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -783,18 +783,18 @@ async def say(ctx, *, text : str = None):
         
     async with ctx.typing():
 
+        possible_responses_ping = [
+            f'Your stupidity amazes me, {ctx.author.mention}.',
+            f"Baka {ctx.author.mention}, you think you can ping everyone?",
+            f"What an idiot :disappointed:. {ctx.author.mention}, why are you trying to ping everyone?",
+            f"Not good {ctx.author.mention}!",
+            f"Come on man! Don't go pinging everyone by using me {ctx.author.mention}!",
+            f"I'm telling you {ctx.author.mention}, you are going to piss people off, be a good dog okay?"
+        ]
+
         await ctx.message.delete()
         if text == None:
             text = 'Usage: `-say <text>`\nMakes me speak with your words.'
-
-            possible_responses_ping = [
-                f'Your stupidity amazes me, {ctx.author.mention}.',
-                f"Baka {ctx.author.mention}, you think you can ping everyone?",
-                f"What an idiot :disappointed:. {ctx.author.mention}, why are you trying to ping everyone?",
-                f"Not good {ctx.author.mention}!",
-                f"Come on man! Don't go pinging everyone by using me {ctx.author.mention}!",
-                f"I'm telling you {ctx.author.mention}, you are going to piss people off, be a good dog okay?"
-            ]
 
         if ctx.message.author.id == BOT_OWNER_ID:
             await ctx.send(text)
