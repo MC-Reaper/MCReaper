@@ -702,6 +702,9 @@ async def changelog(ctx):
 async def afk(ctx, *, reason=None):
     """AFK"""
 
+    if ctx.message.mentions:
+        return await ctx.reply('Using `@mentions` in your AFK reason is forbidden!')
+
     if reason == None:
         translatedAFKReason = 'AFK'
     else:
