@@ -28,7 +28,7 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.18'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.18A'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
@@ -662,7 +662,7 @@ async def mod_help(ctx):
     """Shows Moderation help page"""
 
     embed = discord.Embed(title="Moderator Help", description="These are the commands that can be used by admins to keep their server in check!", colour=RandomColour())
-    embed.add_field(name="Commands", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
+    embed.add_field(name="Commands", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `banmentions` toggle the use of `@mentions` in some cmds.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
     await ctx.send(embed=embed)
 
 @bot.command(aliases=['status'])
