@@ -24,6 +24,7 @@ userbio_c = db["userbio"]
 warn_c = db["warns"]
 nsfw_flag = db["nsfw_enabled"]
 chatlog = db["chatlog"]
+ban_mentions_c = db["forbid_mentions"]
 # ---------------------------------------------------------------------------
 # Webhooks
 logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
@@ -308,6 +309,22 @@ class Moderation(commands.Cog):
                     warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"**Reason:** {x['reason']}\n**Time:** {x['timestamp']}\n**Warn issued by:** {x['moderator']}", inline=False)
 
                 await ctx.send(embed=warnem)
+
+    @commands.command()
+    @commands.has_permissions(manage_guild=True)
+    async def banmentions(self, ctx):
+        """Disallows users from using mentions with some commands like AFK."""
+
+        query = {'GuildID': str(ctx.guild.id)}
+
+        if (ban_mentions_c.count_documents(query) == 0):
+            ban_mentions_c.insert_one(query)
+            await send_to_log_channel(ctx, text=f'{ctx.author} has disabled the use of `@mentions`')
+            await ctx.send('`@mentions` is now disabled on the following commands: `afk`')
+        else:
+            ban_mentions_c.delete_one(query)
+            await send_to_log_channel(ctx, text=f'{ctx.author} has enabled the use of `@mentions`')
+            await ctx.send('@mentions` is now enabled.')
             
     @commands.command(aliases=["banish"])
     @commands.has_permissions(ban_members=True)

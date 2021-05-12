@@ -51,6 +51,7 @@ warn_c = db["warns"]
 nsfw_flag = db["nsfw_enabled"]
 chatlog = db["chatlog"]
 welcmsg = db["welcmsg"]
+ban_mentions_c = db["forbid_mentions"]
 afk_c = db["afk"]
 # ---------------------------------------------------------------------------
 # Prefix Mgt
@@ -702,8 +703,9 @@ async def changelog(ctx):
 async def afk(ctx, *, reason=None):
     """AFK"""
 
-    if ctx.message.mentions:
-        return await ctx.reply('Using `@mentions` in your AFK reason is forbidden!')
+    if (ban_mentions_c.count_documents({'GuildID': str(ctx.guild.id)}) == 1):
+            if ctx.message.mentions:
+                return await ctx.reply('Using `@mentions` in your AFK reason is forbidden!')
 
     if reason == None:
         translatedAFKReason = 'AFK'
