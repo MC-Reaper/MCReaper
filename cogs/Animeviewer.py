@@ -1,10 +1,11 @@
-# Animeviewer cog by Doz
+# Animeviewer cog by Doz (WIP)
 # ---------------------------------------------------------------------------
 import discord, asyncio, requests, json
 from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
 # ---------------------------------------------------------------------------
+# TODO: Merge animesearch and animeview into one command.
 class Animeviewer(commands.Cog):
     """Fetch anime stream links"""
     
@@ -29,11 +30,11 @@ class Animeviewer(commands.Cog):
 
                 from anime_downloader.sites import get_anime_class
 
-                AKisa = get_anime_class('animekisa')
-                search = AKisa.search(keyword)
+                AniPlay = get_anime_class('animixplay')
+                search = AniPlay.search(keyword)
 
-                from anime_downloader.sites.animekisa import AnimeKisa
-                anime = AnimeKisa(search[0].url)
+                from anime_downloader.sites.animixplay import AniMixPlay
+                anime = AniMixPlay(search[0].url)
 
                 em = discord.Embed(title='Anime Search')
 
@@ -62,11 +63,11 @@ class Animeviewer(commands.Cog):
 
                 from anime_downloader.sites import get_anime_class
 
-                AKisa = get_anime_class('animekisa')
-                search = AKisa.search(keyword)
+                AniPlay = get_anime_class('animixplay')
+                search = AniPlay.search(keyword)
 
-                from anime_downloader.sites.animekisa import AnimeKisa
-                anime = AnimeKisa(search[0].url)
+                from anime_downloader.sites.animixplay import AniMixPlay
+                anime = AniMixPlay(search[0].url)
 
                 em = discord.Embed(title='Anime Search')
 

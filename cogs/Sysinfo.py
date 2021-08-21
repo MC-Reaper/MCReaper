@@ -1,4 +1,4 @@
-# Sysinfo cog by Doz, kanged sysd module from Paperplane-Telegram
+# Sysinfo cog by Doz
 # ---------------------------------------------------------------------------
 import discord, asyncio, requests, json, platform
 from discord import Member, File
@@ -26,7 +26,6 @@ class Sysinfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Handle Windows Machines
     @commands.command()
     async def sysinfo(self, ctx):
         """ For sysinfo command, get system info using neofetch. """
