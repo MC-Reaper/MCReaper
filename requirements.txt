@@ -1,4 +1,4 @@
-# Requirements (1)
+# Requirements (0)
 discord.py[voice]
 https://github.com/Nekos-life/nekos.py/archive/master.zip
 https://github.com/rachmadaniHaryono/we-get/archive/master.zip
@@ -6,5 +6,4 @@ requests
 pyfiglet
 pymongo
 dnspython
-anime-downloader
 google

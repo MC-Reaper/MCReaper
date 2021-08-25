@@ -616,7 +616,7 @@ async def help(ctx):
             embed = discord.Embed(colour=RandomColour())
             embed.set_author(name=f'{bot.user.name} Help', icon_url=bot.user.avatar_url_as(static_format='png'))
             embed.set_footer(text='MC Reaper')
-            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n\n- `changelog` What is new?\n- `afk <reason>` Away from Keyboard\n- `fetchtorrent` Torrent searcher (WIP).\n- `animesearch` Anime seacher (WIP).' , inline=False)
+            embed.add_field(name='Commands', value='Command types:\n`<arg>` required.\n`[arg]` optional.\n\n- `changelog` What is new?\n- `afk <reason>` Away from Keyboard\n- `fetchtorrent` Torrent searcher (WIP).' , inline=False)
             embed.add_field(name='Pages', value="Use `help <page>` to navigate to different help sections.\n\n- `help fun` Help for fun commands.\n- `help info` Help for info commands.\n- `help google` Help for google commands.\n- `help greetings` Help for greetings commands (mod only)\n- `help mod` Help for moderator commands.", inline=False)
             embed.add_field(name='NSFW', value='Powered by nekos.life\n- `hentaibomb`\n- `nsfw <text>` Just enter nsfw for list of nsfw.', inline=False)
             embed.add_field(name='Bot information', value=f'{BOT_VERSION}\nCreated by: **{DOZ_DISCORD}**', inline=False)
