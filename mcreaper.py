@@ -40,8 +40,13 @@ CHANGELOG_DATE = '22/07/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-cluster = MongoClient(mongosrv)
-db = cluster["mcreaper"]
+if (mongosrv == None) or (mongosrv == ""):
+    print('[ERROR] There is no authentication for MongoDB. Please setup MongoDB!')
+    exit()
+else:
+    cluster = MongoClient(mongosrv)
+    db = cluster["mcreaper"]
+    print('[INFO] BOT|DB Successfully authenticated to MongoDB.')
 # Collections
 guild_prefixes_c = db["guild_prefixes"]
 gbanned_users_c = db["gbanned_users"]
