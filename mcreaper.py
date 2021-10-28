@@ -28,15 +28,15 @@ token = config.get("bot_token") # bot_token in config.json.
 mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.2'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "Lib update"
-CHANGELOG_DATE = '22/07/2021'
+CHANGELOG_MESSAGE = "- Added `hash` command.\n- Some minor changes."
+CHANGELOG_DATE = '27/10/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -454,7 +454,7 @@ async def on_invite_create(invite):
 
         inviter_pfp = inviter.avatar_url_as(static_format='png')
         if not inviter_pfp:
-            inviter_pfp = 'https://1000logos.net/wp-content/uploads/2017/12/Pornhub-symbol.jpg'
+            inviter_pfp = None
 
         invite_channel = invite.channel
         if not invite_channel:
@@ -633,7 +633,7 @@ async def fun_help(ctx):
     """Help page for Fun"""
 
     embed = discord.Embed(title="Fun Help", description="Commands for Fun", colour=RandomColour())
-    embed.add_field(name='Commands', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 [user]` Checks how gay anything is.\n- `waifur8 [user]` :heart:\n- `thotr8` [user]', inline=False)
+    embed.add_field(name='Commands', value='- `say <words>` You know what this does.\n- `shout <msg>` Shouts messages.\n- `hash <text>` Encrypts text with MD5 hashing.\n- `ascii <text>` Prints text in ascii format.\n- `8ball <question>` Answers your questions!\n- `penis [user]` Checks your pp length.\n- `gayr8 [user]` Checks how gay anything is.\n- `waifur8 [user]` :heart:\n- `thotr8` [user]', inline=False)
     await ctx.send(embed=embed)
 
 

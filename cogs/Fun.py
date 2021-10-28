@@ -89,6 +89,24 @@ class Fun(commands.Cog):
 
             await ctx.send(embed=em)
 
+    @commands.command(name='hash')
+    async def hash_text(self, ctx, *, text: str):
+        "Encrypts given text by using MD5 hashing"
+
+        import hashlib
+        m = hashlib.md5()
+        m.update(text.encode('utf-8'))
+
+        em = discord.Embed(
+            title = 'Text to Hash encrypter',
+            colour = RandomColour()
+        )
+        em.add_field(name='Original Text', value=text, inline=False)
+        em.add_field(name='MD5 hashed text', value=m.hexdigest(), inline=False)
+
+        await ctx.send(embed=em)
+
+
     @commands.command()
     async def thotr8(self, ctx, *, name: str = None):
         rng = random.randint(0, 101)
