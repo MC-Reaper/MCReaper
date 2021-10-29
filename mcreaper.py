@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
@@ -19,13 +19,16 @@ except ImportError:
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 # Configuration
 # Please see config.json
 # ! DO NOT EDIT !
 default_prefix = config.get("prefix")
-token = config.get("bot_token") # bot_token in config.json.
-mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
+BOT_TOKEN = os.getenv("BOT_TOKEN") # bot_token in config.json.
+MONGOSRV = os.getenv("MONGOSRV") # Add your MONGOSRV link in config.json.
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
 BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
@@ -40,11 +43,11 @@ CHANGELOG_DATE = '27/10/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-if (mongosrv == None) or (mongosrv == ""):
+if (MONGOSRV == None) or (MONGOSRV == ""):
     print('[ERROR] There is no authentication for MongoDB. Please setup MongoDB!')
     exit()
 else:
-    cluster = MongoClient(mongosrv)
+    cluster = MongoClient(MONGOSRV)
     db = cluster["mcreaper"]
     print('[INFO] BOT|DB Successfully authenticated to MongoDB.')
 # Collections
@@ -683,7 +686,7 @@ async def mod_help(ctx):
     """Shows Moderation help page"""
 
     embed = discord.Embed(title="Moderator Help", description="These are the commands that can be used by admins to keep their server in check!", colour=RandomColour())
-    embed.add_field(name="Commands", value="- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `banmentions` toggle the use of `@mentions` in some cmds.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
+    embed.add_field(name="Commands", value="- `banmentions` turns of mentions in afk.\n- `log` set logging.\n- `prefix set <prefix>` sets guild prefix.\n- `warn <user> <reason>` warns a user.\n- `unwarn <warn_id>` removes a warn.\n- `warns <user>` lists warns of a user.\n- `banmentions` toggle the use of `@mentions` in some cmds.\n- `ban <@user|userid> [reason]`\n- `softban <user> [reason]` bans then unbans the user.\n- `mute <user> [reason]` prevents a user from seeing chat.\n- `unmute <user>` unmutes a user.\n- `kick <user> [reason]` kicks a user from the server.\n- `block <user>` prevents a user from chatting in the current channel.\n- `unblock <user>` the opposite of block.\n- `nick <user> <new_nick>` or `nick <new_nick>` for yourself.\n- `clear <amount> [reason]` deletes messages.\n- `nsfwon` toggles nsfw commands.\n- `slowmode <int> [reason]` sets channel slowmode.\n- `embed [options]` creates an embed, see `embed help`.", inline=False)
     await ctx.send(embed=embed)
 
 @bot.command(aliases=['status'])
@@ -881,4 +884,4 @@ async def ascii(ctx, *, text = None):
         logs_webhook.send(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 # ---------------------------------------------------------------------------
-bot.run(token, bot=True)
+bot.run(BOT_TOKEN, bot=True)

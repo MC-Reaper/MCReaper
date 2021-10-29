@@ -1,6 +1,6 @@
 # Greetings cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, pymongo, datetime, json
+import discord, asyncio, pymongo, datetime, json, os
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter, File
 from discord.ext.commands import Bot, has_permissions
@@ -13,11 +13,14 @@ errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
-    config = json.load(a) 
+    config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-mongosrv = config.get("mongosrv")
-cluster = MongoClient(mongosrv)
+MONGOSRV = os.getenv("MONGOSRV")
+cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections
 welcmsg = db["welcmsg"]

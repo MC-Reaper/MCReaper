@@ -1,7 +1,7 @@
 # Moderation cog by Doz
 # ---------------------------------------------------------------------------
 # Libs
-import discord, asyncio, pymongo, random, json
+import discord, asyncio, pymongo, random, json, os
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter, File
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -10,11 +10,14 @@ from os import remove
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
-    config = json.load(a) 
+    config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-mongosrv = config.get("mongosrv")
-cluster = MongoClient(mongosrv)
+MONGOSRV = os.getenv("MONGOSRV")
+cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections
 guild_prefixes_c = db["guild_prefixes"]

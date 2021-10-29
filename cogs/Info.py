@@ -1,6 +1,6 @@
 # Info cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo
+import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter
 from discord.ext.commands import Bot
@@ -9,14 +9,17 @@ from discord.ext import commands
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
 BOT_INVITE_LINK = config.get("bot_invite")
 HQ_SERVER_INVITE = config.get("server_invite")
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-mongosrv = config.get("mongosrv") # Add your mongosrv link in config.json.
-cluster = MongoClient(mongosrv, serverSelectionTimeoutMS = 2500)
+MONGOSRV = os.getenv("MONGOSRV")
+cluster = MongoClient(MONGOSRV, serverSelectionTimeoutMS = 2500)
 db = cluster["mcreaper"]
 # Collections
 gbanned_users_c = db["gbanned_users"]

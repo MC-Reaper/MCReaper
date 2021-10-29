@@ -1,6 +1,6 @@
 # GBan cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo
+import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -8,15 +8,18 @@ from discord.ext import commands
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
-    config = json.load(a) 
+    config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 BAN_GIF = config.get("ban_gif")
 DOZ_DISCORD = 'Doz#1040'
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-mongosrv = config.get("mongosrv")
-cluster = MongoClient(mongosrv)
+MONGOSRV = os.getenv("MONGOSRV")
+cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections
 gbanned_users_c = db["gbanned_users"]

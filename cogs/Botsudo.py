@@ -1,6 +1,6 @@
 # Sudoer cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo
+import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
 from discord import Member, Webhook, RequestsWebhookAdapter
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -9,6 +9,9 @@ from discord.ext import commands
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
+
+from dotenv import load_dotenv
+load_dotenv()
 # ---------------------------------------------------------------------------
 def RandomColour():
     """Generates random colours for embed"""
@@ -34,8 +37,8 @@ errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW
  adapter=RequestsWebhookAdapter()) #errorlogs in HQ
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-mongosrv = config.get("mongosrv")
-cluster = MongoClient(mongosrv)
+MONGOSRV = os.getenv("MONGOSRV")
+cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections
 sudo_users_c = db["sudo_users"]

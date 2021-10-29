@@ -7,3 +7,4 @@ pyfiglet
 pymongo
 dnspython
 google
+python-dotenv

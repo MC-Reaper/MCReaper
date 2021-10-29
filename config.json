@@ -1,7 +1,4 @@
 {
-    "bot_token" : "NzIwMzg3OTkyOTkyMDg4MTE1.XuFSnw.L_aEHFcibAcA3zbD3hIAIQd2nmw",
-    "mongosrv" : "mongodb://Doz:ab1dcd77b3@doz-shard-00-00-jumbd.gcp.mongodb.net:27017,doz-shard-00-01-jumbd.gcp.mongodb.net:27017,doz-shard-00-02-jumbd.gcp.mongodb.net:27017/<dbname>?ssl=true&replicaSet=Doz-shard-0&authSource=admin&retryWrites=true&w=majority",
-    
     "term" : "true",
     "prefix" : "-",
     "bot_owner_id" : 540627360513392651,
