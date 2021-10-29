@@ -261,6 +261,22 @@ async def on_member_unban(guild, user):
             await send_to_log_channel(gld=guild, emt=em)
 
 @bot.event
+async def on_member_kick(guild, user):
+    """When a member gets kicked"""
+
+    logs = await guild.audit_logs(limit=1, action=discord.AuditLogAction.kick).flatten()
+    logs = logs[0]
+
+    if logs.target == user:
+
+        if (chatlog.count_documents({"_id": guild.id}) == 1):
+            
+            em = discord.Embed(title='Kick Notice', description=f'**{user} ({user.id})** has been kicked.', colour=discord.Colour.red())
+            em.add_field(name='Reason:', value=logs.reason, inline=False)
+            em.set_footer(text=f'Kicked by {logs.user}', icon_url=logs.user.avatar_url_as(static_format='png'))
+            await send_to_log_channel(gld=guild, emt=em)
+
+@bot.event
 async def on_member_join(member):
     """When a member joins"""
 
