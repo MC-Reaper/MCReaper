@@ -722,7 +722,7 @@ async def afk(ctx, *, reason=None):
 
     if (afk_c.count_documents(query) == 1):
         afk_c.delete_one(query)
-        return await ctx.send('Baka you already had AFK status, removing it anyway.')
+        return await ctx.reply('Baka you already had AFK status, removing it anyway.')
 
     timestamp = datetime.utcnow()
     post = {'User': str(ctx.author), 'UserID': str(ctx.author.id), 'GuildID': str(ctx.guild.id), 'Reason': translatedAFKReason, 'Timestamp': timestamp}
@@ -745,10 +745,10 @@ async def nsfw(ctx, text = None):
         if (sudo_users_c.count_documents(query) == 1):
             pass
         elif not ctx.channel.is_nsfw():
-            return await ctx.send("You cannot use NSFW commands here!")
+            return await ctx.reply("You cannot use NSFW commands here!")
 
     if text == None:
-        return await ctx.send(">>> List of available subcommands by nekos.life:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
+        return await ctx.reply(">>> List of available subcommands by nekos.life:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
 
     async with ctx.typing():
         try:
@@ -776,7 +776,7 @@ async def hentaibomb(ctx, user : discord.Member = None):
         if (sudo_users_c.count_documents(query) == 1):
             pass
         elif not ctx.channel.is_nsfw():
-            return await ctx.send("You cannot use NSFW commands here!")
+            return await ctx.reply("You cannot use NSFW commands here!")
         
     async with ctx.typing():
         await ctx.send(f"{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('hentai')}\n{nekos.img('random_hentai_gif')}\n{nekos.img('random_hentai_gif')}")
@@ -826,7 +826,7 @@ async def shout(ctx, *, msg: str = None):
     """🗣️"""
 
     if msg == None:
-        return await ctx.send("`shout <msg>`")
+        return await ctx.reply("`shout <msg>`")
 
     async with ctx.typing():
 
@@ -852,7 +852,7 @@ async def ascii(ctx, *, text = None):
     """Prints text in ASCII format."""
 
     if text == None:
-        return await ctx.send('`ascii <text>`\nPrints text in ASCII format.')
+        return await ctx.reply('`ascii <text>`\nPrints text in ASCII format.')
 
     async with ctx.typing():
 

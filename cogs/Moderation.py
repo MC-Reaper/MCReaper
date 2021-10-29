@@ -89,7 +89,7 @@ async def mute(ctx, user, reason):
                                             read_message_history=False,
                                             read_messages=False)
         except discord.Forbidden:
-            return await ctx.send("I have no permissions to make a muted role")
+            return await ctx.reply(":x: I have no permissions to make a muted role!")
         await user.add_roles(muted)
         await ctx.send(f"{user.mention} has been sent to the abyss for {reason}")
     else:
@@ -113,7 +113,7 @@ class Redeemed(commands.Converter):
         if muted in argument.roles: # checks if user has muted role
             return argument # returns member object if there is muted role
         else:
-            raise commands.BadArgument("The user was not muted.")
+            raise commands.BadArgument(":x: The user was not muted.")
             
             
 class Moderation(commands.Cog):
@@ -135,7 +135,7 @@ class Moderation(commands.Cog):
 
             if (chatlog.count_documents(query) == 1):
                 chatlog.update_one(query, {"$set": {'chanid':ctx.message.channel.id}})
-                return await ctx.send('Logging will now be sent here.')
+                return await ctx.reply(':white_check_mark: Logging will now be sent here.')
 
             chatlog.insert_one(post)
 
@@ -148,9 +148,9 @@ class Moderation(commands.Cog):
 
         if (chatlog.count_documents(query) == 1):
             chatlog.delete_one(query)
-            return await ctx.send('Disabled logging.')
+            return await ctx.reply(':x: Disabled logging.')
 
-        await ctx.send('You have not setup logging yet!')
+        await ctx.reply(':x: You have not setup logging yet!')
 
     @commands.group(invoke_without_command=True)
     async def prefix(self, ctx):
@@ -162,9 +162,9 @@ class Moderation(commands.Cog):
                 try:
                     if (guild_prefixes_c.count_documents(query) == 1):
                         guild_prefixes : str = guild_prefixes_c.find_one(query)["prefix"]
-                        await ctx.send(f'The guild prefix(s) for {ctx.guild.name}: {guild_prefixes}')
+                        await ctx.reply(f'The guild prefix(s) for {ctx.guild.name}: {guild_prefixes}')
                     else:
-                        await ctx.send(f'This guild has no custom prefixes. The default prefix is: {default_prefix}')
+                        await ctx.reply(f'This guild has no custom prefixes. The default prefix is: {default_prefix}')
                 except Exception as e:
                     await ctx.send('An unknown error has occured, sent error log to HQ.')
                     errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {e}```")
@@ -177,15 +177,15 @@ class Moderation(commands.Cog):
         query = {"_id": ctx.guild.id}
         async with ctx.typing():
             if prefix == None:
-                await ctx.send('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE USED.\nYou can add multiple prefixes by seperating each prefix with ,`')
+                await ctx.reply('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE USED.\nYou can add multiple prefixes by seperating each prefix with ,`')
                 return
             if (guild_prefixes_c.count_documents(query) == 0):
                 post = {"_id": ctx.guild.id, "prefix": prefix}
                 guild_prefixes_c.insert_one(post)
-                await ctx.send(f'Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
+                await ctx.reply(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
             else:
                 guild_prefixes_c.update_one(query, {"$set":{"prefix":prefix}})
-                await ctx.send(f'Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
+                await ctx.send(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
 
     @prefix.error
     async def prefix_error(self, ctx, error):
@@ -210,7 +210,7 @@ class Moderation(commands.Cog):
 
         moderator = ctx.author
         if reason == None:
-            return await ctx.send("You must provide a reason silly!")
+            return await ctx.send(":x: You must provide a reason silly!")
 
         async with ctx.typing():
             post = {"_id": warn_id, "GuildID": ctx.guild.id, "username": member.name+'#'+member.discriminator, "UserID": member.id, "reason": reason, "moderator": moderator.name+'#'+moderator.discriminator, "timestamp": ctx.message.created_at.__format__('%A, %d. %B %Y @ %H:%M:%S')}
@@ -229,7 +229,7 @@ class Moderation(commands.Cog):
         try:
             await member.send(embed=embed)
         except:
-            await ctx.send(f"Warn has not been sent to {member.mention} as they might have disabled DMs for me.")
+            await ctx.send(f"The warning has not been sent to {member.mention} as they might have disabled DMs for me.")
 
         await send_to_log_channel(ctx, emt=embed2)
 

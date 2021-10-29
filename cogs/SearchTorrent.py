@@ -50,7 +50,7 @@ class SearchTorrent(commands.Cog):
                 resultEmbed.add_field(name='Leeches', value=resultDict[result]['leeches'], inline=True)
                 resultEmbed.set_footer(text="Powered by we-get")
 
-                await ctx.send(embed=resultEmbed)
+                await ctx.reply(embed=resultEmbed)
 
 # ---------------------------------------------------------------------------
 def setup(bot):
