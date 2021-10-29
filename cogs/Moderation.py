@@ -205,11 +205,8 @@ class Moderation(commands.Cog):
         if member == None:
             return await ctx.send("`USAGE: warn <user> <reason>`")
 
-        # Random Hash Generator
-        ranbits_128 = random.getrandbits(128)
-        randmd5_hash = '%032x' % ranbits_128
-
-        warn_id = randmd5_hash
+        from reapertools import rand_hash
+        warn_id = rand_hash()
 
         moderator = ctx.author
         if reason == None:

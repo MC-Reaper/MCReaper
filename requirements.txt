@@ -1,7 +1,7 @@
 # Requirements (1)
-discord.py[voice]
 https://github.com/Nekos-life/nekos.py/archive/master.zip
 https://github.com/rachmadaniHaryono/we-get/archive/master.zip
+discord.py[voice]
 requests
 pyfiglet
 pymongo

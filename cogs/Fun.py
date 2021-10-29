@@ -93,16 +93,14 @@ class Fun(commands.Cog):
     async def hash_text(self, ctx, *, text: str):
         "Encrypts given text by using MD5 hashing"
 
-        import hashlib
-        m = hashlib.md5()
-        m.update(text.encode('utf-8'))
+        from reapertools import text2hash
 
         em = discord.Embed(
             title = 'Text to Hash encrypter',
             colour = RandomColour()
         )
         em.add_field(name='Original Text', value=text, inline=False)
-        em.add_field(name='MD5 hashed text', value=m.hexdigest(), inline=False)
+        em.add_field(name='MD5 hashed text', value=text2hash(text=text), inline=False)
 
         await ctx.send(embed=em)
 

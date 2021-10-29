@@ -93,3 +93,12 @@ def rand_hash():
     ranbits_128 = random.getrandbits(128)
     return '%032x' % ranbits_128
 # ---------------------------------------------------------------------------
+def text2hash(*, text: str):
+    "Encrypts given text by using MD5 hashing"
+
+    import hashlib
+    m = hashlib.md5()
+    m.update(text.encode('utf-8'))
+
+    return m.hexdigest()
+# ---------------------------------------------------------------------------
