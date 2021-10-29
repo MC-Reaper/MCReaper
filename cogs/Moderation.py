@@ -135,7 +135,7 @@ class Moderation(commands.Cog):
 
             if (chatlog.count_documents(query) == 1):
                 chatlog.update_one(query, {"$set": {'chanid':ctx.message.channel.id}})
-                return await ctx.reply(':white_check_mark: Logging will now be sent here.')
+                return await ctx.reply(':white_check_mark: Logging will now be sent here.', mention_author=True)
 
             chatlog.insert_one(post)
 
@@ -148,9 +148,9 @@ class Moderation(commands.Cog):
 
         if (chatlog.count_documents(query) == 1):
             chatlog.delete_one(query)
-            return await ctx.reply(':x: Disabled logging.')
+            return await ctx.reply(':x: Disabled logging.', mention_author=True)
 
-        await ctx.reply(':x: You have not setup logging yet!')
+        await ctx.reply(':x: You have not setup logging yet!', mention_author=True)
 
     @commands.group(invoke_without_command=True)
     async def prefix(self, ctx):
@@ -162,9 +162,9 @@ class Moderation(commands.Cog):
                 try:
                     if (guild_prefixes_c.count_documents(query) == 1):
                         guild_prefixes : str = guild_prefixes_c.find_one(query)["prefix"]
-                        await ctx.reply(f'The guild prefix(s) for {ctx.guild.name}: {guild_prefixes}')
+                        await ctx.reply(f'The guild prefix(s) for {ctx.guild.name}: {guild_prefixes}', mention_author=True)
                     else:
-                        await ctx.reply(f'This guild has no custom prefixes. The default prefix is: {default_prefix}')
+                        await ctx.reply(f'This guild has no custom prefixes. The default prefix is: {default_prefix}', mention_author=True)
                 except Exception as e:
                     await ctx.send('An unknown error has occured, sent error log to HQ.')
                     errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {e}```")
@@ -177,20 +177,20 @@ class Moderation(commands.Cog):
         query = {"_id": ctx.guild.id}
         async with ctx.typing():
             if prefix == None:
-                await ctx.reply('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE USED.\nYou can add multiple prefixes by seperating each prefix with ,`')
+                await ctx.reply('Usage:\n`prefix set <new_prefix>\nNOTE: ONLY 1 LETTER IS ACCEPTED.\nIF YOU USE MULTIPLE LETTERS THEN ONLY THE FIRST LETTER WILL BE USED.\nYou can add multiple prefixes by seperating each prefix with ,`', mention_author=True)
                 return
             if (guild_prefixes_c.count_documents(query) == 0):
                 post = {"_id": ctx.guild.id, "prefix": prefix}
                 guild_prefixes_c.insert_one(post)
-                await ctx.reply(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
+                await ctx.reply(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}', mention_author=True)
             else:
                 guild_prefixes_c.update_one(query, {"$set":{"prefix":prefix}})
-                await ctx.send(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}')
+                await ctx.reply(f':white_check_mark: Done! The guild prefix is now {guild_prefixes_c.find_one(query)["prefix"]}', mention_author=True)
 
     @prefix.error
     async def prefix_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send('Usage:\n`prefix set <new_prefix>`')
+            await ctx.reply('Usage:\n`prefix set <new_prefix>`', mention_author=True)
         else:
             await ctx.send('An unknown error has occured, sent error log to HQ.')
             errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {str(error)}```")
@@ -274,7 +274,7 @@ class Moderation(commands.Cog):
         guild_id = ctx.guild.id
 
         if txt == None:
-            return await ctx.send("`USAGE: warns <user>`")
+            return await ctx.reply("`USAGE: warns <user>`", mention_author=True)
 
         for a in txt:
             if (a.isnumeric()) == True:
@@ -287,16 +287,16 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.reply(f":x: {ctx.author.mention}, I can't find that user!", mention_author=True)
 
         if not user:
-            return await ctx.send(f"{ctx.author.mention}, I can't find that user!")  
+            return await ctx.reply(f":x: {ctx.author.mention}, I can't find that user!", mention_author=True)  
 
         query_guild_user = {"GuildID": guild_id, "UserID": user.id}
         a = warn_c.count_documents(query_guild_user)
 
         if (a == 0):
-            await ctx.send(f"**❌  No warnings found for {user}**")
+            await ctx.reply(f"**:x:  No warnings found for {user}**", mention_author=True)
         else:
             async with ctx.typing():
                 warnem = discord.Embed(colour=discord.Colour.red())
@@ -305,7 +305,7 @@ class Moderation(commands.Cog):
                 for x in warn_c.find(query_guild_user):
                     warnem.add_field(name=f"Warn ID: {x['_id']}", value=f"**Reason:** {x['reason']}\n**Time:** {x['timestamp']}\n**Warn issued by:** {x['moderator']}", inline=False)
 
-                await ctx.send(embed=warnem)
+                await ctx.reply(embed=warnem)
 
     @commands.command()
     @commands.has_permissions(manage_guild=True)
@@ -317,11 +317,11 @@ class Moderation(commands.Cog):
         if (ban_mentions_c.count_documents(query) == 0):
             ban_mentions_c.insert_one(query)
             await send_to_log_channel(ctx, text=f'{ctx.author} has disabled the use of `@mentions`')
-            await ctx.send('`@mentions` is now disabled on the following commands: `afk`')
+            await ctx.reply(':white_check_mark: `@mentions` is now disabled on the following commands: `afk`', mention_author=True)
         else:
             ban_mentions_c.delete_one(query)
             await send_to_log_channel(ctx, text=f'{ctx.author} has enabled the use of `@mentions`')
-            await ctx.send('@mentions` is now enabled.')
+            await ctx.reply(':white_check_mark: @mentions` is now enabled.', mention_author=True)
             
     @commands.command(aliases=["banish"])
     @commands.has_permissions(ban_members=True)
@@ -329,7 +329,7 @@ class Moderation(commands.Cog):
         """Bans a user"""
 
         if txt == None:
-            return await ctx.message.reply("`USAGE: ban <user> [reason]`", mention_author=True)
+            return await ctx.reply("`USAGE: ban <user> [reason]`", mention_author=True)
         if reason == None:
             reason = "No reason provided"
 
@@ -344,9 +344,9 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
+                    return await ctx.reply(f":x: {ctx.author.mention}, I can't find that user!", mention_author=True)
         if user.id == ctx.author.id:
-            return await ctx.message.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
+            return await ctx.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
 
         embed = discord.Embed(title='Ban Notice', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=reason, inline=False)
@@ -367,7 +367,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to ban {user.name}!", mention_author=True)
+            return await ctx.reply(f":x: Baka {ctx.author.mention}! I don't have permission to ban {user.name}!", mention_author=True)
 
         await ctx.message.delete()
 
@@ -377,7 +377,7 @@ class Moderation(commands.Cog):
         """Bans then unbans a user."""
 
         if txt == None:
-            return await ctx.message.reply("`USAGE: softban <user> [reason]`", mention_author=True)
+            return await ctx.reply("`USAGE: softban <user> [reason]`", mention_author=True)
         if reason == None:
             reason = "No reason provided"
 
@@ -392,10 +392,10 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
+                    return await ctx.reply(":x: I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.reply(f'Are you trying to use that on yourself {ctx.author.mention}?')
 
         embed = discord.Embed(title='Ban Notice', description=f'You were banned from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=reason, inline=False)
@@ -417,7 +417,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!", mention_author=True)
+            return await ctx.reply(f":x; Baka {ctx.author.mention}! I don't have permission to soft-ban {user.name}!", mention_author=True)
 
         await ctx.message.delete()
     
@@ -427,7 +427,7 @@ class Moderation(commands.Cog):
         """Sends a user to jail."""
     
         if txt == None:
-            return await ctx.send("`USAGE: mute <user> [reason]`")
+            return await ctx.reply("`USAGE: mute <user> [reason]`", mention_author=True)
         if reason == None:
             reason = "No reason provided"
 
@@ -442,10 +442,10 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
+                    return await ctx.reply(":x: I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.reply('Are you trying to use that on yourself?', mention_author=True)
 
         await mute(ctx, user, reason=f"{reason} by {ctx.author}") # uses the mute function
 
@@ -462,7 +462,7 @@ class Moderation(commands.Cog):
         """Kicks someone"""
 
         if txt == None:
-            return await ctx.message.reply("`USAGE: kick <user> [reason]`", mention_author=True)
+            return await ctx.reply("`USAGE: kick <user> [reason]`", mention_author=True)
             
         if reason == None:
             reason = "No reason provided"
@@ -478,10 +478,10 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.message.reply(f"{ctx.author.mention}, I can't find that user!", mention_author=True)
+                    return await ctx.reply(":x: I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
-            return await ctx.message.reply(f'Are you trying to use that on yourself {ctx.author.mention}?', mention_author=True)
+            return await ctx.reply(f'Are you trying to use that on yourself?', mention_author=True)
 
         embed = discord.Embed(title='Kick Notice', description=f'You were kicked from **{ctx.guild.name}** by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.red())
         embed.add_field(name='Reason:', value=reason, inline=False)
@@ -503,7 +503,7 @@ class Moderation(commands.Cog):
 
             await ctx.send(embed=embed2)
         except:
-            return await ctx.message.reply(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!", mention_author=True)
+            return await ctx.reply(f"Baka {ctx.author.mention}! I don't have permission to kick {user.name}!", mention_author=True)
 
         await ctx.message.delete()
 
@@ -518,7 +518,7 @@ class Moderation(commands.Cog):
         """
 
         if txt == None:
-            return await ctx.send("`USAGE: block <user>`")
+            return await ctx.reply("`USAGE: block <user>`", mention_author=True)
 
         for a in txt:
             if (a.isnumeric()) == True:
@@ -531,10 +531,10 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.reply("I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.reply(f'Are you trying to use that on yourself?', mention_author=True)
                                 
         await ctx.set_permissions(user, send_messages=False) # sets permissions for current channel
     
@@ -544,7 +544,7 @@ class Moderation(commands.Cog):
         """Unblocks a user from current channel"""
 
         if txt == None:
-            return await ctx.send("`USAGE: unblock <user>`")
+            return await ctx.reply("`USAGE: unblock <user>`", mention_author=True)
 
         for a in txt:
             if (a.isnumeric()) == True:
@@ -557,10 +557,10 @@ class Moderation(commands.Cog):
                     converter = MemberConverter()
                     user = await converter.convert(ctx, txt)
                 except:
-                    return await ctx.send(f"{ctx.author.mention}, I can't find that user!")
+                    return await ctx.reply(":x: I can't find that user!", mention_author=True)
 
         if user.id == ctx.author.id:
-            return await ctx.send(f'Are you trying to use that on yourself {ctx.author.mention}?')
+            return await ctx.reply(f'Are you trying to use that on yourself?', mention_author=True)
         
         await ctx.set_permissions(user, send_messages=True) # gives back send messages permissions
 
@@ -573,7 +573,7 @@ class Moderation(commands.Cog):
             avi = ctx.message.author.avatar_url_as(static_format='png')
             if nickname == None:
                 await user.edit(nick=None)
-                await ctx.send(f"Cleared **{user.name}'s** nickname!")
+                await ctx.reply(f":white_check_mark: Cleared **{user.name}'s** nickname!", mention_author=True)
             else:
                 em = discord.Embed(title='Nickname changed successfully!', description=f"Changed {user.name}'s nickname to **{nickname}**", colour = discord.Colour.green())
                 em.set_footer(text=f'Moderator: {ctx.message.author}', icon_url=avi)
@@ -584,13 +584,13 @@ class Moderation(commands.Cog):
 
                 await ctx.send(embed=em)
         except:
-            await ctx.send(f"I don't have permission to change that user's nickname!")
+            await ctx.reply(":x: I don't have permission to change that user's nickname!", mention_author=True)
 
 
     @nick.error
     async def nick_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            ctx.send('`nick <user> <new_nick>`\nOr `nick <new_nick>` If you want to change your own nickname.')
+            ctx.reply('`nick <user> <new_nick>`\nOr `nick <new_nick>` If you want to change your own nickname.', mention_author=True)
 
     @commands.command(aliases=["delete","purge"])
     @has_permissions(manage_messages=True)
@@ -635,11 +635,11 @@ class Moderation(commands.Cog):
         if (nsfw_flag.count_documents(query) == 0):
             nsfw_flag.insert_one(query)
             await send_to_log_channel(ctx, text=f'{ctx.author} has disabled the NSFW checker.')
-            await ctx.send('Is there really a need to disable this switch? well whatever you say, boss.')
+            await ctx.reply('Is there really a need to disable this switch? well whatever you say, boss.', mention_author=True)
         else:
             nsfw_flag.delete_one(query)
             await send_to_log_channel(ctx, text=f'{ctx.author} has enabled the NSFW checker.')
-            await ctx.send('Okay.. NSFW commands now works only on NSFW-marked channels.')
+            await ctx.reply('Okay.. NSFW commands now works only on NSFW-marked channels.', mention_author=True)
 
     @commands.command(aliases=['cooldown'])
     @has_permissions(manage_messages=True)
