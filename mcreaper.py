@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, main, os
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
@@ -24,8 +24,8 @@ with open('config.json') as a:
 # Please see config.json
 # ! DO NOT EDIT !
 default_prefix = config.get("prefix")
-BOT_TOKEN = main.BOT_TOKEN
-MONGOSRV = main.MONGOSRV
+BOT_TOKEN = os.environ['BOT_TOKEN']
+MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
 BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
