@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-import subprocess, os, sys, keep_alive
-
-keep_alive.keep_alive()
+import subprocess, os, sys
 
 # ---------------------------------------------------------------------------
 # Modules (check if modules are installed, will come with a better implementation soon)
