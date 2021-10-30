@@ -5,7 +5,7 @@ try:
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
-    from discord.ext import commands
+    from discord.ext import commands, tasks
     from discord.ext.commands import Bot, has_permissions
     from platform import python_version, platform
     from os import remove, listdir
