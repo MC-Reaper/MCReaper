@@ -23,8 +23,6 @@ with open('config.json') as a:
 # Configuration
 # Please see config.json
 # ! DO NOT EDIT !
-from itertools import cycle
-status = cycle([f'-help | Overseeing {len(bot.guilds)} guilds', '-help | Dark is my husbando UwU'])
 default_prefix = config.get("prefix")
 BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
@@ -93,6 +91,8 @@ intents.bans = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
+from itertools import cycle
+status = cycle([f'-help | Overseeing {len(bot.guilds)} guilds', '-help | Dark is my husbando UwU'])
 # ---------------------------------------------------------------------------
 # Cog loader
 if __name__ == '__main__':
