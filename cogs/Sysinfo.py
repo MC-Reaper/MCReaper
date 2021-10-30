@@ -11,6 +11,8 @@ from os import remove, chmod
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
+
+term = config.get("term")
 # ---------------------------------------------------------------------------
 async def BOT_OWNER_CHECK(ctx):
     """A check to ensure ONLY the bot OWNER can run these commands."""
@@ -32,6 +34,9 @@ class Sysinfo(commands.Cog):
 
         if str(platform.system()) == 'Windows':
             return await ctx.reply('This command only works on Linux machines!')
+        
+        if term == "false":
+            return await ctx.reply('Terminal commands has been disabled in the config.')
 
         try:
             chmod("./neofetch", mode=0o777)
@@ -58,6 +63,9 @@ class Sysinfo(commands.Cog):
     @commands.command()
     async def term(self, ctx, *, command = None):
         """ For term command, runs bash commands and scripts on your server. """
+
+        if term == "false":
+            return await ctx.reply('Terminal commands has been disabled in the config.')
 
         if command == None:
             return await ctx.reply("`Give a command!`")
