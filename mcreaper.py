@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os, keep_alive
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
@@ -16,10 +16,6 @@ except ImportError:
     '\nInstall them with pip install -r requirements.txt'
     )
     exit()
-# ---------------------------------------------------------------------------
-# Keep bot alive in repl
-import keep_alive
-keep_alive.keep_alive()
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
@@ -847,4 +843,5 @@ async def ascii(ctx, *, text = None):
         elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
         await send_to_log_channel(gld=ctx.guild, text=elog)
 # ---------------------------------------------------------------------------
+keep_alive.keep_alive()
 bot.run(BOT_TOKEN, bot=True)
