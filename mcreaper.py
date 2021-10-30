@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os, keep_alive
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
