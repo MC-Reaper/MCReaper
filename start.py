@@ -6,7 +6,7 @@ import subprocess, os, sys
 # ---------------------------------------------------------------------------
 # Modules (check if modules are installed, will come with a better implementation soon)
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, flask
 except ImportError:
     print(
     'You baka! You forgot to install the required modules in requirements.txt!',
@@ -25,7 +25,12 @@ def start():
             break
         params = [sys.executable, 'mcreaper.py']
         params.extend(sys.argv[1:])
+
+        params2 = [sys.executable, 'keep_alive.py']
+        params2.extend(sys.argv[1:])
+
         subprocess.call(params)
+        subprocess.call(params2)
 
 if __name__ == '__main__':
     try:

@@ -13,5 +13,6 @@ cogs/__pycache__/Greetings.cpython-39.pyc
 cogs/__pycache__/Moderation.cpython-39.pyc
 cogs/__pycache__/Sysinfo.cpython-39.pyc
 cogs/__pycache__/SearchTorrent.cpython-39.pyc
+__pycache__/keep_alive.cpython-39.pyc
 neofetch
 .env

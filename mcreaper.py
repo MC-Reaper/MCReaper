@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os, keep_alive
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
@@ -45,9 +45,13 @@ if (MONGOSRV == None) or (MONGOSRV == ""):
     print('[ERROR] There is no authentication for MongoDB. Please setup MongoDB!')
     exit()
 else:
-    cluster = MongoClient(MONGOSRV)
-    db = cluster["mcreaper"]
-    print('[INFO] BOT|DB Successfully authenticated to MongoDB.')
+    try:
+        cluster = MongoClient(MONGOSRV)
+        db = cluster["mcreaper"]
+        print('[INFO] BOT|DB Successfully authenticated to MongoDB.')
+    except Exception as e:
+        print(f'[ERROR] Failed to authenticate to MongoDB! {e}')
+
 # Collections
 guild_prefixes_c = db["guild_prefixes"]
 gbanned_users_c = db["gbanned_users"]
@@ -62,7 +66,7 @@ afk_c = db["afk"]
 # ---------------------------------------------------------------------------
 # Prefix Mgt
 def get_prefix(bot, msg):
-    """Get prefix from mongo database"""
+    """Get prefix from MongoDB"""
 
     query = {"_id": msg.guild.id}
 
@@ -92,7 +96,7 @@ intents.bans = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
-status = cycle([f"-help | I'm an egirl UwU", "-help | Dark is my husbando ^//w//^"])
+status = cycle(["-help | I'm an egirl UwU", "-help | Dark is my husbando ^//w//^"])
 # ---------------------------------------------------------------------------
 # Cog loader
 if __name__ == '__main__':
@@ -151,7 +155,7 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
 async def on_ready():
     """When the bot has started up"""
     change_status.start()
-    print(f'[INFO] BOT|BOOT: MC Reaper is running!\n[INFO] BOT|BOOT: Logged in as {bot.user} | {bot.user.id}')
+    print(f'[INFO] BOT|BOOT: MC Reaper is running!\n[INFO] BOT|BOOT: Logged in as {bot.user} | {bot.user.id}\n[INFO] BOT|BOOT: Guilds: {len(bot.guilds)}')
 
 @tasks.loop(seconds=10)
 async def change_status():
@@ -843,5 +847,4 @@ async def ascii(ctx, *, text = None):
         elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
         await send_to_log_channel(gld=ctx.guild, text=elog)
 # ---------------------------------------------------------------------------
-keep_alive.keep_alive()
 bot.run(BOT_TOKEN, bot=True)

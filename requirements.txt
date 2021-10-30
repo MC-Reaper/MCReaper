@@ -1,5 +1,6 @@
 # Requirements
 flask
+waitress
 nekos.py
 we-get
 discord.py[voice]
