@@ -1,6 +1,6 @@
 # Requirements (1)
-https://github.com/Nekos-life/nekos.py/archive/master.zip
-https://github.com/rachmadaniHaryono/we-get/archive/master.zip
+nekos.py
+we-get
 discord.py[voice]
 requests
 pyfiglet
