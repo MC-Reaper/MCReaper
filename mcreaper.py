@@ -9,6 +9,7 @@ try:
     from discord.ext.commands import Bot, has_permissions
     from platform import python_version, platform
     from os import remove, listdir
+    from itertools import cycle
 except ImportError:
     print(
     'You baka! You forgot to install the required modules in requirements.txt!',
@@ -91,8 +92,7 @@ intents.bans = True
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
-from itertools import cycle
-status = cycle([f'-help | Overseeing {len(bot.guilds)} guilds', '-help | Dark is my husbando UwU'])
+status = cycle([f"-help | I'm an egirl UwU", "-help | Dark is my husbando ^//w//^"])
 # ---------------------------------------------------------------------------
 # Cog loader
 if __name__ == '__main__':
