@@ -155,7 +155,7 @@ async def on_ready():
 
 @tasks.loop(seconds=10)
 async def change_status():
-    await bot.change_presence(activity=discord.Streaming(next(status), url='https://www.twitch.tv/artia_hololive'))
+    await bot.change_presence(activity=discord.Game(next(status)))
 
 @bot.event
 async def on_guild_join(guild):

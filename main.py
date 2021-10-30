@@ -45,7 +45,10 @@ def start():
 
 if __name__ == '__main__':
     try:
+        main()
         start()
+        run()
+        keep_alive()
     except KeyboardInterrupt:
         print('Received KeyboardInterrupt, bye bye!')
         try:
