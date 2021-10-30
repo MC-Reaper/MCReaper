@@ -300,12 +300,12 @@ async def on_member_join(member):
     if (gbanned_users_c.count_documents(query) == 1):
         try:
             gban_user_reason : str = gbanned_users_c.find_one(query)["reason"]
-            print(f'```[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}```')
+            print(f'[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}')
             await member.send(f'You were banned from entering {guild.name} because you are in the Federation Ban Database.\nReason: {gban_user_reason}.\n\nIf you think this ban was wrong then speak to **{DOZ_DISCORD}**')
             await member.ban(reason=gban_user_reason)
             await send_to_log_channel(gld=guild, text=f'{member} ({member.id}) was denied access to your server due to being in the global ban database.\nReason for GBAN: {gban_user_reason}')
         except Exception as e:
-            print(f'```[WARNING] AUTOMOD: GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}```')
+            print(f'[WARNING] AUTOMOD: GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}')
 
 @bot.event
 async def on_member_remove(member):
@@ -799,7 +799,6 @@ async def say(ctx, *, text : str = None):
         else:
             await ctx.send(text)
             elog = f'```[INFO] CMD|SAY: {ctx.author} ({ctx.author.id}) said:``` {text}'
-            print(elog)
             await send_to_log_channel(gld=ctx.guild, text=elog)
 
 @bot.command()
@@ -825,7 +824,6 @@ async def shout(ctx, *, msg: str = None):
         await ctx.send("```"+msg+"```")
 
         elog = f'```[INFO] CMD|SHOUT: {ctx.author} ({ctx.author.id}) shouted:``` {msg}'
-        print(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 
 @bot.command()
@@ -843,7 +841,6 @@ async def ascii(ctx, *, text = None):
         await ctx.send(f'```{ascii_text}```')
 
         elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
-        print(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 # ---------------------------------------------------------------------------
 bot.run(BOT_TOKEN, bot=True)

