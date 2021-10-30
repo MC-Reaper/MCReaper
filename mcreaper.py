@@ -23,6 +23,7 @@ with open('config.json') as a:
 # Configuration
 # Please see config.json
 # ! DO NOT EDIT !
+status = cycle([f'-help | Overseeing {len(bot.guilds)} guilds', '-help | Dark is my husbando UwU'])
 default_prefix = config.get("prefix")
 BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
@@ -148,11 +149,12 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
 @bot.event
 async def on_ready():
     """When the bot has started up"""
-
-    # TODO: Add change presence commands and use MongoDB for it to survive restarts. 
-
-    await bot.change_presence(activity=discord.Streaming(name=f"-help | Overseeing {len(bot.guilds)} guilds", url='https://www.twitch.tv/artia_hololive'))
+    change_status.start()
     print(f'[INFO] BOT|BOOT: MC Reaper is running!\n[INFO] BOT|BOOT: Logged in as {bot.user} | {bot.user.id}')
+
+@tasks.loop(seconds=10)
+async def change_status():
+    await bot.change_presence(activity=discord.Streaming(next(status), url='https://www.twitch.tv/artia_hololive'))
 
 @bot.event
 async def on_guild_join(guild):

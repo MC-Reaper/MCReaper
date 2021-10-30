@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
+from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
+@app.route('/')
+def main():
+  return "UTR"
+
+def run():
+  app.run(host="0.0.0.0", port=8000)
+
+def keep_alive():
+  server = Thread(target=run)
+  server.start()
+
 import subprocess, os, sys
 
 # ---------------------------------------------------------------------------
