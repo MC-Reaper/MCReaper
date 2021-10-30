@@ -6,7 +6,7 @@ import subprocess, os, sys
 # ---------------------------------------------------------------------------
 # Modules (check if modules are installed, will come with a better implementation soon)
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, dotenv
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo
 except ImportError:
     print(
     'You baka! You forgot to install the required modules in requirements.txt!',

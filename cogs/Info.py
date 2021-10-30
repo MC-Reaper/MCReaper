@@ -9,16 +9,13 @@ from discord.ext import commands
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
-
-from dotenv import load_dotenv
-load_dotenv()
 # ---------------------------------------------------------------------------
 BOT_OWNER_ID = int(config.get("bot_owner_id"))
 BOT_INVITE_LINK = config.get("bot_invite")
 HQ_SERVER_INVITE = config.get("server_invite")
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-MONGOSRV = os.getenv("MONGOSRV")
+MONGOSRV = os.environ['MONGOSRV']
 cluster = MongoClient(MONGOSRV, serverSelectionTimeoutMS = 2500)
 db = cluster["mcreaper"]
 # Collections

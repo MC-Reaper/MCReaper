@@ -10,12 +10,9 @@ from os import remove
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
-
-from dotenv import load_dotenv
-load_dotenv()
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-MONGOSRV = os.getenv("MONGOSRV")
+MONGOSRV = os.environ['MONGOSRV']
 cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections

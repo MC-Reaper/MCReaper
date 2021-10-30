@@ -9,9 +9,6 @@ from discord.ext import commands
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
-
-from dotenv import load_dotenv
-load_dotenv()
 # ---------------------------------------------------------------------------
 def RandomColour():
     """Generates random colours for embed"""
@@ -27,7 +24,7 @@ NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
-MONGOSRV = os.getenv("MONGOSRV")
+MONGOSRV = os.environ['MONGOSRV']
 cluster = MongoClient(MONGOSRV)
 db = cluster["mcreaper"]
 # Collections

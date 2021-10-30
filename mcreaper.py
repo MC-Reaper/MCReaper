@@ -19,16 +19,13 @@ except ImportError:
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
-
-from dotenv import load_dotenv
-load_dotenv()
 # ---------------------------------------------------------------------------
 # Configuration
 # Please see config.json
 # ! DO NOT EDIT !
 default_prefix = config.get("prefix")
-BOT_TOKEN = os.getenv("BOT_TOKEN") # bot_token in config.json.
-MONGOSRV = os.getenv("MONGOSRV") # Add your MONGOSRV link in config.json.
+BOT_TOKEN = os.environ['BOT_TOKEN']
+MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
 BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
