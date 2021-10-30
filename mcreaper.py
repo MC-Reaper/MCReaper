@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # Modules
 try:
-    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os, keep_alive
+    import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
     from datetime import datetime
     from pymongo import MongoClient
     from discord import Member, Game, File
@@ -16,6 +16,10 @@ except ImportError:
     '\nInstall them with pip install -r requirements.txt'
     )
     exit()
+# ---------------------------------------------------------------------------
+# Keep bot alive in repl
+import keep_alive
+keep_alive.keep_alive()
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
