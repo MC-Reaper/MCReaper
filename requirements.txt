@@ -3,7 +3,7 @@ flask
 waitress
 nekos.py
 we-get
-discord.py[voice]
+discord.py
 requests
 pyfiglet
 pymongo

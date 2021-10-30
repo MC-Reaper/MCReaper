@@ -1,0 +1,18 @@
+[tool]
+[tool.poetry]
+authors = ["DozNaka <dozdguide@gmail.com>"]
+description = ""
+name = "MCReaper"
+version = "0.3"
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.0.2"
+waitress = "^2.0.0"
+"nekos.py" = "^1.0.3"
+we-get = "^1.0.1"
+"discord.py" = "^1.7.3"
+requests = "^2.26.0"
+pyfiglet = "^0.8.post1"
+pymongo = "^3.12.1"
+dnspython = "^2.1.0"
+google = "^3.0.0"
