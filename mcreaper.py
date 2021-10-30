@@ -17,6 +17,10 @@ except ImportError:
     )
     exit()
 # ---------------------------------------------------------------------------
+# Keep bot alive in repl
+import keep_alive
+keep_alive.keep_alive()
+# ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
