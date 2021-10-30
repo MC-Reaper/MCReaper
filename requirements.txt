@@ -1,4 +1,5 @@
-# Requirements (1)
+# Requirements
+flask
 nekos.py
 we-get
 discord.py[voice]
