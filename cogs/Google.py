@@ -1,14 +1,10 @@
 # Google cog by Doz
 # ---------------------------------------------------------------------------
 import discord, asyncio
-from discord import Member, Webhook, RequestsWebhookAdapter
+from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
 from googlesearch import search
-# ---------------------------------------------------------------------------
-# Webhook logging
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 class Google(commands.Cog):
     """Commands for Google"""

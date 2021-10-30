@@ -2,14 +2,10 @@
 # ---------------------------------------------------------------------------
 import discord, asyncio, pymongo, datetime, json, os
 from pymongo import MongoClient
-from discord import Member, Webhook, RequestsWebhookAdapter, File
+from discord import Member, File
 from discord.ext.commands import Bot, has_permissions
 from discord.ext import commands
 from os import remove
-# ---------------------------------------------------------------------------
-# Webhook logging
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:

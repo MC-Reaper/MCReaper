@@ -4,7 +4,7 @@ try:
     import discord, json, asyncio, random, nekos, pyfiglet, pymongo, reapertools, os
     from datetime import datetime
     from pymongo import MongoClient
-    from discord import Member, Game, Webhook, RequestsWebhookAdapter, File
+    from discord import Member, Game, File
     from discord.ext import commands
     from discord.ext.commands import Bot, has_permissions
     from platform import python_version, platform
@@ -95,23 +95,6 @@ bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 bot.remove_command("help")
 botstartTime = datetime.utcnow()
 # ---------------------------------------------------------------------------
-# Webhooks
-# TODO: Make webhook logging optional
-logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter())
-
-reaper_logs_webhook = Webhook.partial(746157945468747776, "lOrgfZFXSTt32nQq9qzZgeNewBxfaM--bTUT4EFg9jgAWhGGfBMcVUSijddymaEQvgWl",\
- adapter=RequestsWebhookAdapter())
-
-gbans_webhook = Webhook.partial(746155689033990144, "V4QGR7UAO3HRGTYb2j8iUNFN4F1utX2CV5RQ3bWQSH_LGartc0lgAXPKEFiMUHxGL6kb",\
- adapter=RequestsWebhookAdapter())
-
-joinleave_webhook = Webhook.partial(746157465606946847, "SOz8ky2uDPiNfdjntY4H40jdpm9YHVM1kVRIv_LcgN_hKu7e269oAHkDGUgtxPdj8y6Q",\
- adapter=RequestsWebhookAdapter())
-
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
-# ---------------------------------------------------------------------------
 # Cog loader
 if __name__ == '__main__':
     for cog in listdir("./cogs"):
@@ -122,7 +105,6 @@ if __name__ == '__main__':
             except Exception as e:
                 cogerrlg = f"[CRITICAL] BOT|COGS: {cog} could not be loaded!\n{e}"
                 print(cogerrlg)
-                errorlogs_webhook.send(f"```{cogerrlg}```")
             else:
                 print(f"[INFO] BOT|COGS: {cog} has been loaded!")
 # ---------------------------------------------------------------------------
@@ -147,7 +129,6 @@ async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: Fi
             lgerr = f'[NOTICE] BOT|LOGS: Could not find channel for logging in {gld.name} ({gld.id}) so the DB has been deleted.'
             chatlog.delete_many(query)
             print(lgerr)
-            logs_webhook.send(f'```{lgerr}```')
         
         else:
             if text:
@@ -174,10 +155,6 @@ async def on_ready():
     # TODO: Add change presence commands and use MongoDB for it to survive restarts. 
 
     await bot.change_presence(activity=discord.Streaming(name=f"-help | Overseeing {len(bot.guilds)} guilds", url='https://www.twitch.tv/artia_hololive'))
-
-    em = discord.Embed(title='MC Reaper Status', description=f'MC Reaper is running!', colour=RandomColour())
-    em.add_field(name='Bot version:', value=BOT_VERSION, inline=False)
-    logs_webhook.send(embed=em)
     print(f'[INFO] BOT|BOOT: MC Reaper is running!\n[INFO] BOT|BOOT: Logged in as {bot.user} | {bot.user.id}')
 
 @bot.event
@@ -186,7 +163,6 @@ async def on_guild_join(guild):
 
     ogr = f'[INFO] BOT|JOIN: Joined guild, {guild.name} ({guild.id}) owned by {guild.owner} ({guild.owner.id})'
     print(ogr)
-    joinleave_webhook.send(f'```{ogr}```')
 
 @bot.event
 async def on_guild_remove(guild):
@@ -194,7 +170,6 @@ async def on_guild_remove(guild):
 
     ogr1 = f'[INFO] BOT|LEAVE: Left guild, {guild.name} ({guild.id})'
     print(ogr1)
-    joinleave_webhook.send(f'```{ogr1}```')
 
     wquery = {"guild_id" : guild.id}
     gquery = {"GuildID": str(guild.id)}
@@ -205,31 +180,25 @@ async def on_guild_remove(guild):
             resultw = warn_c.delete_many(wquery)
             mjrp1 = f'[INFO] WARN|DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp1)
-            logs_webhook.send(f"```{mjrp1}```")
         if (nsfw_flag.count_documents(query) >= 1):
             resultn = nsfw_flag.delete_many(query)
             mjrp2 = f'[INFO] NSFW|DB: Deleted {resultn.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp2)
-            logs_webhook.send(f"```{mjrp2}```")
         if (chatlog.count_documents(query) >= 1):
             resultc = chatlog.delete_many(query)
             mjrp3 = f'[INFO] CHATLOG|DB: Deleted {resultc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp3)
-            logs_webhook.send(f"```{mjrp3}```")
         if (welcmsg.count_documents(query) >= 1):
             resultwc = welcmsg.delete_many(query)
             mjrp4 = f'[INFO] WELCOME_MSG|DB: Deleted {resultwc.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp4)
-            logs_webhook.send(f"```{mjrp4}```")
         if (afk_c.count_documents(gquery) >= 1):
             resultafk = welcmsg.delete_many(gquery)
             mjrp5 = f'[INFO] AFK|DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.'
             print(mjrp5)
-            logs_webhook.send(f"```{mjrp5}```")
     except Exception as e:
         mjrp6 = f'[ERROR] ONMEMBERJOIN|DATABASE: {e}'
         print(mjrp6)
-        errorlogs_webhook.send(f'```{mjrp6}```')
 
 @bot.event
 async def on_member_ban(guild, user):
@@ -301,7 +270,6 @@ async def on_member_join(member):
         if not welcome_channel:
             lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
             print(lgerr)
-            errorlogs_webhook.send(f'```{lgerr}```')
         else:
             await welcome_channel.send(content=translated_text)
 
@@ -332,12 +300,12 @@ async def on_member_join(member):
     if (gbanned_users_c.count_documents(query) == 1):
         try:
             gban_user_reason : str = gbanned_users_c.find_one(query)["reason"]
-            logs_webhook.send(f'```[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}```')
+            print(f'```[INFO] AUTOMOD: {member} ({member.id}) was banned from entering {guild.name}!\nREASON GBANNED: {gban_user_reason}```')
             await member.send(f'You were banned from entering {guild.name} because you are in the Federation Ban Database.\nReason: {gban_user_reason}.\n\nIf you think this ban was wrong then speak to **{DOZ_DISCORD}**')
             await member.ban(reason=gban_user_reason)
             await send_to_log_channel(gld=guild, text=f'{member} ({member.id}) was denied access to your server due to being in the global ban database.\nReason for GBAN: {gban_user_reason}')
         except Exception as e:
-            errorlogs_webhook.send(f'```[WARNING] AUTOMOD: GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}```')
+            print(f'```[WARNING] AUTOMOD: GBAN OF {member} ({member.id}) in {guild.name} FAILED! {e}```')
 
 @bot.event
 async def on_member_remove(member):
@@ -363,7 +331,6 @@ async def on_member_remove(member):
             if not welcome_channel:
                 lgerr = f'[WARNING] BOT|LOGS: Could not find channel for welcome message in {guild.name} ({guild.id})!'
                 print(lgerr)
-                errorlogs_webhook.send(f'```{lgerr}```')
             else:
                 await welcome_channel.send(content=translated_text)
 
@@ -378,14 +345,13 @@ async def on_member_remove(member):
     try:
         if (warn_c.count_documents(query) >= 1):
             resultw = warn_c.delete_many(query)
-            logs_webhook.send(f'WARN DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            print(f'WARN DB: Deleted {resultw.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
         if (afk_c.count_documents(query) >= 1):
             resultafk = welcmsg.delete_many(query)
-            logs_webhook.send(f'AFK DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
+            print(f'AFK DB: Deleted {resultafk.deleted_count} queries of {guild.name} ({guild.id}) as the bot was removed.')
     except Exception as e:
         errlog = f'[ERROR] DATABASE|ONMEMBERREMOVE: {e}'
         print(errlog)
-        errorlogs_webhook.send(f'```{errlog}```')
 
 @bot.event
 async def on_member_update(userb, usera):
@@ -613,11 +579,7 @@ async def on_command_error(ctx, error):
     else:
         errorstr = f"An error has occured! HQ will receive this error message!\n```{error}```"
         pwebstr = f"[ERROR] BOT|CMD: MSGCONT: {msgcont}\nError: {error}"
-        try:
-            errorlogs_webhook.send(pwebstr)
-        except:
-            errorlogs_webhook.send('An error has occured but it exceeded 2000 Chars, sending to console logs..')
-            print(pwebstr)
+        print(pwebstr)
 
     if errorstr == None:
         return
@@ -773,7 +735,7 @@ async def nsfw(ctx, text = None):
         try:
             inviteurl = await ctx.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
             await ctx.send(nekos.img(text))
-            logs_webhook.send(f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+            await send_to_log_channel.send(gld=ctx.guild, text=f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
         except Exception as e:
             if "You haven't added any valid arguments" in str(e):
                 await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")
@@ -804,7 +766,7 @@ async def hentaibomb(ctx, user : discord.Member = None):
         await ctx.send(f"{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('cum')}\n{nekos.img('lewd')}\n{nekos.img('lewd')}")
         await ctx.send(f"{nekos.img('lewd')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('nsfw_neko_gif')}\n{nekos.img('lewdkemo')}")
         await ctx.send(f"{nekos.img('lewdkemo')}\n{nekos.img('lewdkemo')}\n{nekos.img('classic')}\n{nekos.img('classic')}\n{nekos.img('classic')}")
-        logs_webhook.send(f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id})')
+        await send_to_log_channel.send(gld=ctx.guild, text=f'[NOTICE] CMD|HENTAIBOMB: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id})')
 
 @bot.command()
 async def say(ctx, *, text : str = None):
@@ -837,7 +799,7 @@ async def say(ctx, *, text : str = None):
         else:
             await ctx.send(text)
             elog = f'```[INFO] CMD|SAY: {ctx.author} ({ctx.author.id}) said:``` {text}'
-            logs_webhook.send(elog)
+            print(elog)
             await send_to_log_channel(gld=ctx.guild, text=elog)
 
 @bot.command()
@@ -863,7 +825,7 @@ async def shout(ctx, *, msg: str = None):
         await ctx.send("```"+msg+"```")
 
         elog = f'```[INFO] CMD|SHOUT: {ctx.author} ({ctx.author.id}) shouted:``` {msg}'
-        logs_webhook.send(elog)
+        print(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 
 @bot.command()
@@ -881,7 +843,7 @@ async def ascii(ctx, *, text = None):
         await ctx.send(f'```{ascii_text}```')
 
         elog = f'```[INFO] CMD|ASCII: {ctx.author} ({ctx.author.id}) used ASCII:``` {text}'
-        logs_webhook.send(elog)
+        print(elog)
         await send_to_log_channel(gld=ctx.guild, text=elog)
 # ---------------------------------------------------------------------------
 bot.run(BOT_TOKEN, bot=True)

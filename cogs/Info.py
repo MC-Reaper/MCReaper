@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
-from discord import Member, Webhook, RequestsWebhookAdapter
+from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
 # ---------------------------------------------------------------------------
@@ -25,10 +25,6 @@ db = cluster["mcreaper"]
 gbanned_users_c = db["gbanned_users"]
 sudo_users_c = db["sudo_users"]
 userbio_c = db["userbio"]
-# ---------------------------------------------------------------------------
-# Webhooks
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 def RandomColour():
     """Generates random colours for embed"""
@@ -171,7 +167,7 @@ class Info(commands.Cog):
             await ctx.send('`ui <user> or ui avi <user>`')
         else:
             await ctx.send('An unknown error has occured, sent error log to HQ.')
-            errorlogs_webhook.send(f"```[ERROR] CMD|UI/AVI: {str(error)}```")
+            print(f"[ERROR] CMD|UI/AVI: {str(error)}")
 
     @commands.command(aliases=['server', 'sinfo', 'si'])
     async def serverinfo(self, ctx, *, lol = None):

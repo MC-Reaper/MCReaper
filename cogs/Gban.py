@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 import discord, asyncio, random, json, pymongo, os
 from pymongo import MongoClient
-from discord import Member, Webhook, RequestsWebhookAdapter
+from discord import Member
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
 from discord.ext import commands
 # ---------------------------------------------------------------------------
@@ -24,16 +24,6 @@ db = cluster["mcreaper"]
 # Collections
 gbanned_users_c = db["gbanned_users"]
 sudo_users_c = db["sudo_users"]
-# ---------------------------------------------------------------------------
-# Webhooks
-logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter())
-
-gbans_webhook = Webhook.partial(746155689033990144, "V4QGR7UAO3HRGTYb2j8iUNFN4F1utX2CV5RQ3bWQSH_LGartc0lgAXPKEFiMUHxGL6kb",\
- adapter=RequestsWebhookAdapter())
-
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Checks
 async def SUDOER_CHECK(ctx):
@@ -103,39 +93,39 @@ class Gban(commands.Cog):
                     await ctx.send(f'{user} ({user.id}) was already gbanned! New reason set!: {gbanned_users_c.find_one(query)["reason"]}')
             except Exception as e:
                 await ctx.send('Aborted operation due to an error on the database.')
-                return errorlogs_webhook.send(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
+                return print(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
 
-            initbanmsg = await ctx.send(f">>> Initiating GBAN for **{user}**...")
+            initbanmsg = await ctx.send(f">>> Initiating GBAN for {user}...")
         
             for guild in self.bot.guilds:
                 try:
                     await guild.ban(user, reason=reason)
-                    logs_webhook.send(f'gbanned **{user}** from **{guild.name}** successfully!')
+                    print(f'gbanned {user} from {guild.name} successfully!')
                 except Exception as e:
-                    logs_webhook.send(f'Failed to gban **{user}** from **{guild.name}**!\nDetails:\n`{e}`')
+                    print(f'Failed to gban {user} from {guild.name}!\nDetails:\n{e}')
 
             try:
-                embed = discord.Embed(title='Federation Ban Notice', description=f'You were banned from the federation by **{ctx.author}**', colour=discord.Colour.red())
+                embed = discord.Embed(title='Federation Ban Notice', description=f'You were banned from the federation by {ctx.author}', colour=discord.Colour.red())
                 embed.add_field(name='Reason:', value=reason, inline=False)
                 embed.add_field(name='Federation BAN?', value=f'If you think this ban was unjustified please contact the bot owner {DOZ_DISCORD} ({BOT_OWNER_ID}) to get unbanned!')
                 embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                 embed.set_image(url=BAN_GIF)
                 await user.send(embed=embed)
             except:
-                errorlogs_webhook.send(f'>>> Federation Ban message not sent to {user} ({user.id})')
+                print(f'>>> Federation Ban message not sent to {user} ({user.id})')
                 pass
 
 
             try:
-                embed = discord.Embed(title='Federation Ban Notice', description=f'{user} ({user.id}) has been banned from the federation by **{ctx.message.author}**', colour=discord.Colour.red())
+                embed = discord.Embed(title='Federation Ban Notice', description=f'{user} ({user.id}) has been banned from the federation by {ctx.message.author}', colour=discord.Colour.red())
                 embed.add_field(name='Reason:', value=f'{reason}', inline=False)
                 embed.set_footer(text=f'Banned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                 await ctx.send(embed=embed)
                 await initbanmsg.delete()
-                gbans_webhook.send(embed=embed)
+                print(f'{user} ({user.id}) has been banned from the federation by {ctx.message.author}\nReason{reason}')
             except Exception as e:
                 await ctx.send('An unknown error has occured, sent error log to HQ.')
-                errorlogs_webhook.send(f"```[ERROR] CMD|GBAN: {e}```")
+                print(f"[ERROR] CMD|GBAN: {e}")
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
@@ -170,15 +160,15 @@ class Gban(commands.Cog):
             query = {"_id": user.id}
             if (gbanned_users_c.count_documents(query) == 1):
                 try:
-                    embed = discord.Embed(title='Federation Unban Notice', description=f'{user} has been unbanned by **{ctx.message.author} ({ctx.message.author.id})**', colour=discord.Colour.green())
+                    embed = discord.Embed(title='Federation Unban Notice', description=f'{user} has been unbanned by {ctx.message.author} ({ctx.message.author.id})', colour=discord.Colour.green())
                     embed.add_field(name='Reason:', value=f'{reason}', inline=False)
                     embed.set_footer(text=f'Unbanned by {ctx.message.author.name}', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
                     gbanned_users_c.delete_one(query)
                     await ctx.send(embed=embed)
-                    gbans_webhook.send(embed=embed)
+                    print(f'{user} ({user.id}) has been unbanned from the federation by {ctx.message.author}\nReason{reason}')
                 except Exception as e:
                     await ctx.send('An unknown error has occured, sent error log to HQ.')
-                    errorlogs_webhook.send(f"```[ERROR] CMD|UNGBAN: {e}```")
+                    print(f"[ERROR] CMD|UNGBAN: {e}")
 
             else:
                 return await ctx.send(f"{user} ({user.id}) is not gbanned!")

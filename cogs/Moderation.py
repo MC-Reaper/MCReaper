@@ -3,7 +3,7 @@
 # Libs
 import discord, asyncio, pymongo, random, json, os
 from pymongo import MongoClient
-from discord import Member, Webhook, RequestsWebhookAdapter, File
+from discord import Member, File
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
 from discord.ext import commands
 from os import remove
@@ -28,13 +28,6 @@ warn_c = db["warns"]
 nsfw_flag = db["nsfw_enabled"]
 chatlog = db["chatlog"]
 ban_mentions_c = db["forbid_mentions"]
-# ---------------------------------------------------------------------------
-# Webhooks
-logs_webhook = Webhook.partial(746158498181808229, "JJNzXDenBhg5t97X7eAX52bjhzL0Oz-dS5b_XKoAzkqjQvA90tWva-5fWibrcEQb2WD5",\
- adapter=RequestsWebhookAdapter())
-
-errorlogs_webhook = Webhook.partial(746156734019665929, "i88z41TM5VLxuqnbIdM7EjW1SiaK8GkSUu0H3fOTLBZ9RDQmcOG0xoz6P5j1IafoU1t5",\
- adapter=RequestsWebhookAdapter())
 # ---------------------------------------------------------------------------
 # Other Defs
 BAN_GIF = config.get("ban_gif")
@@ -62,7 +55,6 @@ async def send_to_log_channel(ctx, *, text=None, emt=None):
             lgerr = f'[NOTICE] BOT|LOGS: Could not find channel for logging in {ctx.guild.name} ({ctx.guild.id}) so the DB has been deleted.'
             chatlog.delete_many(query)
             print(lgerr)
-            logs_webhook.send(f'```{lgerr}```')
 
         if text:
             if len(text) > 2000:
@@ -170,7 +162,7 @@ class Moderation(commands.Cog):
                         await ctx.reply(f'This guild has no custom prefixes. The default prefix is: {default_prefix}', mention_author=True)
                 except Exception as e:
                     await ctx.send('An unknown error has occured, sent error log to HQ.')
-                    errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {e}```")
+                    print(f"[ERROR] CMD|PREFIX: {e}")
 
     @prefix.command(aliases=['set'])
     @has_permissions(manage_guild=True)
@@ -196,7 +188,7 @@ class Moderation(commands.Cog):
             await ctx.reply('Usage:\n`prefix set <new_prefix>`', mention_author=True)
         else:
             await ctx.send('An unknown error has occured, sent error log to HQ.')
-            errorlogs_webhook.send(f"```[ERROR] CMD|PREFIX: {str(error)}```")
+            print(f"[ERROR] CMD|PREFIX: {str(error)}")
 
     @commands.command()
     @has_permissions(manage_messages=True)
@@ -756,7 +748,7 @@ class Moderation(commands.Cog):
                     await ctx.send(content=None, embed=em)
                     
                 except Exception as e:
-                    errorlogs_webhook.send(f"```[ERROR] CMD|EMBED: {e}```")
+                    print(f"[ERROR] CMD|EMBED: {e}")
                     em = discord.Embed(title='Reaper Embed Creator', description='Input cancelled due to an error\n\n```[ERROR] CMD|EMBED: {e}```', colour=discord.Colour.red())
                     return await ctx.send(content=None, embed=em)
 
