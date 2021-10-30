@@ -3,6 +3,7 @@
 
 import subprocess, os, sys
 
+# For heroku only
 # ---------------------------------------------------------------------------
 # Modules (check if modules are installed, will come with a better implementation soon)
 try:
@@ -23,7 +24,7 @@ def start():
             if kill == 'update':
                 exit(15)
             break
-        params = [sys.executable, 'mcreaper.py']
+        params = [sys.executable, 'main.py']
         params.extend(sys.argv[1:])
 
         params2 = [sys.executable, 'keep_alive.py']
