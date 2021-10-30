@@ -24,8 +24,8 @@ with open('config.json') as a:
 # Please see config.json
 # ! DO NOT EDIT !
 default_prefix = config.get("prefix")
-BOT_TOKEN = os.environ['BOT_TOKEN']
-MONGOSRV = os.environ['MONGOSRV']
+BOT_TOKEN = reapertools.BOT_TOKEN
+MONGOSRV = reapertools.MONGOSRV
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
 BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
