@@ -10,8 +10,9 @@ def main():
 # ---------------------------------------------------------------------------
 def run():
     from waitress import serve
-    serve(app, host="0.0.0.0", port=80)
+    serve(app, host="0.0.0.0", port=8080)
 
 def keep_alive():
+    print('[INFO] BOT|BOOT: Starting keep_alive server')
     server = Thread(target=run)
     server.start()

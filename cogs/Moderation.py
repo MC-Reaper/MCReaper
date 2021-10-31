@@ -1,12 +1,13 @@
 # Moderation cog by Doz
 # ---------------------------------------------------------------------------
 # Libs
-import discord, asyncio, pymongo, random, json, os
+import discord, asyncio, pymongo, json, os
 from pymongo import MongoClient
 from discord import Member, File
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
 from discord.ext import commands
 from os import remove
+from reapertools import RandomColour
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
@@ -31,12 +32,6 @@ BAN_GIF = config.get("ban_gif")
 default_prefix = '-'
 # ---------------------------------------------------------------------------
 # Program Defs
-def RandomColour():
-    """Generates random colours for embed"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
-
 async def send_to_log_channel(ctx, *, text=None, emt=None):
     """Send info to log channel which can be fetched using MongoDB"""
 

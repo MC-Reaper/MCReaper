@@ -5,16 +5,11 @@ from pymongo import MongoClient
 from discord import Member
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
 from discord.ext import commands
+from reapertools import RandomColour
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
     config = json.load(a)
-# ---------------------------------------------------------------------------
-def RandomColour():
-    """Generates random colours for embed"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
 # ---------------------------------------------------------------------------
 # Configuration
 BOT_OWNER_ID = int(config.get("bot_owner_id"))

@@ -10,6 +10,7 @@ try:
     from platform import python_version, platform
     from os import remove, listdir
     from itertools import cycle
+    from reapertools import RandomColour
 except ImportError:
     print(
     'You baka! You forgot to install the required modules in requirements.txt!',
@@ -29,14 +30,14 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.3'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "- Added `hash` command.\n- Some minor changes."
+CHANGELOG_MESSAGE = "- Moved to replit\n- Disabled `sysinfo`\n- Cleanup."
 CHANGELOG_DATE = '27/10/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
@@ -88,6 +89,7 @@ f"""
 ╚═╝     ╚═╝ ╚═════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝
 
 By {DOZ_DISCORD} | Ver: {BOT_VERSION}
+Source code: https://github.com/MC-Reaper/MCReaper
 """)
 
 intents = discord.Intents.default()
@@ -112,12 +114,6 @@ if __name__ == '__main__':
                 print(f"[INFO] BOT|COGS: {cog} has been loaded!")
 # ---------------------------------------------------------------------------
 # Program Defs
-def RandomColour():
-    """Generates random colours for embed"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
-
 async def send_to_log_channel(gld=discord.Guild, *, text=None, emt=None, fle: File = None):
     """Send info to log channel which can be fetched using MongoDB"""
 

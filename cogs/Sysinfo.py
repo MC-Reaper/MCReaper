@@ -55,9 +55,9 @@ class Sysinfo(commands.Cog):
         except FileNotFoundError:
             try:
                 await asyncrunapp("wget", "https://raw.githubusercontent.com/dylanaraps/neofetch/master/neofetch")
-                await ctx.reply(content="I have downloaded a neofetch binary, please run this command again.")
+                await ctx.reply("I have downloaded a neofetch binary, please run this command again.")
             except:
-            	await ctx.reply("There is no neofetch binary and I could not download one!")
+            	await ctx.reply(":x: There is no neofetch binary and I could not download one!")
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()

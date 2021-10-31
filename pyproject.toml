@@ -3,7 +3,7 @@
 authors = ["DozNaka <dozdguide@gmail.com>"]
 description = ""
 name = "MCReaper"
-version = "0.3"
+version = "0.4"
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^2.0.2"

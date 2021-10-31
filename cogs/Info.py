@@ -1,10 +1,11 @@
 # Info cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo, os
+import discord, asyncio, json, pymongo, os
 from pymongo import MongoClient
 from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
+from reapertools import RandomColour
 # ---------------------------------------------------------------------------
 # Load configuration file
 with open('config.json') as a:
@@ -22,12 +23,6 @@ db = cluster["mcreaper"]
 gbanned_users_c = db["gbanned_users"]
 sudo_users_c = db["sudo_users"]
 userbio_c = db["userbio"]
-# ---------------------------------------------------------------------------
-def RandomColour():
-    """Generates random colours for embed"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
 # ---------------------------------------------------------------------------
 class Info(commands.Cog):
     """Commands for information"""

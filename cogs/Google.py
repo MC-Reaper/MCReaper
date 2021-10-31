@@ -22,8 +22,8 @@ class Google(commands.Cog):
         results = '\n '.join(str(x) for x in search(query, tld="com", num=5, stop=5, pause=2))
 
         if results == '':
-            results = "Couldn't search for that!"
-        await ctx.send(results)
+            results = ":x: I couldn't search for that!"
+        await ctx.reply(results)
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Google(bot))

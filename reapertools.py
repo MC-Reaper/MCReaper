@@ -2,7 +2,7 @@
 # Reaper Tools by Doz
 # ---------------------------------------------------------------------------
 # Modules
-import random, datetime
+import random, datetime, discord
 # ---------------------------------------------------------------------------
 # Humanize Time by Liudmil Mitev edited by makiolo.
 def humanize_time(amount: int, units = 'seconds'):
@@ -70,14 +70,12 @@ def humanize_time(amount: int, units = 'seconds'):
 
     return buf
 # ---------------------------------------------------------------------------
-# Date Diff by Doz
 def datediff_humanize(old_time: datetime, new_time: datetime):
     """Get the difference of time in seconds then throw it to humanize_time"""
     timediff = new_time - old_time
     result = humanize_time(timediff.total_seconds())
     return result
 # ---------------------------------------------------------------------------
-# rtwdv by Doz
 def rtwdv(txt, dic):
     """Replace words/letters in a string with values from a dict."""
 
@@ -86,7 +84,6 @@ def rtwdv(txt, dic):
 
     return txt
 # ---------------------------------------------------------------------------
-# Simple hash generator by Doz
 def rand_hash():
     """Returns a random hash"""
     
@@ -101,4 +98,10 @@ def text2hash(*, text: str):
     m.update(text.encode('utf-8'))
 
     return m.hexdigest()
+# ---------------------------------------------------------------------------
+def RandomColour():
+    """Generates random colours for embed"""
+
+    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
+    return randcolour
 # ---------------------------------------------------------------------------

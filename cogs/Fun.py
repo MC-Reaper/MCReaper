@@ -4,12 +4,7 @@ import discord, asyncio, random
 from discord import Member
 from discord.ext.commands import Bot
 from discord.ext import commands
-# ---------------------------------------------------------------------------
-def RandomColour():
-    """Generates random colours for embed"""
-
-    randcolour = discord.Colour(random.randint(0x000000, 0xFFFFFF))
-    return randcolour
+from reapertools import RandomColour
 # ---------------------------------------------------------------------------
 class Fun(commands.Cog):
     """Fun commands"""

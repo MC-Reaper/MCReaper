@@ -1,6 +1,6 @@
 # GBan cog by Doz
 # ---------------------------------------------------------------------------
-import discord, asyncio, random, json, pymongo, os
+import discord, asyncio, json, pymongo, os
 from pymongo import MongoClient
 from discord import Member
 from discord.ext.commands import Bot, has_permissions, CheckFailure, MemberConverter
@@ -89,15 +89,15 @@ class Gban(commands.Cog):
                     gbanned_users_c.update_one({"_id":user.id}, {"$set":{"user":user.name+'#'+user.discriminator,"reason":reason}})
                     await ctx.send(f'{user} ({user.id}) was already gbanned! New reason set!: {gbanned_users_c.find_one(query)["reason"]}')
             except Exception as e:
-                await ctx.send('Aborted operation due to an error on the database.')
-                return print(f'>>> Failed to add user to GBAN DATABSE!\nEXCEPTION: {e}')
+                await ctx.send(':x: Aborted operation due to an error on the database.')
+                return print(f'[ERROR] BOT|DB: GBANDB: {e}')
 
             initbanmsg = await ctx.send(f">>> Initiating GBAN for {user}...")
         
             for guild in self.bot.guilds:
                 try:
                     await guild.ban(user, reason=reason)
-                    print(f'gbanned {user} from {guild.name} successfully!')
+                    print(f'[INFO] CMD|GBAN: Banned {user} from {guild.name} successfully!')
                 except Exception as e:
                     print(f'Failed to gban {user} from {guild.name}!\nDetails:\n{e}')
 
@@ -109,7 +109,7 @@ class Gban(commands.Cog):
                 embed.set_image(url=BAN_GIF)
                 await user.send(embed=embed)
             except:
-                print(f'>>> Federation Ban message not sent to {user} ({user.id})')
+                print(f'Federation Ban message not sent to {user} ({user.id})')
                 pass
 
 

@@ -39,7 +39,7 @@ class Greetings(commands.Cog):
                 if (welcmsg.count_documents(query) == 1):
                     message = welcmsg.find_one(query)['msg']
                 else:
-                    return await ctx.send('See `greetings help` for details')
+                    return await ctx.reply('See `greetings help` for details')
 
             if (welcmsg.count_documents(query) == 1):
                 welcmsg.update_one(query, {"$set": {'chanid': ctx.message.channel.id, 'msg': message}})
@@ -60,9 +60,9 @@ class Greetings(commands.Cog):
 
         if (welcmsg.count_documents(query) == 1):
             welcmsg.update_one(query, {"$set": {'msgleave': message}})
-            return await ctx.send(f'Updated message for on user leave.\n**If you want to disable Goodbye messages then type `greetings leave none`**\nGoodbye message:\n{welcmsg.find_one(query)["msgleave"]}')
+            return await ctx.send(f':white_check_mark: Updated message for on user leave.\n**If you want to disable Goodbye messages then type `greetings leave none`**\nGoodbye message:\n{welcmsg.find_one(query)["msgleave"]}')
         else:
-            await ctx.send('You have not setup greetings yet!')
+            await ctx.reply(':x: You have not setup greetings yet!')
 
     @greetings.command(aliases=['raw', 'noformat'])
     @has_permissions(manage_guild=True)
@@ -75,7 +75,7 @@ class Greetings(commands.Cog):
             await ctx.send(f"Greetings message:\n{welcmsg.find_one(query)['msg']}")
             return await ctx.send(f"Goodbye message:\n{welcmsg.find_one(query)['msgleave']}")
 
-        await ctx.send('You have not setup greetings yet!')
+        await ctx.reply(':x: You have not setup greetings yet!')
 
     @greetings.command(aliases=['off'])
     @has_permissions(manage_guild=True)
@@ -86,9 +86,9 @@ class Greetings(commands.Cog):
 
         if (welcmsg.count_documents(query) == 1):
             welcmsg.delete_one(query)
-            return await ctx.send('Disabled greetings message.')
+            return await ctx.reply(':white_check_mark: Disabled greetings message.')
 
-        await ctx.send('You have not setup greetings yet!')
+        await ctx.reply(':x: You have not setup greetings yet!')
 # ---------------------------------------------------------------------------
 def setup(bot):
     bot.add_cog(Greetings(bot))
