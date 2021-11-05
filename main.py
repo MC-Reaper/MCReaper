@@ -30,15 +30,15 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4A'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "- Moved to replit\n- Disabled `sysinfo`\n- Cleanup."
-CHANGELOG_DATE = '27/10/2021'
+CHANGELOG_MESSAGE = "- Removed kanged tf command."
+CHANGELOG_DATE = '05/11/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
