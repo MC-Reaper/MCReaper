@@ -30,15 +30,15 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4A'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4B'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "- Removed kanged tf command."
-CHANGELOG_DATE = '05/11/2021'
+CHANGELOG_MESSAGE = "- Temporary handle `user not assigned` error and assume that the user is invalid.\nRemoved `chanmsgall`.\nMade `servers` command output in chat."
+CHANGELOG_DATE = '14/11/2021'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
@@ -572,7 +572,9 @@ async def on_command_error(ctx, error):
     elif isinstance(error, discord.errors.Forbidden):
         errorstr = f'Discord forbids this action!\n```{error}```'
     elif "Cannot send an empty message" in errorstring:
-        errorstr = "Can't send an empty message!"
+        errorstr = 'I cannot send an empty message!'
+    elif "local variable 'user' referenced before assignment" in errorstring:
+        errorstr = 'I cannot find that user!' # Temporary fix.
     elif "Unknown Message" in errorstring:
         errorstr = None
         pass

