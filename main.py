@@ -51,7 +51,7 @@ else:
         db = cluster["mcreaper"]
         print('[INFO] BOT|DB Successfully authenticated to MongoDB.')
     except Exception as e:
-        print(f'[ERROR] Failed to authenticate to MongoDB! {e}')
+        print(f'[ERR authenticate to MongoDB! {e}')
 
 # Collections
 guild_prefixes_c = db["guild_prefixes"]
@@ -735,9 +735,8 @@ async def nsfw(ctx, text = None):
 
     async with ctx.typing():
         try:
-            inviteurl = await ctx.channel.create_invite(destination = ctx.message.channel, xkcd = True, max_uses = 100)
             await ctx.send(nekos.img(text))
-            await send_to_log_channel.send(gld=ctx.guild, text=f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}) ({inviteurl}).\nDETAILS:\n{ctx.message.content}')
+            await send_to_log_channel.send(gld=ctx.guild, text=f'[NOTICE] CMD|NSFW: {ctx.message.author}  ({ctx.message.author.id}) used nsfw commands on {ctx.channel.name} ({ctx.channel.id}) in {ctx.guild.name} ({ctx.guild.id}).\nDETAILS:\n{ctx.message.content}')
         except Exception as e:
             if "You haven't added any valid arguments" in str(e):
                 await ctx.send(">>> Please use these valid arguments!:\n```yaml\nfeet, yuri, trap, futanari, hololewd, lewdkemo, solog, feetg, cum, erokemo, les, wallpaper, lewdk, ngif, tickle, lewd, feed, gecg, eroyuri, eron, cum_jpg, bj, nsfw_neko_gif, solo, kemonomimi, nsfw_avatar, gasm, poke, anal, slap, hentai, avatar, erofeet, holo, keta, blowjob, pussy, tits, holoero, lizard, pussy_jpg, pwankg, classic, kuni, waifu, pat, 8ball, kiss, femdom, neko, spank, cuddle, erok, fox_girl, boobs, random_hentai_gif, smallboobs, hug, ero, smug, goose, baka, woof```")

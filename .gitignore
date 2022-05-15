@@ -14,6 +14,17 @@ cogs/__pycache__/Moderation.cpython-39.pyc
 cogs/__pycache__/Sysinfo.cpython-39.pyc
 cogs/__pycache__/SearchTorrent.cpython-39.pyc
 __pycache__/keep_alive.cpython-39.pyc
+__pycache__/reapertools.cpython-38.pyc
+cogs/__pycache__/Botsudo.cpython-38.pyc
+cogs/__pycache__/Fun.cpython-38.pyc
+cogs/__pycache__/Gban.cpython-38.pyc
+cogs/__pycache__/Google.cpython-38.pyc
+cogs/__pycache__/Info.cpython-38.pyc
+cogs/__pycache__/Greetings.cpython-38.pyc
+cogs/__pycache__/Moderation.cpython-38.pyc
+cogs/__pycache__/Sysinfo.cpython-38.pyc
+cogs/__pycache__/SearchTorrent.cpython-38.pyc
+__pycache__/keep_alive.cpython-38.pyc
 neofetch
 .env
 secrets.json
