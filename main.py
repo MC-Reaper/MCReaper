@@ -30,15 +30,15 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 MONGOSRV = os.environ['MONGOSRV']
 BOT_OWNER_ID = int(config.get("bot_owner_id")) # Add your userid in config.json.
 # --------------------------------------------------------------------------
-BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4B'
+BOT_VERSION = f'Python: v{python_version()} | Discord.py: v{discord.__version__} | Bot: v0.4C'
 DOZ_DISCORD = 'Doz#1040'
 # ---------------------------------------------------------------------------
 HQ_SERVER_INVITE = config.get("server_invite")
 BAN_GIF = config.get("ban_gif")
 NUKE_GIF = config.get("nuke_gif")
 NUKE_LAUNCH_GIF = config.get("nuke_launch_gif")
-CHANGELOG_MESSAGE = "- Temporary handle `user not assigned` error and assume that the user is invalid.\nRemoved `chanmsgall`.\nMade `servers` command output in chat."
-CHANGELOG_DATE = '14/11/2021'
+CHANGELOG_MESSAGE = "- Test"
+CHANGELOG_DATE = '15/05/2022'
 # ! DO NOT EDIT !
 # ---------------------------------------------------------------------------
 # MongoDB Configuration
